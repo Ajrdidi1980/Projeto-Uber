@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
+  background: #f4f4f4;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+/* MENU */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* TELAS */
+.tela {
+  display: none;
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* INPUTS E BOTÕES */
+input,
+button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+/* HOVER */
+button:hover {
+  background: #1b5e20;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+td {
+  text-align: center;
+}
