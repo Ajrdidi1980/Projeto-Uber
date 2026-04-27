@@ -35,6 +35,9 @@ function trocarTela(id) {
   });
 
   document.getElementById(id).style.display = "block";
+  if (id === "resumo") {
+    atualizar();
+  }
 }
 
 // ===== FILTRO =====
@@ -176,7 +179,6 @@ function atualizar() {
 
   listaR.innerHTML = "";
   listaG.innerHTML = "";
-  atualizarGrafico();
 
   // RECEITAS
   receitas.forEach((r, i) => {
@@ -240,44 +242,39 @@ function atualizar() {
   document.getElementById("total-gastos").textContent = totalG.toFixed(2);
   document.getElementById("reserva").textContent = reserva.toFixed(2);
   document.getElementById("saldo").textContent = saldo.toFixed(2);
-  atualizarGrafico();
-}
 
-//===== GRÁFICO =====
-function atualizarGrafico() {
-  const dadosPorDia = {};
+  const canvas = document.getElementById("grafico");
 
-  receitas.forEach((r) => {
-    if (!r.data) return;
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
 
-    if (!dadosPorDia[r.data]) {
-      dadosPorDia[r.data] = 0;
+    if (window.meuGrafico) {
+      window.meuGrafico.destroy();
     }
 
-    dadosPorDia[r.data] += r.valor;
-  });
-
-  const labels = Object.keys(dadosPorDia);
-  const valores = Object.values(dadosPorDia);
-
-  const ctx = document.getElementById("grafico").getContext("2d");
-
-  if (grafico) {
-    grafico.destroy();
-  }
-
-  grafico = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Ganhos (R$)",
-          data: valores,
+    window.meuGrafico = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Receitas", "Gastos"],
+        datasets: [
+          {
+            data: [totalR, totalG],
+            backgroundColor: ["#22c55e", "#ef4444"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            labels: {
+              color: "#fff",
+            },
+          },
         },
-      ],
-    },
-  });
+      },
+    });
+  }
 }
 
 // ===== INICIAR =====

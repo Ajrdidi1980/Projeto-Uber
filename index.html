@@ -11,72 +11,82 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <h1>Controle Uber 🚗</h1>
+    <div class="app">
+      <header class="topo">
+        <h1>Controle Uber 🚗</h1>
+      </header>
 
-    <!-- MENU -->
-    <div class="tabs">
-      <button onclick="trocarTela('receitas')">Receitas</button>
-      <button onclick="trocarTela('gastos')">Gastos</button>
-      <button onclick="trocarTela('resumo')">Resumo</button>
-    </div>
+      <!-- MENU -->
+      <nav class="tabs">
+        <button onclick="trocarTela('receitas')">Receitas</button>
+        <button onclick="trocarTela('gastos')">Gastos</button>
+        <button onclick="trocarTela('resumo')">Resumo</button>
+      </nav>
 
-    <!-- RECEITAS -->
-    <div id="receitas" class="tela">
-      <h2>Corridas</h2>
+      <!-- RECEITAS -->
+      <div id="receitas" class="tela card">
+        <h2>Corridas</h2>
 
-      <input id="desc-receita" placeholder="Descrição" />
-      <input id="valor-receita" type="number" placeholder="Valor" />
+        <div class="form">
+          <input id="desc-receita" placeholder="Descrição" />
+          <input id="valor-receita" type="number" placeholder="Valor" />
+          <button onclick="addReceita()">Adicionar</button>
+        </div>
 
-      <button onclick="addReceita()">Adicionar</button>
-      <button id="btn-receita" onclick="addReceita()">Adicionar</button>
+        <div class="filtros">
+          <input
+            id="filtro-receitas"
+            placeholder="Buscar..."
+            oninput="filtrarReceitas()"
+          />
+          <input type="date" id="data-inicio" />
+          <input type="date" id="data-fim" />
+          <button onclick="filtrarPorData()">Filtrar</button>
+          <button id="btn-receita" onclick="limparFiltros()">Limpar</button>
+        </div>
 
-      <!-- FILTROS -->
-      <!-- FILTROS -->
-      <input
-        id="filtro-receitas"
-        placeholder="Buscar descrição"
-        oninput="filtrarReceitas()"
-      />
+        <table>
+          <tbody id="lista-receitas"></tbody>
+        </table>
+      </div>
 
-      <input type="date" id="data-inicio" />
-      <input type="date" id="data-fim" />
+      <!-- GASTOS -->
+      <div id="gastos" class="tela card">
+        <h2>Manutenção</h2>
 
-      <button onclick="filtrarPorData()">Filtrar período</button>
-      <button onclick="limparFiltros()">Limpar</button>
+        <div class="form">
+          <input id="desc-gasto" placeholder="Descrição" />
+          <input id="valor-gasto" type="number" placeholder="Valor" />
+          <button id="btn-gasto" onclick="addGasto()">Adicionar</button>
+        </div>
 
-      <table>
-        <tbody id="lista-receitas"></tbody>
-      </table>
-    </div>
+        <table>
+          <tbody id="lista-gastos"></tbody>
+        </table>
+      </div>
 
-    <!-- GASTOS -->
-    <div id="gastos" class="tela">
-      <h2>Manutenção</h2>
+      <!-- RESUMO -->
+      <div id="resumo" class="tela card">
+        <h2>Resumo</h2>
 
-      <input id="desc-gasto" placeholder="Descrição" />
-      <input id="valor-gasto" type="number" placeholder="Valor" />
-
-      <button id="btn-gasto" onclick="addGasto()">Adicionar</button>
-
-      <table>
-        <tbody id="lista-gastos"></tbody>
-      </table>
-    </div>
-
-    <!-- RESUMO -->
-    <div id="resumo" class="tela">
-      <h2>Resumo</h2>
-
-      <input id="percentual" type="number" placeholder="Reserva (%)" />
-      <button onclick="salvarPercentual()">Salvar</button>
-
-      <p>Receitas: R$ <span id="total-receitas">0.00</span></p>
-      <p>Gastos: R$ <span id="total-gastos">0.00</span></p>
-      <p>Reserva: R$ <span id="reserva">0.00</span></p>
-
-      <h3>Saldo: R$ <span id="saldo">0.00</span></h3>
-      <h3>Ganhos por Dia</h3>
-      <canvas id="grafico"></canvas>
+        <div class="cards">
+          <div class="card-mini">
+            Receitas<br />R$ <span id="total-receitas">0</span>
+          </div>
+          <div class="card-mini">
+            Gastos<br />R$ <span id="total-gastos">0</span>
+          </div>
+          <div class="card-mini">
+            Reserva<br />R$ <span id="reserva">0</span>
+          </div>
+          <div class="card-mini destaque">
+            Saldo<br />R$ <span id="saldo">0</span>
+          </div>
+        </div>
+        <canvas id="grafico"></canvas>
+        <input id="percentual" type="number" placeholder="Reserva (%)" />
+        <button onclick="salvarPercentual()">Salvar</button>
+      </div>
     </div>
   </body>
 </html>

@@ -1,21 +1,28 @@
-* {
+body {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
-body {
-  font-family: Arial;
-  background: #f4f4f4;
+/* APP */
+.app {
+  max-width: 900px;
+  margin: auto;
   padding: 20px;
 }
 
-h1 {
+/* TOPO */
+.topo {
   text-align: center;
-  color: #333;
+  margin-bottom: 20px;
 }
 
-/* MENU */
+.topo h1 {
+  color: #38bdf8;
+}
+
+/* TABS */
 .tabs {
   display: flex;
   justify-content: center;
@@ -24,41 +31,64 @@ h1 {
 }
 
 .tabs button {
-  background: #333;
+  background: #1e293b;
   color: #fff;
   border: none;
-  padding: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 5px;
 }
 
-/* TELAS */
-.tela {
+.tabs button:hover {
+  background: #334155;
+}
+
+/* CARD */
+.card {
   display: none;
-  background: #fff;
+  background: #1e293b;
   padding: 15px;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
-/* INPUTS E BOTÕES */
-input,
-button {
-  width: 100%;
+/* FORM */
+.form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* FILTROS */
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* INPUTS */
+input {
   padding: 10px;
-  margin: 5px 0;
-}
-
-button {
-  background: #2e7d32;
-  color: white;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
+  background: #334155;
+  color: #fff;
 }
 
-/* HOVER */
+/* BOTÕES */
+button {
+  background: #22c55e;
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 button:hover {
-  background: #1b5e20;
+  background: #16a34a;
 }
 
 /* TABELA */
@@ -69,9 +99,31 @@ table {
 }
 
 td {
-  padding: 8px;
-  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  border-bottom: 1px solid #334155;
 }
-td {
+
+tr:hover {
+  background: #334155;
+}
+
+/* CARDS RESUMO */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card-mini {
+  background: #334155;
+  padding: 15px;
+  border-radius: 10px;
   text-align: center;
+}
+
+.destaque {
+  background: #22c55e;
+  color: #000;
+  font-weight: bold;
 }
