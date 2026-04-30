@@ -174,6 +174,32 @@ function atualizar() {
   let totalR = 0;
   let totalG = 0;
 
+  // 🔥 CALCULAR MELHOR DIA E MÉDIA
+  const ganhosPorDia = {};
+
+  receitas.forEach((r) => {
+    if (!r.data) return;
+
+    if (!ganhosPorDia[r.data]) {
+      ganhosPorDia[r.data] = 0;
+    }
+
+    ganhosPorDia[r.data] += r.valor;
+  });
+
+  const valores = Object.values(ganhosPorDia);
+
+  let melhorDia = 0;
+  let mediaDia = 0;
+
+  if (valores.length > 0) {
+    melhorDia = Math.max(...valores);
+    mediaDia = totalR / valores.length;
+  }
+
+  document.getElementById("melhor-dia").textContent = melhorDia.toFixed(2);
+  document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
+
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
 
@@ -242,34 +268,57 @@ function atualizar() {
   document.getElementById("total-gastos").textContent = totalG.toFixed(2);
   document.getElementById("reserva").textContent = reserva.toFixed(2);
   document.getElementById("saldo").textContent = saldo.toFixed(2);
+  atualizarGrafico();
 
-  const canvas = document.getElementById("grafico");
+  function atualizarGrafico() {
+    const canvas = document.getElementById("grafico");
+    if (!canvas) return;
 
-  if (canvas) {
     const ctx = canvas.getContext("2d");
 
-    if (window.meuGrafico) {
-      window.meuGrafico.destroy();
+    if (grafico) {
+      grafico.destroy();
     }
 
-    window.meuGrafico = new Chart(ctx, {
-      type: "doughnut",
+    const dadosPorDia = {};
+
+    receitas.forEach((r) => {
+      if (!r.data) return;
+
+      if (!dadosPorDia[r.data]) {
+        dadosPorDia[r.data] = 0;
+      }
+
+      dadosPorDia[r.data] += r.valor;
+    });
+
+    const labels = Object.keys(dadosPorDia);
+    const valores = Object.values(dadosPorDia);
+
+    grafico = new Chart(ctx, {
+      type: "bar",
       data: {
-        labels: ["Receitas", "Gastos"],
+        labels: labels,
         datasets: [
           {
-            data: [totalR, totalG],
-            backgroundColor: ["#22c55e", "#ef4444"],
-            borderWidth: 2,
+            label: "Ganhos por dia (R$)",
+            data: valores,
+            backgroundColor: "#22c55e",
           },
         ],
       },
       options: {
         plugins: {
           legend: {
-            labels: {
-              color: "#fff",
-            },
+            labels: { color: "#fff" },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#fff" },
+          },
+          y: {
+            ticks: { color: "#fff" },
           },
         },
       },
