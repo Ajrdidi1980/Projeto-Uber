@@ -127,3 +127,31 @@ tr:hover {
   color: #000;
   font-weight: bold;
 }
+.card {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+button {
+  transition: 0.2s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+input:focus {
+  outline: 2px solid #38bdf8;
+}
+@media (max-width: 600px) {
+  .form {
+    flex-direction: column;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  table {
+    font-size: 12px;
+  }
+}
