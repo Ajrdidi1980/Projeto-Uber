@@ -21,7 +21,7 @@ Aplicação web desenvolvida para auxiliar motoristas de aplicativo no controle 
 
 ## 📸 Preview
 
-![Preview](./imag/preview.png)
+![Preview](./img/preview.png)
 
 ## 🎯 Objetivo do Projeto
 
