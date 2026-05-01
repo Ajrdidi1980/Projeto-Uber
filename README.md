@@ -1,21 +1,22 @@
-# 🚗 Controle Uber
+# 💰 Controle Financeiro para Motoristas
 
-Sistema de controle financeiro para motoristas
+Aplicação web para controle de receitas e despesas, focada em organização e análise de ganhos no dia a dia.
 
-## 📊 Funcionalidades
+## 🚀 Funcionalidades
+- Cadastro de receitas e gastos
+- Filtro por período
+- Dashboard com gráfico (Chart.js)
+- Cálculo automático de saldo e reserva
+- Armazenamento local (LocalStorage)
 
-- Cadastro de receitas
-- Cadastro de gastos
-- Filtro por data
-- Dashboard com gráfico
-
-## 🚀 Tecnologias
-
-- HTML
-- CSS
+## 🛠 Tecnologias
 - JavaScript
-- Chart.js
+- HTML5
+- CSS3
+- Git & GitHub
 
-## 🌐 Acesso
+## 📊 Preview
+(Coloca aqui print do sistema)
 
-Projeto hospedado no GitHub Pages
+## 🔗 Acesse o projeto
+https://github.com/Ajrdidi1980/Projeto-Uber
