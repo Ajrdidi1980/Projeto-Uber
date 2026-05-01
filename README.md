@@ -1,14 +1,18 @@
 # 💰 Controle Financeiro para Motoristas de Aplicativo
 
-Aplicação web desenvolvida para auxiliar motoristas de aplicativo no controle financeiro diário, permitindo análise de ganhos, despesas e saldo de forma simples e visual.
+Aplicação web para controle financeiro de motoristas de aplicativo, com foco em organização, análise de ganhos e tomada de decisão no dia a dia.
+
+## 📸 Preview
+
+![Preview](img/preview.png)
 
 ## 🔧 Funcionalidades
 
 - Registro de receitas e despesas
-- Filtro por período (data inicial e final)
-- Dashboard com visualização em gráfico
-- Cálculo automático de saldo e reserva financeira
-- Persistência de dados com LocalStorage
+- Filtro por período
+- Dashboard com gráfico
+- Cálculo automático de saldo e reserva
+- Persistência com LocalStorage
 
 ## 🛠 Tecnologias
 
@@ -19,16 +23,12 @@ Aplicação web desenvolvida para auxiliar motoristas de aplicativo no controle 
 - LocalStorage
 - Git e GitHub
 
-## 📸 Preview
+## 🎯 Objetivo
 
-![Preview](./img/preview.png)
-
-## 🎯 Objetivo do Projeto
-
-Projeto desenvolvido com foco em prática real de desenvolvimento web, aplicando conceitos de manipulação de DOM, armazenamento local e visualização de dados.
+Projeto desenvolvido com foco em prática real de desenvolvimento web.
 
 ## 🚀 Como usar
 
-1. Faça o download ou clone este repositório
-2. Abra o arquivo `index.html` no navegador
-3. Utilize o sistema para registrar receitas e despesas
+1. Clone ou baixe o repositório
+2. Abra o `index.html`
+3. Utilize o sistema normalmente
