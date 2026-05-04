@@ -29,12 +29,25 @@ function hoje() {
 }
 
 // ===== TROCAR TELA =====
-function trocarTela(id) {
-  document.querySelectorAll(".tela").forEach((t) => {
-    t.style.display = "none";
-  });
+function trocarTela(id, el) {
+  // esconder telas
+  document.querySelectorAll(".tela").forEach((t) => (t.style.display = "none"));
 
+  // mostrar tela selecionada
   document.getElementById(id).style.display = "block";
+
+  // remover ativo
+  document
+    .querySelectorAll(".sidebar button")
+    .forEach((b) => b.classList.remove("ativo"));
+
+  // adiciona ativo
+  document.getElementById("btn-" + id).classList.add("ativo");
+
+  if (el) {
+    el.classList.add("ativo");
+  }
+  // atualizar resumo
   if (id === "resumo") {
     atualizar();
   }
@@ -328,6 +341,7 @@ function atualizar() {
 
 // ===== INICIAR =====
 document.addEventListener("DOMContentLoaded", function () {
-  trocarTela("receitas");
+  trocarTela("receitas", document.querySelector(".sidebar button"));
+
   atualizar();
 });
