@@ -39,6 +39,10 @@
           <div class="form">
             <input id="desc-receita" placeholder="Descrição" />
             <input id="valor-receita" type="number" placeholder="R$ 0,00" />
+            <input id="km-inicial" type="number" placeholder="KM inicial" />
+            <input id="km-final" type="number" placeholder="KM final" />
+            <input id="consumo" type="number" placeholder="Km/L" />
+            <input id="combustivel" type="number" placeholder="R$/L" />
             <button onclick="addReceita()">Adicionar</button>
           </div>
 
@@ -55,6 +59,18 @@
           </div>
 
           <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>KM</th>
+                <th>Combustível</th>
+                <th>Lucro</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+
             <tbody id="lista-receitas"></tbody>
           </table>
         </div>
@@ -62,7 +78,11 @@
         <!-- GASTOS -->
         <div id="gastos" class="tela card">
           <h2>Gastos</h2>
-
+          <select id="tipo-gasto">
+            <option value="manutencao">Manutenção</option>
+            <option value="alimentacao">Alimentação</option>
+            <option value="outros">Outros</option>
+          </select>
           <div class="form">
             <input id="desc-gasto" placeholder="Descrição" />
             <input id="valor-gasto" type="number" placeholder="R$ 0,00" />
@@ -70,6 +90,14 @@
           </div>
 
           <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
             <tbody id="lista-gastos"></tbody>
           </table>
         </div>
@@ -96,6 +124,13 @@
             </div>
             <div class="card-mini">
               Média diária<br />R$ <span id="media-dia">0</span>
+            </div>
+            <div class="card-mini">
+              Custo por KM<br />R$ <span id="custo-km">0</span>
+            </div>
+            <div class="card-mini">
+              Ganho por KM<br />
+              R$ <span id="ganho-km">0</span>
             </div>
           </div>
 

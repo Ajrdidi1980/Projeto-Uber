@@ -69,7 +69,22 @@ function filtrarPorData() {
 // ===== ADICIONAR / EDITAR RECEITA =====
 function addReceita() {
   const desc = document.getElementById("desc-receita").value;
-  const valor = parseFloat(document.getElementById("valor-receita").value);
+  const valor = parseFloat(document.getElementById("valor-receita").value) || 0;
+  const kmInicial =
+    parseFloat(document.getElementById("km-inicial").value) || 0;
+  const kmFinal = parseFloat(document.getElementById("km-final").value) || 0;
+  const consumo = parseFloat(document.getElementById("consumo").value) || 0;
+  const combustivel =
+    parseFloat(document.getElementById("combustivel").value) || 0;
+
+  const kmRodado = kmFinal - kmInicial;
+
+  let gastoCombustivel = 0;
+
+  if (consumo > 0 && combustivel > 0 && kmRodado > 0) {
+    gastoCombustivel = (kmRodado / consumo) * combustivel;
+  }
+  const lucroLiquido = valor - gastoCombustivel;
 
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
 
@@ -78,6 +93,9 @@ function addReceita() {
       descricao: desc,
       valor: valor,
       data: hoje(),
+      kmRodado,
+      gastoCombustivel,
+      lucroLiquido,
     };
     editandoReceita = null;
   } else {
@@ -85,6 +103,9 @@ function addReceita() {
       descricao: desc,
       valor: valor,
       data: hoje(),
+      kmRodado,
+      gastoCombustivel,
+      lucroLiquido,
     });
   }
 
@@ -100,7 +121,8 @@ function addReceita() {
 // ===== ADICIONAR / EDITAR GASTO =====
 function addGasto() {
   const desc = document.getElementById("desc-gasto").value;
-  const valor = parseFloat(document.getElementById("valor-gasto").value);
+  const valor = parseFloat(document.getElementById("valor-gasto").value) || 0;
+  const tipo = document.getElementById("tipo-gasto").value;
 
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
 
@@ -108,6 +130,7 @@ function addGasto() {
     gastos[editandoGasto] = {
       descricao: desc,
       valor: valor,
+      tipo: tipo || "outros",
       data: hoje(),
     };
     editandoGasto = null;
@@ -115,6 +138,7 @@ function addGasto() {
     gastos.push({
       descricao: desc,
       valor: valor,
+      tipo: tipo || "outros",
       data: hoje(),
     });
   }
@@ -125,6 +149,7 @@ function addGasto() {
   // limpa campos
   document.getElementById("desc-gasto").value = "";
   document.getElementById("valor-gasto").value = "";
+  document.getElementById("tipo-gasto").value = "outros";
   document.getElementById("btn-gasto").textContent = "Adicionar";
 }
 function limparFiltros() {
@@ -156,7 +181,7 @@ function editarGasto(i) {
 
   document.getElementById("desc-gasto").value = g.descricao;
   document.getElementById("valor-gasto").value = g.valor;
-
+  document.getElementById("tipo-gasto").value = g.tipo;
   document.getElementById("btn-gasto").textContent = "Salvar";
 
   editandoGasto = i;
@@ -186,32 +211,8 @@ function salvarPercentual() {
 function atualizar() {
   let totalR = 0;
   let totalG = 0;
-
-  // 🔥 CALCULAR MELHOR DIA E MÉDIA
-  const ganhosPorDia = {};
-
-  receitas.forEach((r) => {
-    if (!r.data) return;
-
-    if (!ganhosPorDia[r.data]) {
-      ganhosPorDia[r.data] = 0;
-    }
-
-    ganhosPorDia[r.data] += r.valor;
-  });
-
-  const valores = Object.values(ganhosPorDia);
-
-  let melhorDia = 0;
-  let mediaDia = 0;
-
-  if (valores.length > 0) {
-    melhorDia = Math.max(...valores);
-    mediaDia = totalR / valores.length;
-  }
-
-  document.getElementById("melhor-dia").textContent = melhorDia.toFixed(2);
-  document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
+  let totalKm = 0;
+  let totalCombustivel = 0;
 
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
@@ -219,27 +220,44 @@ function atualizar() {
   listaR.innerHTML = "";
   listaG.innerHTML = "";
 
-  // RECEITAS
+  // 🔥 AGRUPAR GANHOS POR DIA
+  const ganhosPorDia = {};
+
+  // ===== RECEITAS =====
   receitas.forEach((r, i) => {
-    // filtro por texto
+    if (!r.data) return;
+
+    // filtro texto
     if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) return;
 
-    // 🔥 CONVERTER DATA (DD/MM/AAAA → AAAA-MM-DD)
-    if (!r.data) return;
+    // converter data
     const partes = r.data.split("/");
     const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
 
-    // 🔥 FILTRO POR PERÍODO
+    // filtro período
     if (dataInicio && dataFormatada < dataInicio) return;
     if (dataFim && dataFormatada > dataFim) return;
 
-    totalR += r.valor;
+    // 🔥 ACUMULADORES
+    totalR += r.lucroLiquido || r.valor;
+    totalKm += r.kmRodado || 0;
+    totalCombustivel += r.gastoCombustivel || 0;
 
+    // 🔥 AGRUPAMENTO POR DIA
+    if (!ganhosPorDia[r.data]) {
+      ganhosPorDia[r.data] = 0;
+    }
+    ganhosPorDia[r.data] += r.valor;
+
+    // 🔥 RENDER
     listaR.innerHTML += `
       <tr>
         <td>${r.descricao}</td>
         <td>${r.data}</td>
         <td>R$ ${r.valor.toFixed(2)}</td>
+        <td>${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}</td>
+        <td>${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}</td>
+        <td><strong>R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}</strong></td>
         <td>
           <button onclick="editarReceita(${i})">Editar</button>
           <button onclick="excluirReceita(${i})">Excluir</button>
@@ -248,7 +266,7 @@ function atualizar() {
     `;
   });
 
-  // GASTOS
+  // ===== GASTOS =====
   gastos.forEach((g, i) => {
     if (!g.data) return;
 
@@ -261,82 +279,94 @@ function atualizar() {
     totalG += g.valor;
 
     listaG.innerHTML += `
-    <tr>
-      <td>${g.descricao}</td>
-      <td>${g.data}</td>
-      <td>R$ ${g.valor.toFixed(2)}</td>
-      <td>
-        <button onclick="editarGasto(${i})">Editar</button>
-        <button onclick="excluirGasto(${i})">Excluir</button>
-      </td>
-    </tr>
-  `;
+      <tr>
+        <td>${g.descricao} (${g.tipo})</td>
+        <td>${g.data}</td>
+        <td>R$ ${g.valor.toFixed(2)}</td>
+        <td>
+          <button onclick="editarGasto(${i})">Editar</button>
+          <button onclick="excluirGasto(${i})">Excluir</button>
+        </td>
+      </tr>
+    `;
   });
 
-  // RESUMO
+  // ===== CÁLCULOS =====
+  const valores = Object.values(ganhosPorDia);
+
+  let melhorDia = 0;
+  let mediaDia = 0;
+
+  if (valores.length > 0) {
+    melhorDia = Math.max(...valores);
+    mediaDia = totalR / valores.length;
+  }
+
+  let custoPorKm = 0;
+  if (totalKm > 0) {
+    custoPorKm = totalCombustivel / totalKm;
+  }
+  let ganhoPorKm = 0;
+
+  if (totalKm > 0) {
+    ganhoPorKm = totalR / totalKm;
+  }
+
+  // ===== RESUMO =====
   const reserva = totalR * (percentual / 100);
   const saldo = totalR - totalG - reserva;
 
+  // ===== ATUALIZAR UI =====
   document.getElementById("total-receitas").textContent = totalR.toFixed(2);
   document.getElementById("total-gastos").textContent = totalG.toFixed(2);
   document.getElementById("reserva").textContent = reserva.toFixed(2);
   document.getElementById("saldo").textContent = saldo.toFixed(2);
-  atualizarGrafico();
+  document.getElementById("melhor-dia").textContent = melhorDia.toFixed(2);
+  document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
+  document.getElementById("custo-km").textContent = custoPorKm.toFixed(2);
+  document.getElementById("ganho-km").textContent = ganhoPorKm.toFixed(2);
 
-  function atualizarGrafico() {
-    const canvas = document.getElementById("grafico");
-    if (!canvas) return;
+  atualizarGrafico(ganhosPorDia);
+}
 
-    const ctx = canvas.getContext("2d");
+// ===== GRÁFICO =====
+function atualizarGrafico(dadosPorDia) {
+  const canvas = document.getElementById("grafico");
+  if (!canvas) return;
 
-    if (grafico) {
-      grafico.destroy();
-    }
+  const ctx = canvas.getContext("2d");
 
-    const dadosPorDia = {};
-
-    receitas.forEach((r) => {
-      if (!r.data) return;
-
-      if (!dadosPorDia[r.data]) {
-        dadosPorDia[r.data] = 0;
-      }
-
-      dadosPorDia[r.data] += r.valor;
-    });
-
-    const labels = Object.keys(dadosPorDia);
-    const valores = Object.values(dadosPorDia);
-
-    grafico = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Ganhos por dia (R$)",
-            data: valores,
-            backgroundColor: "#22c55e",
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          legend: {
-            labels: { color: "#fff" },
-          },
-        },
-        scales: {
-          x: {
-            ticks: { color: "#fff" },
-          },
-          y: {
-            ticks: { color: "#fff" },
-          },
-        },
-      },
-    });
+  if (grafico) {
+    grafico.destroy();
   }
+
+  const labels = Object.keys(dadosPorDia);
+  const valores = Object.values(dadosPorDia);
+
+  grafico = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Ganhos por dia (R$)",
+          data: valores,
+          backgroundColor: "#22c55e",
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: { color: "#fff" },
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#fff" } },
+        y: { ticks: { color: "#fff" } },
+      },
+    },
+  });
 }
 
 // ===== INICIAR =====
