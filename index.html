@@ -132,12 +132,23 @@
               Ganho por KM<br />
               R$ <span id="ganho-km">0</span>
             </div>
+            <div class="card-mini">
+              Meta diária<br />
+              R$ <span id="meta-diaria">300</span>
+            </div>
+
+            <div class="card-mini destaque">
+              Falta bater meta<br />
+              R$ <span id="faltam-meta">0</span>
+            </div>
           </div>
 
           <canvas id="grafico"></canvas>
 
           <input id="percentual" type="number" placeholder="Reserva (%)" />
           <button onclick="salvarPercentual()">Salvar</button>
+          <input id="meta-input" type="number" placeholder="Meta diária R$" />
+          <button onclick="salvarMeta()">Salvar Meta</button>
         </div>
       </main>
     </div>

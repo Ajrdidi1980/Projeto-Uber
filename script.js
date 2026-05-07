@@ -2,6 +2,7 @@
 let receitas = JSON.parse(localStorage.getItem("receitas")) || [];
 let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
 let percentual = parseFloat(localStorage.getItem("percentual")) || 0;
+let metaDiaria = parseFloat(localStorage.getItem("metaDiaria")) || 300;
 
 let editandoReceita = null;
 let editandoGasto = null;
@@ -15,6 +16,7 @@ function salvar() {
   localStorage.setItem("receitas", JSON.stringify(receitas));
   localStorage.setItem("gastos", JSON.stringify(gastos));
   localStorage.setItem("percentual", percentual);
+  localStorage.setItem("metaDiaria", metaDiaria);
 }
 
 // ===== DATA =====
@@ -206,6 +208,15 @@ function salvarPercentual() {
   salvar();
   atualizar();
 }
+function salvarMeta() {
+  const valor = document.getElementById("meta-input").value;
+
+  metaDiaria = Number(valor);
+
+  localStorage.setItem("metaDiaria", metaDiaria);
+
+  atualizar();
+}
 
 // ===== ATUALIZAR TELA =====
 function atualizar() {
@@ -315,6 +326,20 @@ function atualizar() {
   // ===== RESUMO =====
   const reserva = totalR * (percentual / 100);
   const saldo = totalR - totalG - reserva;
+  let metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
+
+  let faltamMeta = Number(metaDiaria) - totalR;
+  console.log("META:", metaDiaria);
+  console.log("TOTALR:", totalR);
+  console.log("FALTAM:", faltamMeta);
+
+  let textoMeta = "";
+
+  if (totalR >= Number(metaDiaria)) {
+    textoMeta = "Meta batida 🚀";
+  } else {
+    textoMeta = "R$ " + faltamMeta.toFixed(2);
+  }
 
   // ===== ATUALIZAR UI =====
   document.getElementById("total-receitas").textContent = totalR.toFixed(2);
@@ -325,6 +350,9 @@ function atualizar() {
   document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
   document.getElementById("custo-km").textContent = custoPorKm.toFixed(2);
   document.getElementById("ganho-km").textContent = ganhoPorKm.toFixed(2);
+  document.getElementById("meta-diaria").textContent =
+    Number(metaDiaria).toFixed(2);
+  document.getElementById("faltam-meta").textContent = textoMeta;
 
   atualizarGrafico(ganhosPorDia);
 }
