@@ -39,6 +39,9 @@
           <div class="form">
             <input id="desc-receita" placeholder="Descrição" />
             <input id="valor-receita" type="number" placeholder="R$ 0,00" />
+            <input id="data-receita" type="date" />
+            <input id="hora-inicio" type="time" />
+            <input id="hora-fim" type="time" />
             <input id="km-inicial" type="number" placeholder="KM inicial" />
             <input id="km-final" type="number" placeholder="KM final" />
             <input id="consumo" type="number" placeholder="Km/L" />
@@ -52,9 +55,7 @@
               placeholder="Buscar..."
               oninput="filtrarReceitas()"
             />
-            <input type="date" id="data-inicio" />
-            <input type="date" id="data-fim" />
-            <button onclick="filtrarPorData()">Filtrar</button>
+
             <button onclick="limparFiltros()">Limpar</button>
           </div>
 
@@ -67,6 +68,7 @@
                 <th>KM</th>
                 <th>Combustível</th>
                 <th>Lucro</th>
+                <th>Ganho/Hora</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -105,6 +107,14 @@
         <!-- RESUMO -->
         <div id="resumo" class="tela card">
           <h2>Resumo</h2>
+          <div class="filtros-resumo">
+            <input type="date" id="data-inicio" />
+            <input type="date" id="data-fim" />
+
+            <button onclick="filtrarPorData()">Filtrar período</button>
+
+            <button onclick="limparFiltros()">Limpar</button>
+          </div>
 
           <div class="cards">
             <div class="card-mini">
@@ -136,11 +146,19 @@
               Meta diária<br />
               R$ <span id="meta-diaria">300</span>
             </div>
-
             <div class="card-mini destaque">
               Falta bater meta<br />
               R$ <span id="faltam-meta">0</span>
             </div>
+            <div class="barra-meta">
+              <div id="progresso-meta"></div>
+              <div class="card-mini">
+                Ganho/Hora Médio<br />
+                R$ <span id="media-hora">0</span>/h
+              </div>
+            </div>
+
+            <p id="texto-progresso">0% da meta</p>
           </div>
 
           <canvas id="grafico"></canvas>
@@ -149,8 +167,10 @@
           <button onclick="salvarPercentual()">Salvar</button>
           <input id="meta-input" type="number" placeholder="Meta diária R$" />
           <button onclick="salvarMeta()">Salvar Meta</button>
+          <button onclick="exportarPDF()">Exportar PDF</button>
         </div>
       </main>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </body>
 </html>

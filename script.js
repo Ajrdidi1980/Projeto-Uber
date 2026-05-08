@@ -29,6 +29,11 @@ function hoje() {
 
   return `${dia}/${mes}/${ano}`;
 }
+function formatarData(dataISO) {
+  const partes = dataISO.split("-");
+
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
 
 // ===== TROCAR TELA =====
 function trocarTela(id, el) {
@@ -72,6 +77,9 @@ function filtrarPorData() {
 function addReceita() {
   const desc = document.getElementById("desc-receita").value;
   const valor = parseFloat(document.getElementById("valor-receita").value) || 0;
+  const dataReceita = document.getElementById("data-receita").value;
+  const horaInicio = document.getElementById("hora-inicio").value;
+  const horaFim = document.getElementById("hora-fim").value;
   const kmInicial =
     parseFloat(document.getElementById("km-inicial").value) || 0;
   const kmFinal = parseFloat(document.getElementById("km-final").value) || 0;
@@ -80,6 +88,18 @@ function addReceita() {
     parseFloat(document.getElementById("combustivel").value) || 0;
 
   const kmRodado = kmFinal - kmInicial;
+  let ganhoPorHora = 0;
+
+  if (horaInicio && horaFim) {
+    const inicio = new Date(`2000-01-01T${horaInicio}`);
+    const fim = new Date(`2000-01-01T${horaFim}`);
+
+    const horas = (fim - inicio) / 1000 / 60 / 60;
+
+    if (horas > 0) {
+      ganhoPorHora = valor / horas;
+    }
+  }
 
   let gastoCombustivel = 0;
 
@@ -94,7 +114,7 @@ function addReceita() {
     receitas[editandoReceita] = {
       descricao: desc,
       valor: valor,
-      data: hoje(),
+      data: dataReceita ? formatarData(dataReceita) : hoje(),
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
@@ -104,10 +124,11 @@ function addReceita() {
     receitas.push({
       descricao: desc,
       valor: valor,
-      data: hoje(),
+      data: dataReceita ? formatarData(dataReceita) : hoje(),
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
+      ganhoPorHora,
     });
   }
 
@@ -151,6 +172,13 @@ function addGasto() {
   // limpa campos
   document.getElementById("desc-gasto").value = "";
   document.getElementById("valor-gasto").value = "";
+  document.getElementById("data-receita").value = "";
+  document.getElementById("hora-inicio").value = "";
+  document.getElementById("hora-fim").value = "";
+  document.getElementById("km-inicial").value = "";
+  document.getElementById("km-final").value = "";
+  document.getElementById("consumo").value = "";
+  document.getElementById("combustivel").value = "";
   document.getElementById("tipo-gasto").value = "outros";
   document.getElementById("btn-gasto").textContent = "Adicionar";
 }
@@ -224,6 +252,8 @@ function atualizar() {
   let totalG = 0;
   let totalKm = 0;
   let totalCombustivel = 0;
+  let totalGanhoHora = 0;
+  let qtdHoras = 0;
 
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
@@ -253,7 +283,10 @@ function atualizar() {
     totalR += r.lucroLiquido || r.valor;
     totalKm += r.kmRodado || 0;
     totalCombustivel += r.gastoCombustivel || 0;
-
+    if (r.ganhoPorHora) {
+      totalGanhoHora += r.ganhoPorHora;
+      qtdHoras++;
+    }
     // 🔥 AGRUPAMENTO POR DIA
     if (!ganhosPorDia[r.data]) {
       ganhosPorDia[r.data] = 0;
@@ -269,6 +302,7 @@ function atualizar() {
         <td>${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}</td>
         <td>${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}</td>
         <td><strong>R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}</strong></td>
+        <td>${r.ganhoPorHora ? "R$ " + r.ganhoPorHora.toFixed(2) + "/h" : "-"}</td>
         <td>
           <button onclick="editarReceita(${i})">Editar</button>
           <button onclick="excluirReceita(${i})">Excluir</button>
@@ -322,6 +356,11 @@ function atualizar() {
   if (totalKm > 0) {
     ganhoPorKm = totalR / totalKm;
   }
+  let mediaHora = 0;
+
+  if (qtdHoras > 0) {
+    mediaHora = totalGanhoHora / qtdHoras;
+  }
 
   // ===== RESUMO =====
   const reserva = totalR * (percentual / 100);
@@ -350,9 +389,35 @@ function atualizar() {
   document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
   document.getElementById("custo-km").textContent = custoPorKm.toFixed(2);
   document.getElementById("ganho-km").textContent = ganhoPorKm.toFixed(2);
+  document.getElementById("media-hora").textContent = mediaHora.toFixed(2);
   document.getElementById("meta-diaria").textContent =
     Number(metaDiaria).toFixed(2);
   document.getElementById("faltam-meta").textContent = textoMeta;
+  let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
+
+  if (porcentagemMeta > 100) {
+    porcentagemMeta = 100;
+  }
+  const barra = document.getElementById("progresso-meta");
+
+  barra.style.width = porcentagemMeta + "%";
+
+  // 🔴 VERMELHO
+  if (porcentagemMeta < 50) {
+    barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
+  }
+
+  // 🟡 AMARELO
+  else if (porcentagemMeta < 100) {
+    barra.style.background = "linear-gradient(90deg, #facc15, #eab308)";
+  }
+
+  // 🟢 VERDE
+  else {
+    barra.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
+  }
+  document.getElementById("texto-progresso").textContent =
+    porcentagemMeta.toFixed(0) + "% da meta";
 
   atualizarGrafico(ganhosPorDia);
 }
@@ -403,3 +468,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
   atualizar();
 });
+async function exportarPDF() {
+  const { jsPDF } = window.jspdf;
+
+  const doc = new jsPDF();
+
+  // ===== DADOS =====
+  const receitas = document.getElementById("total-receitas").textContent;
+
+  const gastos = document.getElementById("total-gastos").textContent;
+
+  const saldo = document.getElementById("saldo").textContent;
+
+  const meta = document.getElementById("meta-diaria").textContent;
+
+  const data = new Date().toLocaleDateString("pt-BR");
+
+  // ===== TITULO =====
+  doc.setFontSize(18);
+
+  doc.text("Relatório Financeiro", 20, 20);
+
+  // ===== DATA =====
+  doc.setFontSize(11);
+
+  doc.text(`Data: ${data}`, 20, 30);
+
+  // ===== RESUMO =====
+  doc.setFontSize(14);
+
+  doc.text("Resumo Financeiro", 20, 45);
+
+  doc.setFontSize(12);
+
+  doc.text(`Receitas: R$ ${receitas}`, 20, 60);
+  doc.text(`Gastos: R$ ${gastos}`, 20, 70);
+  doc.text(`Saldo: R$ ${saldo}`, 20, 80);
+  doc.text(`Meta diária: R$ ${meta}`, 20, 90);
+
+  // ===== CORRIDAS =====
+  let y = 110;
+
+  doc.setFontSize(14);
+
+  doc.text("Corridas", 20, y);
+
+  y += 10;
+
+  receitasArray = JSON.parse(localStorage.getItem("receitas")) || [];
+
+  doc.setFontSize(11);
+
+  receitasArray.forEach((r) => {
+    doc.text(`${r.data} | ${r.descricao} | R$ ${r.valor.toFixed(2)}`, 20, y);
+
+    y += 8;
+  });
+
+  // ===== SALVAR =====
+  doc.save("relatorio-financeiro.pdf");
+}
