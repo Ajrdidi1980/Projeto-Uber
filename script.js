@@ -461,6 +461,12 @@ function atualizarGrafico(dadosPorDia) {
     },
   });
 }
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(() => console.log("PWA ativo"))
+    .catch((err) => console.log(err));
+}
 
 // ===== INICIAR =====
 document.addEventListener("DOMContentLoaded", function () {
