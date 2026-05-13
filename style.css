@@ -361,3 +361,101 @@ td:last-child {
     max-width: 100%;
   }
 }
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+#toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #22c55e;
+  color: #000;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  z-index: 9999;
+  transform: translateY(20px);
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ajuda-percentual {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+/* =========================
+   LIGHT MODE
+========================= */
+
+body.light {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+body.light .app {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+body.light .sidebar {
+  background: #e2e8f0;
+}
+
+body.light .card-mini {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+body.light table {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+body.light th {
+  background: #cbd5e1;
+  color: #000;
+}
+
+body.light td {
+  border-color: #cbd5e1;
+}
+
+body.light input {
+  background: #fff;
+  color: #000;
+  border: 1px solid #cbd5e1;
+}
+
+body.light label {
+  color: #334155;
+}
+
+body.light .sidebar button {
+  color: #000;
+}
+
+body.light .tabs button {
+  color: #000;
+}
+.filtros-rapidos {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.filtros-rapidos button {
+  flex: 1;
+}

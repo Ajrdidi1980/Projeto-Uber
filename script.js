@@ -265,6 +265,9 @@ function atualizar() {
   const ganhosPorDia = {};
 
   // ===== RECEITAS =====
+  let ganhosManha = 0;
+  let ganhosTarde = 0;
+  let ganhosNoite = 0;
   receitas.forEach((r, i) => {
     if (!r.data) return;
 
@@ -281,6 +284,17 @@ function atualizar() {
 
     // 🔥 ACUMULADORES
     totalR += r.lucroLiquido || r.valor;
+    if (r.horaInicio) {
+      const hora = Number(r.horaInicio.split(":")[0]);
+
+      if (hora >= 5 && hora < 12) {
+        ganhosManha += r.valor;
+      } else if (hora >= 12 && hora < 18) {
+        ganhosTarde += r.valor;
+      } else {
+        ganhosNoite += r.valor;
+      }
+    }
     totalKm += r.kmRodado || 0;
     totalCombustivel += r.gastoCombustivel || 0;
     if (r.ganhoPorHora) {
@@ -346,6 +360,15 @@ function atualizar() {
     melhorDia = Math.max(...valores);
     mediaDia = totalR / valores.length;
   }
+  let melhorPeriodo = "Manhã";
+
+  if (ganhosTarde > ganhosManha && ganhosTarde > ganhosNoite) {
+    melhorPeriodo = "Tarde";
+  }
+
+  if (ganhosNoite > ganhosManha && ganhosNoite > ganhosTarde) {
+    melhorPeriodo = "Noite";
+  }
 
   let custoPorKm = 0;
   if (totalKm > 0) {
@@ -393,6 +416,7 @@ function atualizar() {
   document.getElementById("meta-diaria").textContent =
     Number(metaDiaria).toFixed(2);
   document.getElementById("faltam-meta").textContent = textoMeta;
+  document.getElementById("melhor-periodo").textContent = melhorPeriodo;
   let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
 
   if (porcentagemMeta > 100) {
@@ -533,4 +557,135 @@ async function exportarPDF() {
 
   // ===== SALVAR =====
   doc.save("relatorio-financeiro.pdf");
+}
+// ===== EXPORTAR BACKUP =====
+function exportarBackup() {
+  const dados = {
+    receitas,
+    gastos,
+    metaDiaria,
+  };
+
+  const json = JSON.stringify(dados, null, 2);
+
+  const blob = new Blob([json], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "backup-financeiro.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// ===== IMPORTAR BACKUP =====
+function importarBackup(event) {
+  const arquivo = event.target.files[0];
+
+  if (!arquivo) return;
+
+  const leitor = new FileReader();
+
+  leitor.onload = function (e) {
+    const dados = JSON.parse(e.target.result);
+
+    receitas = dados.receitas || [];
+    gastos = dados.gastos || [];
+    metaDiaria = dados.metaDiaria || 0;
+
+    localStorage.setItem("receitas", JSON.stringify(receitas));
+
+    localStorage.setItem("gastos", JSON.stringify(gastos));
+
+    localStorage.setItem("metaDiaria", metaDiaria);
+
+    atualizar();
+
+    mostrarToast("✅ Backup restaurado!");
+  };
+
+  leitor.readAsText(arquivo);
+}
+function mostrarToast(mensagem) {
+  const toast = document.getElementById("toast");
+
+  toast.textContent = mensagem;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+// ===== TROCAR TEMA =====
+function trocarTema() {
+  document.body.classList.toggle("light");
+
+  if (document.body.classList.contains("light")) {
+    localStorage.setItem("tema", "light");
+  } else {
+    localStorage.setItem("tema", "dark");
+  }
+}
+
+// ===== CARREGAR TEMA =====
+const temaSalvo = localStorage.getItem("tema");
+
+if (temaSalvo === "light") {
+  document.body.classList.add("light");
+}
+function filtrarReceitas() {
+  filtroTexto = document.getElementById("filtro-receitas").value.toLowerCase();
+
+  atualizar();
+}
+// ===== FILTRO HOJE =====
+function filtrarHoje() {
+  const hoje = new Date().toISOString().split("T")[0];
+
+  dataInicio = hoje;
+  dataFim = hoje;
+
+  atualizar();
+}
+
+// ===== FILTRO SEMANA =====
+function filtrarSemana() {
+  const hoje = new Date();
+
+  const primeiroDia = new Date();
+  primeiroDia.setDate(hoje.getDate() - 7);
+
+  dataInicio = primeiroDia.toISOString().split("T")[0];
+
+  dataFim = hoje.toISOString().split("T")[0];
+
+  atualizar();
+}
+
+// ===== FILTRO MÊS =====
+function filtrarMes() {
+  const hoje = new Date();
+
+  const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+  dataInicio = primeiroDia.toISOString().split("T")[0];
+
+  dataFim = hoje.toISOString().split("T")[0];
+
+  atualizar();
+}
+
+// ===== LIMPAR =====
+function limparFiltros() {
+  dataInicio = "";
+  dataFim = "";
+
+  atualizar();
 }

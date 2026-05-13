@@ -40,8 +40,11 @@
           <div class="form">
             <input id="desc-receita" placeholder="Descrição" />
             <input id="valor-receita" type="number" placeholder="R$ 0,00" />
+            <label for="data-receita">Data da corrida</label>
             <input id="data-receita" type="date" />
+            <label for="hora-inicio">Hora de início</label>
             <input id="hora-inicio" type="time" />
+            <label for="hora-fim">Hora de fim</label>
             <input id="hora-fim" type="time" />
             <input id="km-inicial" type="number" placeholder="KM inicial" />
             <input id="km-final" type="number" placeholder="KM final" />
@@ -111,6 +114,15 @@
           <div class="filtros-resumo">
             <input type="date" id="data-inicio" />
             <input type="date" id="data-fim" />
+            <div class="filtros-rapidos">
+              <button onclick="filtrarHoje()">Hoje</button>
+
+              <button onclick="filtrarSemana()">Semana</button>
+
+              <button onclick="filtrarMes()">Mês</button>
+
+              <button onclick="limparFiltros()">Tudo</button>
+            </div>
 
             <button onclick="filtrarPorData()">Filtrar período</button>
 
@@ -132,6 +144,10 @@
             </div>
             <div class="card-mini">
               Melhor dia<br />R$ <span id="melhor-dia">0</span>
+            </div>
+            <div class="card-mini">
+              Melhor período<br />
+              <strong id="melhor-periodo"> - </strong>
             </div>
             <div class="card-mini">
               Média diária<br />R$ <span id="media-dia">0</span>
@@ -163,15 +179,28 @@
           </div>
 
           <canvas id="grafico"></canvas>
-
+          <p class="ajuda-percentual">
+            % reservado automaticamente dos ganhos. Exemplo: 10% para
+            manutenção, emergência ou combustível.
+          </p>
           <input id="percentual" type="number" placeholder="Reserva (%)" />
           <button onclick="salvarPercentual()">Salvar</button>
           <input id="meta-input" type="number" placeholder="Meta diária R$" />
           <button onclick="salvarMeta()">Salvar Meta</button>
           <button onclick="exportarPDF()">Exportar PDF</button>
+          <button onclick="exportarBackup()">Exportar Backup</button>
+          <button onclick="trocarTema()">🌙 / ☀️ Tema</button>
+
+          <input
+            type="file"
+            id="importar-backup"
+            accept=".json"
+            onchange="importarBackup(event)"
+          />
         </div>
       </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <div id="toast"></div>
   </body>
 </html>
