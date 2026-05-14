@@ -10,6 +10,7 @@ let grafico = null;
 let filtroTexto = "";
 let dataInicio = "";
 let dataFim = "";
+let modoGrafico = "mes";
 
 // ===== SALVAR =====
 function salvar() {
@@ -302,10 +303,23 @@ function atualizar() {
       qtdHoras++;
     }
     // 🔥 AGRUPAMENTO POR DIA
-    if (!ganhosPorDia[r.data]) {
-      ganhosPorDia[r.data] = 0;
+    if (modoGrafico === "dia") {
+      if (!ganhosPorDia[r.data]) {
+        ganhosPorDia[r.data] = 0;
+      }
+
+      ganhosPorDia[r.data] += r.valor;
+    } else {
+      const partesMes = r.data.split("/");
+
+      const chaveMes = partesMes[1] + "/" + partesMes[2];
+
+      if (!ganhosPorDia[chaveMes]) {
+        ganhosPorDia[chaveMes] = 0;
+      }
+
+      ganhosPorDia[chaveMes] += r.valor;
     }
-    ganhosPorDia[r.data] += r.valor;
 
     // 🔥 RENDER
     listaR.innerHTML += `
@@ -442,6 +456,53 @@ function atualizar() {
   }
   document.getElementById("texto-progresso").textContent =
     porcentagemMeta.toFixed(0) + "% da meta";
+  // ===== COMPARATIVO SEMANAL =====
+
+  const hoje = new Date();
+
+  const semanaAtual = receitas.filter((r) => {
+    if (!r.data) return false;
+
+    const partes = r.data.split("/");
+
+    const data = new Date(partes[2], partes[1] - 1, partes[0]);
+
+    const diff = (hoje - data) / (1000 * 60 * 60 * 24);
+
+    return diff <= 7;
+  });
+
+  const semanaPassada = receitas.filter((r) => {
+    if (!r.data) return false;
+
+    const partes = r.data.split("/");
+
+    const data = new Date(partes[2], partes[1] - 1, partes[0]);
+
+    const diff = (hoje - data) / (1000 * 60 * 60 * 24);
+
+    return diff > 7 && diff <= 14;
+  });
+
+  const totalAtual = semanaAtual.reduce((acc, r) => acc + r.valor, 0);
+
+  const totalPassado = semanaPassada.reduce((acc, r) => acc + r.valor, 0);
+
+  let textoComparativo = "Sem dados suficientes";
+
+  if (totalPassado > 0) {
+    const diferenca = ((totalAtual - totalPassado) / totalPassado) * 100;
+
+    if (diferenca > 0) {
+      textoComparativo = `📈 ${diferenca.toFixed(1)}% acima da semana passada`;
+    } else {
+      textoComparativo = `📉 ${Math.abs(diferenca).toFixed(
+        1,
+      )}% abaixo da semana passada`;
+    }
+  }
+
+  document.getElementById("comparativo").innerHTML = textoComparativo;
 
   atualizarGrafico(ganhosPorDia);
 }

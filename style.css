@@ -241,9 +241,17 @@ td:last-child {
   text-align: left;
   padding: 12px;
   border-radius: 10px;
-  background: transparent;
+
+  background: rgba(255, 255, 255, 0.08);
+
   color: #fff;
+
+  opacity: 1;
+
   transition: 0.2s;
+
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -407,6 +415,9 @@ body.light .app {
   background: #ffffff;
   color: #0f172a;
 }
+body.light .filtros-rapidos button {
+  color: #fff;
+}
 
 body.light .sidebar {
   background: #e2e8f0;
@@ -443,6 +454,11 @@ body.light label {
 }
 
 body.light .sidebar button {
+  background: rgba(255, 255, 255, 0.7);
+  color: #000;
+}
+body.light .sidebar button.ativo {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #000;
 }
 
@@ -458,4 +474,51 @@ body.light .tabs button {
 
 .filtros-rapidos button {
   flex: 1;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.filtros-rapidos button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+/* ===== BOTÕES FILTROS RÁPIDOS ===== */
+
+.filtros-rapidos button {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+
+  color: #fff !important;
+
+  border: none !important;
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.filtros-rapidos button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.9;
+}
+.btn-verde {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
