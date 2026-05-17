@@ -7,6 +7,7 @@ let metaDiaria = parseFloat(localStorage.getItem("metaDiaria")) || 300;
 let editandoReceita = null;
 let editandoGasto = null;
 let grafico = null;
+let graficoPizza = null;
 let filtroTexto = "";
 let dataInicio = "";
 let dataFim = "";
@@ -264,13 +265,79 @@ function atualizar() {
 
   // 🔥 AGRUPAR GANHOS POR DIA
   const ganhosPorDia = {};
+  let ganhosSemanaAtual = 0;
+  let ganhosSemanaPassada = 0;
 
   // ===== RECEITAS =====
   let ganhosManha = 0;
   let ganhosTarde = 0;
   let ganhosNoite = 0;
+  const ganhosSemana = {
+    Domingo: 0,
+    Segunda: 0,
+    Terça: 0,
+    Quarta: 0,
+    Quinta: 0,
+    Sexta: 0,
+    Sábado: 0,
+  };
+
+  let maiorGanho = 0;
   receitas.forEach((r, i) => {
     if (!r.data) return;
+    const hoje = new Date();
+
+    const partesData = r.data.split("/");
+
+    const dataCorrida = new Date(
+      partesData[2],
+      partesData[1] - 1,
+      partesData[0],
+    );
+
+    const diffTempo = hoje - dataCorrida;
+
+    const diffDias = diffTempo / (1000 * 60 * 60 * 24);
+
+    // ===== SEMANA ATUAL =====
+
+    if (diffDias <= 7) {
+      ganhosSemanaAtual += r.valor;
+    }
+
+    // ===== SEMANA PASSADA =====
+    else if (diffDias <= 14) {
+      ganhosSemanaPassada += r.valor;
+    }
+    // ===== DIA DA SEMANA =====
+
+    const partesSemana = r.data.split("/");
+
+    const dataSemana = new Date(
+      partesSemana[2],
+      partesSemana[1] - 1,
+      partesSemana[0],
+    );
+
+    const dias = [
+      "Domingo",
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado",
+    ];
+
+    const nomeDia = dias[dataSemana.getDay()];
+
+    ganhosSemana[nomeDia] += r.valor;
+
+    // ===== MAIOR GANHO =====
+
+    if (r.valor > maiorGanho) {
+      maiorGanho = r.valor;
+    }
 
     // filtro texto
     if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) return;
@@ -374,6 +441,18 @@ function atualizar() {
     melhorDia = Math.max(...valores);
     mediaDia = totalR / valores.length;
   }
+  // ===== MELHOR DIA =====
+
+  let melhorDiaSemana = "Domingo";
+  let maiorValorSemana = 0;
+
+  for (const dia in ganhosSemana) {
+    if (ganhosSemana[dia] > maiorValorSemana) {
+      maiorValorSemana = ganhosSemana[dia];
+
+      melhorDiaSemana = dia;
+    }
+  }
   let melhorPeriodo = "Manhã";
 
   if (ganhosTarde > ganhosManha && ganhosTarde > ganhosNoite) {
@@ -431,6 +510,14 @@ function atualizar() {
     Number(metaDiaria).toFixed(2);
   document.getElementById("faltam-meta").textContent = textoMeta;
   document.getElementById("melhor-periodo").textContent = melhorPeriodo;
+  document.getElementById("ranking-dia").textContent =
+    "🏆 Melhor dia: " + melhorDiaSemana;
+
+  document.getElementById("ranking-periodo").textContent =
+    "🔥 Melhor período: " + melhorPeriodo;
+
+  document.getElementById("ranking-maior").textContent =
+    "💰 Maior corrida: R$ " + maiorGanho.toFixed(2);
   let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
 
   if (porcentagemMeta > 100) {
@@ -456,6 +543,7 @@ function atualizar() {
   }
   document.getElementById("texto-progresso").textContent =
     porcentagemMeta.toFixed(0) + "% da meta";
+
   // ===== COMPARATIVO SEMANAL =====
 
   const hoje = new Date();
@@ -502,9 +590,10 @@ function atualizar() {
     }
   }
 
-  document.getElementById("comparativo").innerHTML = textoComparativo;
+  document.getElementById("comparativo-semana").innerHTML = textoComparativo;
 
   atualizarGrafico(ganhosPorDia);
+  atualizarGraficoPizza(totalR, totalG, reserva);
 }
 
 // ===== GRÁFICO =====
@@ -542,6 +631,43 @@ function atualizarGrafico(dadosPorDia) {
       scales: {
         x: { ticks: { color: "#fff" } },
         y: { ticks: { color: "#fff" } },
+      },
+    },
+  });
+}
+function atualizarGraficoPizza(receitas, gastos, reserva) {
+  const canvas = document.getElementById("graficoPizza");
+
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  if (graficoPizza) {
+    graficoPizza.destroy();
+  }
+
+  graficoPizza = new Chart(ctx, {
+    type: "pie",
+
+    data: {
+      labels: ["Receitas", "Gastos", "Reserva"],
+
+      datasets: [
+        {
+          data: [receitas, gastos, reserva],
+
+          backgroundColor: ["#22c55e", "#ef4444", "#3b82f6"],
+        },
+      ],
+    },
+
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: "#fff",
+          },
+        },
       },
     },
   });

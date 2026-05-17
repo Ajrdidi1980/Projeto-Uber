@@ -130,6 +130,15 @@
 
             <button class="btn-verde" onclick="limparFiltros()">Limpar</button>
           </div>
+          <div class="card">
+            <h3>🏆 Ranking Automático</h3>
+
+            <p id="ranking-dia"></p>
+
+            <p id="ranking-periodo"></p>
+
+            <p id="ranking-maior"></p>
+          </div>
 
           <div class="cards">
             <div class="card-mini">
@@ -171,14 +180,18 @@
             </div>
             <div class="barra-meta">
               <div id="progresso-meta"></div>
-              <div class="card-mini">
-                Ganho/Hora Médio<br />
-                R$ <span id="media-hora">0</span>/h
-              </div>
             </div>
 
             <p id="texto-progresso">0% da meta</p>
-            <div id="comparativo" class="card-mini"></div>
+
+            <div id="comparativo-semana" class="card-mini">
+              📈 Comparando semanas...
+            </div>
+
+            <div class="card-mini">
+              Ganho/Hora Médio<br />
+              R$ <span id="media-hora">0</span>/h
+            </div>
           </div>
 
           <div class="filtros-grafico">
@@ -202,6 +215,9 @@
           </div>
 
           <canvas id="grafico"></canvas>
+          <div class="grafico-pizza-container">
+            <canvas id="graficoPizza"></canvas>
+          </div>
           <p class="ajuda-percentual">
             % reservado automaticamente dos ganhos. Exemplo: 10% para
             manutenção, emergência ou combustível.

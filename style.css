@@ -335,6 +335,17 @@ td:last-child {
   .card-mini {
     padding: 18px;
     font-size: 15px;
+    #comparativo-semana {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 50px;
+
+      font-weight: bold;
+
+      color: #22c55e;
+    }
   }
 
   .form,
@@ -521,4 +532,14 @@ body.light .tabs button {
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+}
+.grafico-pizza-container {
+  max-width: 280px;
+  margin: 30px auto;
+}
+#comparativo-semana {
+  margin-top: 12px;
+  padding: 14px;
+  text-align: center;
+  font-weight: bold;
 }
