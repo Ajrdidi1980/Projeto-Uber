@@ -233,9 +233,17 @@ function editarGasto(i) {
   editandoGasto = i;
 }
 // ===== EXCLUIR =====
-function excluirReceita(i) {
+async function excluirReceita(i) {
+  const receita = receitas[i];
+
+  if (receita.id) {
+    await excluirReceitaFirebase(receita.id);
+  }
+
   receitas.splice(i, 1);
+
   salvar();
+
   atualizar();
 }
 
@@ -895,8 +903,6 @@ async function iniciarSistema() {
 
   if (receitasNuvem.length > 0) {
     receitas = receitasNuvem;
-
-    salvar();
   }
 
   atualizar();
