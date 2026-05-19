@@ -4,6 +4,7 @@ import {
   getFirestore,
   collection,
   addDoc,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -18,6 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+
+// ===== SALVAR RECEITA =====
+
 window.salvarReceitaFirebase = async function (dados) {
   try {
     await addDoc(collection(db, "receitas"), dados);
@@ -25,6 +29,28 @@ window.salvarReceitaFirebase = async function (dados) {
     console.log("✅ Receita salva na nuvem");
   } catch (erro) {
     console.error("❌ Erro:", erro);
+  }
+};
+
+// ===== CARREGAR RECEITAS =====
+
+window.carregarReceitasFirebase = async function () {
+  try {
+    const consulta = await getDocs(collection(db, "receitas"));
+
+    let receitasFirebase = [];
+
+    consulta.forEach((doc) => {
+      receitasFirebase.push(doc.data());
+    });
+
+    console.log("☁️ Receitas carregadas:", receitasFirebase);
+
+    return receitasFirebase;
+  } catch (erro) {
+    console.error("❌ Erro:", erro);
+
+    return [];
   }
 };
 

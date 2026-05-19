@@ -127,6 +127,16 @@ async function addReceita() {
       descricao: desc,
       valor: valor,
       data: dataReceita ? formatarData(dataReceita) : hoje(),
+
+      horaInicio,
+      horaFim,
+
+      kmInicial,
+      kmFinal,
+
+      consumo,
+      combustivel,
+
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
@@ -487,7 +497,7 @@ function atualizar() {
   const saldo = totalR - totalG - reserva;
   let metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
 
-  let faltamMeta = Number(metaDiaria) - totalR;
+  let faltamMeta = Math.max(0, Number(metaDiaria) - totalR);
   console.log("META:", metaDiaria);
   console.log("TOTALR:", totalR);
   console.log("FALTAM:", faltamMeta);
@@ -684,10 +694,10 @@ if ("serviceWorker" in navigator) {
 }
 
 // ===== INICIAR =====
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   trocarTela("receitas", document.querySelector(".sidebar button"));
 
-  atualizar();
+  await iniciarSistema();
 });
 async function exportarPDF() {
   const { jsPDF } = window.jspdf;
@@ -877,6 +887,17 @@ function filtrarMes() {
 function limparFiltros() {
   dataInicio = "";
   dataFim = "";
+
+  atualizar();
+}
+async function iniciarSistema() {
+  const receitasNuvem = await carregarReceitasFirebase();
+
+  if (receitasNuvem.length > 0) {
+    receitas = receitasNuvem;
+
+    salvar();
+  }
 
   atualizar();
 }
