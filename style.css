@@ -307,6 +307,18 @@ td:last-child {
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
+    #graficoPizza {
+      max-width: 280px;
+      margin: 20px auto;
+    }
+
+    #comparativo-semana {
+      margin-top: 15px;
+    }
+
+    .card {
+      margin-bottom: 15px;
+    }
   }
 
   .sidebar {
@@ -542,4 +554,17 @@ body.light .tabs button {
   padding: 14px;
   text-align: center;
   font-weight: bold;
+}
+/* ===== MOBILE GRÁFICO PIZZA ===== */
+
+#graficoPizza {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* ===== CARD RANKING ===== */
+
+.card {
+  width: 100%;
+  box-sizing: border-box;
 }
