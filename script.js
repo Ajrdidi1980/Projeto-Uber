@@ -76,7 +76,7 @@ function filtrarPorData() {
 }
 
 // ===== ADICIONAR / EDITAR RECEITA =====
-function addReceita() {
+async function addReceita() {
   const desc = document.getElementById("desc-receita").value;
   const valor = parseFloat(document.getElementById("valor-receita").value) || 0;
   const dataReceita = document.getElementById("data-receita").value;
@@ -123,7 +123,7 @@ function addReceita() {
     };
     editandoReceita = null;
   } else {
-    receitas.push({
+    const novaReceita = {
       descricao: desc,
       valor: valor,
       data: dataReceita ? formatarData(dataReceita) : hoje(),
@@ -131,7 +131,11 @@ function addReceita() {
       gastoCombustivel,
       lucroLiquido,
       ganhoPorHora,
-    });
+    };
+
+    receitas.push(novaReceita);
+
+    await salvarReceitaFirebase(novaReceita);
   }
 
   salvar();

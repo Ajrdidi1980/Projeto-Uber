@@ -1,5 +1,10 @@
-// Firebase SDK
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBxAd9aONVUtaMPiyPlrZtEJNserACJySs",
@@ -10,7 +15,17 @@ const firebaseConfig = {
   appId: "1:116752945231:web:6477f51f338bd780a61a3a",
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
-console.log("🔥 Firebase conectado");
+const db = getFirestore(app);
+window.salvarReceitaFirebase = async function (dados) {
+  try {
+    await addDoc(collection(db, "receitas"), dados);
+
+    console.log("✅ Receita salva na nuvem");
+  } catch (erro) {
+    console.error("❌ Erro:", erro);
+  }
+};
+
+console.log("🔥 Firestore conectado");
