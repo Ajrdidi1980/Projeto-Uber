@@ -7,6 +7,7 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -36,16 +37,27 @@ window.salvarReceitaFirebase = async function (dados) {
 
 // ===== CARREGAR RECEITAS =====
 
-window.carregarReceitasFirebase = async function () {
-  window.excluirReceitaFirebase = async function (id) {
-    try {
-      await deleteDoc(doc(db, "receitas", id));
+window.editarReceitaFirebase = async function (id, dados) {
+  try {
+    await updateDoc(doc(db, "receitas", id), dados);
 
-      console.log("🗑️ Receita excluída");
-    } catch (erro) {
-      console.error(erro);
-    }
-  };
+    console.log("✏️ Receita atualizada");
+  } catch (erro) {
+    console.error(erro);
+  }
+};
+
+window.excluirReceitaFirebase = async function (id) {
+  try {
+    await deleteDoc(doc(db, "receitas", id));
+
+    console.log("🗑️ Receita excluída");
+  } catch (erro) {
+    console.error(erro);
+  }
+};
+
+window.carregarReceitasFirebase = async function () {
   try {
     const consulta = await getDocs(collection(db, "receitas"));
 
@@ -54,6 +66,7 @@ window.carregarReceitasFirebase = async function () {
     consulta.forEach((doc) => {
       receitasFirebase.push({
         id: doc.id,
+
         ...doc.data(),
       });
     });

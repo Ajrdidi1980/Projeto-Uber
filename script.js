@@ -113,14 +113,36 @@ async function addReceita() {
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
 
   if (editandoReceita !== null) {
-    receitas[editandoReceita] = {
+    const receitaEditada = {
       descricao: desc,
       valor: valor,
       data: dataReceita ? formatarData(dataReceita) : hoje(),
+
+      horaInicio,
+      horaFim,
+
+      kmInicial,
+      kmFinal,
+
+      consumo,
+      combustivel,
+
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
+      ganhoPorHora,
     };
+
+    const idFirebase = receitas[editandoReceita].id;
+
+    receitas[editandoReceita] = {
+      id: idFirebase,
+      ...receitaEditada,
+    };
+    console.log(receitas[editandoReceita]);
+
+    await editarReceitaFirebase(idFirebase, receitaEditada);
+
     editandoReceita = null;
   } else {
     const novaReceita = {
@@ -214,7 +236,27 @@ function editarReceita(i) {
   const r = receitas[i];
 
   document.getElementById("desc-receita").value = r.descricao;
+
   document.getElementById("valor-receita").value = r.valor;
+
+  document.getElementById("data-receita").value = r.data
+    .split("/")
+    .reverse()
+    .join("-");
+
+  document.getElementById("hora-inicio").value = r.horaInicio || "";
+
+  document.getElementById("hora-fim").value = r.horaFim || "";
+
+  document.getElementById("km-inicial").value = r.kmInicial || "";
+
+  document.getElementById("km-final").value = r.kmFinal || "";
+
+  document.getElementById("consumo").value = r.consumo || "";
+
+  document.getElementById("combustivel").value = r.combustivel || "";
+
+  document.getElementById("btn-receita").textContent = "Salvar";
 
   editandoReceita = i;
 }
