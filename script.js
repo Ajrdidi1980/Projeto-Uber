@@ -154,7 +154,17 @@ async function addReceita() {
   // limpa campos
   document.getElementById("desc-receita").value = "";
   document.getElementById("valor-receita").value = "";
-  document.getElementById("btn-receita").textContent = "Adicionar";
+  document.getElementById("desc-gasto").value = "";
+  document.getElementById("valor-gasto").value = "";
+  document.getElementById("data-receita").value = "";
+  document.getElementById("hora-inicio").value = "";
+  document.getElementById("hora-fim").value = "";
+  document.getElementById("km-inicial").value = "";
+  document.getElementById("km-final").value = "";
+  document.getElementById("consumo").value = "";
+  document.getElementById("combustivel").value = "";
+  document.getElementById("tipo-gasto").value = "outros";
+  document.getElementById("btn-gasto").textContent = "Adicionar";
 }
 
 // ===== ADICIONAR / EDITAR GASTO =====
@@ -184,19 +194,6 @@ function addGasto() {
 
   salvar();
   atualizar();
-
-  // limpa campos
-  document.getElementById("desc-gasto").value = "";
-  document.getElementById("valor-gasto").value = "";
-  document.getElementById("data-receita").value = "";
-  document.getElementById("hora-inicio").value = "";
-  document.getElementById("hora-fim").value = "";
-  document.getElementById("km-inicial").value = "";
-  document.getElementById("km-final").value = "";
-  document.getElementById("consumo").value = "";
-  document.getElementById("combustivel").value = "";
-  document.getElementById("tipo-gasto").value = "outros";
-  document.getElementById("btn-gasto").textContent = "Adicionar";
 }
 function limparFiltros() {
   filtroTexto = "";
