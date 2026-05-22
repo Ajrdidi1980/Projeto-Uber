@@ -276,12 +276,10 @@ async function excluirReceita(i) {
   const receita = receitas[i];
 
   if (receita.id) {
-    await excluirReceitaFirebase(receita.id);
+    await window.excluirReceitaFirebase(receita.id);
   }
 
-  receitas.splice(i, 1);
-
-  salvar();
+  receitas = receitas.filter((_, index) => index !== i);
 
   atualizar();
 }
@@ -307,6 +305,77 @@ function salvarMeta() {
   localStorage.setItem("metaDiaria", metaDiaria);
 
   atualizar();
+}
+function renderizarReceita(r, i) {
+  return `
+    <tr>
+      <td>${r.descricao}</td>
+      <td>${r.data}</td>
+
+      <td>
+        R$ ${r.valor.toFixed(2)}
+      </td>
+
+      <td>
+        ${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}
+      </td>
+
+      <td>
+        ${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}
+      </td>
+
+      <td>
+        <strong>
+          R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}
+        </strong>
+      </td>
+
+      <td>
+        ${r.ganhoPorHora ? "R$ " + r.ganhoPorHora.toFixed(2) + "/h" : "-"}
+      </td>
+
+      <td>
+        <button onclick="editarReceita(${i})">
+          Editar
+        </button>
+
+        <button onclick="excluirReceita(${i})">
+          Excluir
+        </button>
+      </td>
+    </tr>
+  `;
+}
+function renderizarGasto(g, i) {
+  return `
+    <tr>
+
+      <td>
+        ${g.descricao} (${g.tipo})
+      </td>
+
+      <td>
+        ${g.data}
+      </td>
+
+      <td>
+        R$ ${g.valor.toFixed(2)}
+      </td>
+
+      <td>
+
+        <button onclick="editarGasto(${i})">
+          Editar
+        </button>
+
+        <button onclick="excluirGasto(${i})">
+          Excluir
+        </button>
+
+      </td>
+
+    </tr>
+  `;
 }
 
 // ===== ATUALIZAR TELA =====
@@ -448,23 +517,7 @@ function atualizar() {
 
       ganhosPorDia[chaveMes] += r.valor;
     }
-
-    // 🔥 RENDER
-    listaR.innerHTML += `
-      <tr>
-        <td>${r.descricao}</td>
-        <td>${r.data}</td>
-        <td>R$ ${r.valor.toFixed(2)}</td>
-        <td>${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}</td>
-        <td>${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}</td>
-        <td><strong>R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}</strong></td>
-        <td>${r.ganhoPorHora ? "R$ " + r.ganhoPorHora.toFixed(2) + "/h" : "-"}</td>
-        <td>
-          <button onclick="editarReceita(${i})">Editar</button>
-          <button onclick="excluirReceita(${i})">Excluir</button>
-        </td>
-      </tr>
-    `;
+    listaR.innerHTML += renderizarReceita(r, i);
   });
 
   // ===== GASTOS =====
@@ -479,17 +532,7 @@ function atualizar() {
 
     totalG += g.valor;
 
-    listaG.innerHTML += `
-      <tr>
-        <td>${g.descricao} (${g.tipo})</td>
-        <td>${g.data}</td>
-        <td>R$ ${g.valor.toFixed(2)}</td>
-        <td>
-          <button onclick="editarGasto(${i})">Editar</button>
-          <button onclick="excluirGasto(${i})">Excluir</button>
-        </td>
-      </tr>
-    `;
+    listaG.innerHTML += renderizarGasto(g, i);
   });
 
   // ===== CÁLCULOS =====
@@ -888,11 +931,7 @@ const temaSalvo = localStorage.getItem("tema");
 if (temaSalvo === "light") {
   document.body.classList.add("light");
 }
-function filtrarReceitas() {
-  filtroTexto = document.getElementById("filtro-receitas").value.toLowerCase();
 
-  atualizar();
-}
 // ===== FILTRO HOJE =====
 function filtrarHoje() {
   const hoje = new Date().toISOString().split("T")[0];
@@ -938,7 +977,7 @@ function limparFiltros() {
   atualizar();
 }
 async function iniciarSistema() {
-  const receitasNuvem = await carregarReceitasFirebase();
+  const receitasNuvem = await window.carregarReceitasFirebase();
 
   if (receitasNuvem.length > 0) {
     receitas = receitasNuvem;

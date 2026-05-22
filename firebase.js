@@ -8,6 +8,8 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -49,17 +51,21 @@ window.editarReceitaFirebase = async function (id, dados) {
 
 window.excluirReceitaFirebase = async function (id) {
   try {
+    console.log("🗑️ Excluindo ID:", id);
+
     await deleteDoc(doc(db, "receitas", id));
 
-    console.log("🗑️ Receita excluída");
+    console.log("✅ Receita excluída do Firebase");
   } catch (erro) {
-    console.error(erro);
+    console.error("❌ Erro ao excluir:", erro);
   }
 };
 
 window.carregarReceitasFirebase = async function () {
   try {
-    const consulta = await getDocs(collection(db, "receitas"));
+    const q = query(collection(db, "receitas"), orderBy("data", "desc"));
+
+    const consulta = await getDocs(q);
 
     let receitasFirebase = [];
 
