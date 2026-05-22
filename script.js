@@ -15,7 +15,6 @@ let modoGrafico = "mes";
 
 // ===== SALVAR =====
 function salvar() {
-  localStorage.setItem("receitas", JSON.stringify(receitas));
   localStorage.setItem("gastos", JSON.stringify(gastos));
   localStorage.setItem("percentual", percentual);
   localStorage.setItem("metaDiaria", metaDiaria);
@@ -165,9 +164,11 @@ async function addReceita() {
       ganhoPorHora,
     };
 
-    receitas.push(novaReceita);
+    const idFirebase = await salvarReceitaFirebase(novaReceita);
 
-    await salvarReceitaFirebase(novaReceita);
+    novaReceita.id = idFirebase;
+
+    receitas.push(novaReceita);
   }
 
   salvar();

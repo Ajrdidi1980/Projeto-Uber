@@ -29,7 +29,9 @@ const db = getFirestore(app);
 
 window.salvarReceitaFirebase = async function (dados) {
   try {
-    await addDoc(collection(db, "receitas"), dados);
+    const docRef = await addDoc(collection(db, "receitas"), dados);
+
+    return docRef.id;
 
     console.log("✅ Receita salva na nuvem");
   } catch (erro) {
