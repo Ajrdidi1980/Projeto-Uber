@@ -19,23 +19,6 @@ function salvar() {
   localStorage.setItem("percentual", percentual);
   localStorage.setItem("metaDiaria", metaDiaria);
 }
-
-// ===== DATA =====
-function hoje() {
-  const d = new Date();
-
-  const dia = String(d.getDate()).padStart(2, "0");
-  const mes = String(d.getMonth() + 1).padStart(2, "0");
-  const ano = d.getFullYear();
-
-  return `${dia}/${mes}/${ano}`;
-}
-function formatarData(dataISO) {
-  const partes = dataISO.split("-");
-
-  return `${partes[2]}/${partes[1]}/${partes[0]}`;
-}
-
 // ===== TROCAR TELA =====
 function trocarTela(id, el) {
   // esconder telas
@@ -167,8 +150,6 @@ async function addReceita() {
     const idFirebase = await salvarReceitaFirebase(novaReceita);
 
     novaReceita.id = idFirebase;
-
-    receitas.push(novaReceita);
   }
 
   salvar();
@@ -191,32 +172,38 @@ async function addReceita() {
 }
 
 // ===== ADICIONAR / EDITAR GASTO =====
-function addGasto() {
+
+async function addGasto() {
   const desc = document.getElementById("desc-gasto").value;
+
   const valor = parseFloat(document.getElementById("valor-gasto").value) || 0;
+
   const tipo = document.getElementById("tipo-gasto").value;
 
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
 
+  const gastoData = {
+    descricao: desc,
+    valor: valor,
+    tipo: tipo || "outros",
+    data: hoje(),
+  };
+
   if (editandoGasto !== null) {
-    gastos[editandoGasto] = {
-      descricao: desc,
-      valor: valor,
-      tipo: tipo || "outros",
-      data: hoje(),
-    };
+    const idFirebase = gastos[editandoGasto].id;
+
+    await editarGastoFirebase(idFirebase, gastoData);
+
     editandoGasto = null;
   } else {
-    gastos.push({
-      descricao: desc,
-      valor: valor,
-      tipo: tipo || "outros",
-      data: hoje(),
-    });
+    await salvarGastoFirebase(gastoData);
   }
 
-  salvar();
   atualizar();
+
+  document.getElementById("desc-gasto").value = "";
+
+  document.getElementById("valor-gasto").value = "";
 }
 function limparFiltros() {
   filtroTexto = "";
@@ -978,11 +965,15 @@ function limparFiltros() {
   atualizar();
 }
 async function iniciarSistema() {
-  const receitasNuvem = await window.carregarReceitasFirebase();
+  window.escutarReceitasFirebase((receitasFirebase) => {
+    receitas = receitasFirebase;
 
-  if (receitasNuvem.length > 0) {
-    receitas = receitasNuvem;
-  }
+    atualizar();
+  });
 
-  atualizar();
+  window.escutarGastosFirebase((gastosFirebase) => {
+    gastos = gastosFirebase;
+
+    atualizar();
+  });
 }

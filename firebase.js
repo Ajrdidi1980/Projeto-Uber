@@ -10,6 +10,7 @@ import {
   updateDoc,
   query,
   orderBy,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -87,6 +88,70 @@ window.carregarReceitasFirebase = async function () {
 
     return [];
   }
+};
+window.escutarReceitasFirebase = function (callback) {
+  const q = query(collection(db, "receitas"), orderBy("data", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    let receitasFirebase = [];
+
+    snapshot.forEach((doc) => {
+      receitasFirebase.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    callback(receitasFirebase);
+  });
+};
+// ===== GASTOS =====
+
+window.salvarGastoFirebase = async function (dados) {
+  try {
+    const docRef = await addDoc(collection(db, "gastos"), dados);
+
+    return docRef.id;
+  } catch (erro) {
+    console.error("❌ Erro ao salvar gasto:", erro);
+  }
+};
+
+window.editarGastoFirebase = async function (id, dados) {
+  try {
+    await updateDoc(doc(db, "gastos", id), dados);
+
+    console.log("✏️ Gasto atualizado");
+  } catch (erro) {
+    console.error(erro);
+  }
+};
+
+window.excluirGastoFirebase = async function (id) {
+  try {
+    await deleteDoc(doc(db, "gastos", id));
+
+    console.log("🗑️ Gasto excluído");
+  } catch (erro) {
+    console.error(erro);
+  }
+};
+
+window.escutarGastosFirebase = function (callback) {
+  const q = query(collection(db, "gastos"), orderBy("data", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    let gastosFirebase = [];
+
+    snapshot.forEach((doc) => {
+      gastosFirebase.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    callback(gastosFirebase);
+  });
 };
 
 console.log("🔥 Firestore conectado");
