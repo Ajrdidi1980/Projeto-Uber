@@ -204,9 +204,17 @@ function renderizarReceita(r, i) {
     </tr>
   `;
 }
+function renderizarTabelaReceitas(receitasFiltradas, listaR) {
+  listaR.innerHTML = "";
+
+  receitasFiltradas.forEach((r, i) => {
+    listaR.innerHTML += renderizarReceita(r, i);
+  });
+}
 window.addReceita = addReceita;
 window.editarReceita = editarReceita;
 window.excluirReceita = excluirReceita;
 window.filtrarReceitas = filtrarReceitas;
 window.filtrarPorData = filtrarPorData;
 window.renderizarReceita = renderizarReceita;
+window.renderizarTabelaReceitas = renderizarTabelaReceitas;

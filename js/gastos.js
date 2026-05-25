@@ -94,7 +94,15 @@ function editarGasto(i) {
 
   editandoGasto = i;
 }
+function renderizarTabelaGastos(gastosFiltrados, listaG) {
+  listaG.innerHTML = "";
+
+  gastosFiltrados.forEach((g, i) => {
+    listaG.innerHTML += renderizarGasto(g, i);
+  });
+}
 window.renderizarGasto = renderizarGasto;
 window.addGasto = addGasto;
 window.excluirGasto = excluirGasto;
 window.editarGasto = editarGasto;
+window.renderizarTabelaGastos = renderizarTabelaGastos;

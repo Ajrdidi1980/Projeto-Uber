@@ -13,30 +13,6 @@ let dataInicio = "";
 let dataFim = "";
 let modoGrafico = "mes";
 
-// ===== TROCAR TELA =====
-function trocarTela(id, el) {
-  // esconder telas
-  document.querySelectorAll(".tela").forEach((t) => (t.style.display = "none"));
-
-  // mostrar tela selecionada
-  document.getElementById(id).style.display = "block";
-
-  // remover ativo
-  document
-    .querySelectorAll(".sidebar button")
-    .forEach((b) => b.classList.remove("ativo"));
-
-  // adiciona ativo
-  document.getElementById("btn-" + id).classList.add("ativo");
-
-  if (el) {
-    el.classList.add("ativo");
-  }
-  // atualizar resumo
-  if (id === "resumo") {
-    atualizar();
-  }
-}
 // ===== ATUALIZAR TELA =====
 function atualizar() {
   let totalR = 0;
@@ -72,6 +48,7 @@ function atualizar() {
   };
 
   let maiorGanho = 0;
+  const receitasFiltradas = [];
   receitas.forEach((r, i) => {
     if (!r.data) return;
     const hoje = new Date();
@@ -176,8 +153,10 @@ function atualizar() {
 
       ganhosPorDia[chaveMes] += r.valor;
     }
-    listaR.innerHTML += renderizarReceita(r, i);
+    receitasFiltradas.push(r);
   });
+  renderizarTabelaReceitas(receitasFiltradas, listaR);
+  const gastosFiltrados = [];
 
   // ===== GASTOS =====
   gastos.forEach((g, i) => {
@@ -191,8 +170,9 @@ function atualizar() {
 
     totalG += g.valor;
 
-    listaG.innerHTML += renderizarGasto(g, i);
+    gastosFiltrados.push(g);
   });
+  renderizarTabelaGastos(gastosFiltrados, listaG);
 
   // ===== CÁLCULOS =====
   const valores = Object.values(ganhosPorDia);
@@ -205,45 +185,26 @@ function atualizar() {
     mediaDia = totalR / valores.length;
   }
   // ===== MELHOR DIA =====
+  const melhorDiaSemana = calcularMelhorDiaSemana(ganhosSemana);
+  const melhorPeriodo = calcularMelhorPeriodo({
+    ganhosManha,
+    ganhosTarde,
+    ganhosNoite,
+  });
 
-  let melhorDiaSemana = "Domingo";
-  let maiorValorSemana = 0;
-
-  for (const dia in ganhosSemana) {
-    if (ganhosSemana[dia] > maiorValorSemana) {
-      maiorValorSemana = ganhosSemana[dia];
-
-      melhorDiaSemana = dia;
-    }
-  }
-  let melhorPeriodo = "Manhã";
-
-  if (ganhosTarde > ganhosManha && ganhosTarde > ganhosNoite) {
-    melhorPeriodo = "Tarde";
-  }
-
-  if (ganhosNoite > ganhosManha && ganhosNoite > ganhosTarde) {
-    melhorPeriodo = "Noite";
-  }
-
-  let custoPorKm = 0;
-  if (totalKm > 0) {
-    custoPorKm = totalCombustivel / totalKm;
-  }
-  let ganhoPorKm = 0;
-
-  if (totalKm > 0) {
-    ganhoPorKm = totalR / totalKm;
-  }
-  let mediaHora = 0;
-
-  if (qtdHoras > 0) {
-    mediaHora = totalGanhoHora / qtdHoras;
-  }
-
+  const { custoPorKm, ganhoPorKm, mediaHora } = calcularMetricas({
+    totalKm,
+    totalCombustivel,
+    totalR,
+    totalGanhoHora,
+    qtdHoras,
+  });
   // ===== RESUMO =====
-  const reserva = totalR * (percentual / 100);
-  const saldo = totalR - totalG - reserva;
+  const { reserva, saldo } = calcularResumoFinanceiro({
+    totalR,
+    totalG,
+    percentual,
+  });
   let metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
 
   let faltamMeta = Math.max(0, Number(metaDiaria) - totalR);
@@ -259,182 +220,30 @@ function atualizar() {
     textoMeta = "R$ " + faltamMeta.toFixed(2);
   }
 
-  // ===== ATUALIZAR UI =====
-  document.getElementById("total-receitas").textContent = totalR.toFixed(2);
-  document.getElementById("total-gastos").textContent = totalG.toFixed(2);
-  document.getElementById("reserva").textContent = reserva.toFixed(2);
-  document.getElementById("saldo").textContent = saldo.toFixed(2);
-  document.getElementById("melhor-dia").textContent = melhorDia.toFixed(2);
-  document.getElementById("media-dia").textContent = mediaDia.toFixed(2);
-  document.getElementById("custo-km").textContent = custoPorKm.toFixed(2);
-  document.getElementById("ganho-km").textContent = ganhoPorKm.toFixed(2);
-  document.getElementById("media-hora").textContent = mediaHora.toFixed(2);
-  document.getElementById("meta-diaria").textContent =
-    Number(metaDiaria).toFixed(2);
-  document.getElementById("faltam-meta").textContent = textoMeta;
-  document.getElementById("melhor-periodo").textContent = melhorPeriodo;
-  document.getElementById("ranking-dia").textContent =
-    "🏆 Melhor dia: " + melhorDiaSemana;
-
-  document.getElementById("ranking-periodo").textContent =
-    "🔥 Melhor período: " + melhorPeriodo;
-
-  document.getElementById("ranking-maior").textContent =
-    "💰 Maior corrida: R$ " + maiorGanho.toFixed(2);
-  let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
-
-  if (porcentagemMeta > 100) {
-    porcentagemMeta = 100;
-  }
-  const barra = document.getElementById("progresso-meta");
-
-  barra.style.width = porcentagemMeta + "%";
-
-  // 🔴 VERMELHO
-  if (porcentagemMeta < 50) {
-    barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
-  }
-
-  // 🟡 AMARELO
-  else if (porcentagemMeta < 100) {
-    barra.style.background = "linear-gradient(90deg, #facc15, #eab308)";
-  }
-
-  // 🟢 VERDE
-  else {
-    barra.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
-  }
-  document.getElementById("texto-progresso").textContent =
-    porcentagemMeta.toFixed(0) + "% da meta";
-
-  // ===== COMPARATIVO SEMANAL =====
-
-  const hoje = new Date();
-
-  const semanaAtual = receitas.filter((r) => {
-    if (!r.data) return false;
-
-    const partes = r.data.split("/");
-
-    const data = new Date(partes[2], partes[1] - 1, partes[0]);
-
-    const diff = (hoje - data) / (1000 * 60 * 60 * 24);
-
-    return diff <= 7;
+  atualizarCardsDashboard({
+    totalR,
+    totalG,
+    reserva,
+    saldo,
+    melhorDia,
+    mediaDia,
+    custoPorKm,
+    ganhoPorKm,
+    mediaHora,
+    metaDiaria,
+    textoMeta,
+    melhorPeriodo,
+    melhorDiaSemana,
+    maiorGanho,
   });
+  atualizarBarraMeta(totalR, metaDiaria);
 
-  const semanaPassada = receitas.filter((r) => {
-    if (!r.data) return false;
-
-    const partes = r.data.split("/");
-
-    const data = new Date(partes[2], partes[1] - 1, partes[0]);
-
-    const diff = (hoje - data) / (1000 * 60 * 60 * 24);
-
-    return diff > 7 && diff <= 14;
-  });
-
-  const totalAtual = semanaAtual.reduce((acc, r) => acc + r.valor, 0);
-
-  const totalPassado = semanaPassada.reduce((acc, r) => acc + r.valor, 0);
-
-  let textoComparativo = "Sem dados suficientes";
-
-  if (totalPassado > 0) {
-    const diferenca = ((totalAtual - totalPassado) / totalPassado) * 100;
-
-    if (diferenca > 0) {
-      textoComparativo = `📈 ${diferenca.toFixed(1)}% acima da semana passada`;
-    } else {
-      textoComparativo = `📉 ${Math.abs(diferenca).toFixed(
-        1,
-      )}% abaixo da semana passada`;
-    }
-  }
-
-  document.getElementById("comparativo-semana").innerHTML = textoComparativo;
+  atualizarComparativoSemanal(receitas);
 
   atualizarGrafico(ganhosPorDia);
   atualizarGraficoPizza(totalR, totalG, reserva);
 }
 
-// ===== GRÁFICO =====
-function atualizarGrafico(dadosPorDia) {
-  const canvas = document.getElementById("grafico");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  if (grafico) {
-    grafico.destroy();
-  }
-
-  const labels = Object.keys(dadosPorDia);
-  const valores = Object.values(dadosPorDia);
-
-  grafico = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Ganhos por dia (R$)",
-          data: valores,
-          backgroundColor: "#22c55e",
-        },
-      ],
-    },
-    options: {
-      plugins: {
-        legend: {
-          labels: { color: "#fff" },
-        },
-      },
-      scales: {
-        x: { ticks: { color: "#fff" } },
-        y: { ticks: { color: "#fff" } },
-      },
-    },
-  });
-}
-function atualizarGraficoPizza(receitas, gastos, reserva) {
-  const canvas = document.getElementById("graficoPizza");
-
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  if (graficoPizza) {
-    graficoPizza.destroy();
-  }
-
-  graficoPizza = new Chart(ctx, {
-    type: "pie",
-
-    data: {
-      labels: ["Receitas", "Gastos", "Reserva"],
-
-      datasets: [
-        {
-          data: [receitas, gastos, reserva],
-
-          backgroundColor: ["#22c55e", "#ef4444", "#3b82f6"],
-        },
-      ],
-    },
-
-    options: {
-      plugins: {
-        legend: {
-          labels: {
-            color: "#fff",
-          },
-        },
-      },
-    },
-  });
-}
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("./sw.js")
@@ -591,50 +400,6 @@ if (temaSalvo === "light") {
   document.body.classList.add("light");
 }
 
-// ===== FILTRO HOJE =====
-function filtrarHoje() {
-  const hoje = new Date().toISOString().split("T")[0];
-
-  dataInicio = hoje;
-  dataFim = hoje;
-
-  atualizar();
-}
-
-// ===== FILTRO SEMANA =====
-function filtrarSemana() {
-  const hoje = new Date();
-
-  const primeiroDia = new Date();
-  primeiroDia.setDate(hoje.getDate() - 7);
-
-  dataInicio = primeiroDia.toISOString().split("T")[0];
-
-  dataFim = hoje.toISOString().split("T")[0];
-
-  atualizar();
-}
-
-// ===== FILTRO MÊS =====
-function filtrarMes() {
-  const hoje = new Date();
-
-  const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-
-  dataInicio = primeiroDia.toISOString().split("T")[0];
-
-  dataFim = hoje.toISOString().split("T")[0];
-
-  atualizar();
-}
-
-// ===== LIMPAR =====
-function limparFiltros() {
-  dataInicio = "";
-  dataFim = "";
-
-  atualizar();
-}
 async function iniciarSistema() {
   window.escutarReceitasFirebase((receitasFirebase) => {
     receitas = receitasFirebase;
