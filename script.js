@@ -136,23 +136,11 @@ function atualizar() {
       qtdHoras++;
     }
     // 🔥 AGRUPAMENTO POR DIA
-    if (modoGrafico === "dia") {
-      if (!ganhosPorDia[r.data]) {
-        ganhosPorDia[r.data] = 0;
-      }
-
-      ganhosPorDia[r.data] += r.valor;
-    } else {
-      const partesMes = r.data.split("/");
-
-      const chaveMes = partesMes[1] + "/" + partesMes[2];
-
-      if (!ganhosPorDia[chaveMes]) {
-        ganhosPorDia[chaveMes] = 0;
-      }
-
-      ganhosPorDia[chaveMes] += r.valor;
-    }
+    agruparGanhosPorPeriodo({
+      modoGrafico,
+      ganhosPorDia,
+      receita: r,
+    });
     receitasFiltradas.push(r);
   });
   renderizarTabelaReceitas(receitasFiltradas, listaR);
@@ -177,13 +165,10 @@ function atualizar() {
   // ===== CÁLCULOS =====
   const valores = Object.values(ganhosPorDia);
 
-  let melhorDia = 0;
-  let mediaDia = 0;
-
-  if (valores.length > 0) {
-    melhorDia = Math.max(...valores);
-    mediaDia = totalR / valores.length;
-  }
+  const { melhorDia, mediaDia } = calcularDesempenhoDiario({
+    valores,
+    totalR,
+  });
   // ===== MELHOR DIA =====
   const melhorDiaSemana = calcularMelhorDiaSemana(ganhosSemana);
   const melhorPeriodo = calcularMelhorPeriodo({
@@ -207,18 +192,15 @@ function atualizar() {
   });
   let metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
 
-  let faltamMeta = Math.max(0, Number(metaDiaria) - totalR);
+  const faltamMeta = calcularFaltamMeta(totalR, metaDiaria);
   console.log("META:", metaDiaria);
   console.log("TOTALR:", totalR);
   console.log("FALTAM:", faltamMeta);
-
-  let textoMeta = "";
-
-  if (totalR >= Number(metaDiaria)) {
-    textoMeta = "Meta batida 🚀";
-  } else {
-    textoMeta = "R$ " + faltamMeta.toFixed(2);
-  }
+  const textoMeta = calcularTextoMeta({
+    totalR,
+    metaDiaria,
+    faltamMeta,
+  });
 
   atualizarCardsDashboard({
     totalR,

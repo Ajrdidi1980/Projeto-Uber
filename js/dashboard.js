@@ -251,6 +251,59 @@ function calcularResumoFinanceiro({ totalR, totalG, percentual }) {
     saldo,
   };
 }
+function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
+  let textoMeta = "";
+
+  if (totalR >= Number(metaDiaria)) {
+    textoMeta = "Meta batida 🚀";
+  } else {
+    textoMeta = "R$ " + faltamMeta.toFixed(2);
+  }
+
+  return textoMeta;
+}
+function calcularFaltamMeta(totalR, metaDiaria) {
+  return Math.max(0, Number(metaDiaria) - totalR);
+}
+function calcularDesempenhoDiario({ valores, totalR }) {
+  let melhorDia = 0;
+
+  let mediaDia = 0;
+
+  if (valores.length > 0) {
+    melhorDia = Math.max(...valores);
+
+    mediaDia = totalR / valores.length;
+  }
+
+  return {
+    melhorDia,
+    mediaDia,
+  };
+}
+function agruparGanhosPorPeriodo({ modoGrafico, ganhosPorDia, receita }) {
+  // AGRUPAR POR DIA
+  if (modoGrafico === "dia") {
+    if (!ganhosPorDia[receita.data]) {
+      ganhosPorDia[receita.data] = 0;
+    }
+
+    ganhosPorDia[receita.data] += receita.valor;
+  }
+
+  // AGRUPAR POR MÊS
+  else {
+    const partesMes = receita.data.split("/");
+
+    const chaveMes = partesMes[1] + "/" + partesMes[2];
+
+    if (!ganhosPorDia[chaveMes]) {
+      ganhosPorDia[chaveMes] = 0;
+    }
+
+    ganhosPorDia[chaveMes] += receita.valor;
+  }
+}
 window.salvar = salvar;
 window.salvarPercentual = salvarPercentual;
 window.salvarMeta = salvarMeta;
@@ -265,3 +318,7 @@ window.calcularMetricas = calcularMetricas;
 window.calcularMelhorPeriodo = calcularMelhorPeriodo;
 window.calcularMelhorDiaSemana = calcularMelhorDiaSemana;
 window.calcularResumoFinanceiro = calcularResumoFinanceiro;
+window.calcularTextoMeta = calcularTextoMeta;
+window.calcularFaltamMeta = calcularFaltamMeta;
+window.calcularDesempenhoDiario = calcularDesempenhoDiario;
+window.agruparGanhosPorPeriodo = agruparGanhosPorPeriodo;
