@@ -304,6 +304,58 @@ function agruparGanhosPorPeriodo({ modoGrafico, ganhosPorDia, receita }) {
     ganhosPorDia[chaveMes] += receita.valor;
   }
 }
+function calcularAcumuladoresReceita({
+  receita,
+  totalR,
+  totalKm,
+  totalCombustivel,
+  totalGanhoHora,
+  qtdHoras,
+}) {
+  totalR += receita.lucroLiquido || receita.valor;
+
+  totalKm += receita.kmRodado || 0;
+
+  totalCombustivel += receita.gastoCombustivel || 0;
+
+  if (receita.ganhoPorHora) {
+    totalGanhoHora += receita.ganhoPorHora;
+
+    qtdHoras++;
+  }
+
+  return {
+    totalR,
+    totalKm,
+    totalCombustivel,
+    totalGanhoHora,
+    qtdHoras,
+  };
+}
+function calcularGanhosPorPeriodo({
+  receita,
+  ganhosManha,
+  ganhosTarde,
+  ganhosNoite,
+}) {
+  if (receita.horaInicio) {
+    const hora = Number(receita.horaInicio.split(":")[0]);
+
+    if (hora >= 5 && hora < 12) {
+      ganhosManha += receita.valor;
+    } else if (hora >= 12 && hora < 18) {
+      ganhosTarde += receita.valor;
+    } else {
+      ganhosNoite += receita.valor;
+    }
+  }
+
+  return {
+    ganhosManha,
+    ganhosTarde,
+    ganhosNoite,
+  };
+}
 window.salvar = salvar;
 window.salvarPercentual = salvarPercentual;
 window.salvarMeta = salvarMeta;
@@ -322,3 +374,5 @@ window.calcularTextoMeta = calcularTextoMeta;
 window.calcularFaltamMeta = calcularFaltamMeta;
 window.calcularDesempenhoDiario = calcularDesempenhoDiario;
 window.agruparGanhosPorPeriodo = agruparGanhosPorPeriodo;
+window.calcularAcumuladoresReceita = calcularAcumuladoresReceita;
+window.calcularGanhosPorPeriodo = calcularGanhosPorPeriodo;

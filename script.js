@@ -117,24 +117,37 @@ function atualizar() {
     if (dataFim && dataFormatada > dataFim) return;
 
     // 🔥 ACUMULADORES
-    totalR += r.lucroLiquido || r.valor;
-    if (r.horaInicio) {
-      const hora = Number(r.horaInicio.split(":")[0]);
+    const acumulados = calcularAcumuladoresReceita({
+      receita: r,
+      totalR,
+      totalKm,
+      totalCombustivel,
+      totalGanhoHora,
+      qtdHoras,
+    });
 
-      if (hora >= 5 && hora < 12) {
-        ganhosManha += r.valor;
-      } else if (hora >= 12 && hora < 18) {
-        ganhosTarde += r.valor;
-      } else {
-        ganhosNoite += r.valor;
-      }
-    }
-    totalKm += r.kmRodado || 0;
-    totalCombustivel += r.gastoCombustivel || 0;
-    if (r.ganhoPorHora) {
-      totalGanhoHora += r.ganhoPorHora;
-      qtdHoras++;
-    }
+    totalR = acumulados.totalR;
+
+    totalKm = acumulados.totalKm;
+
+    totalCombustivel = acumulados.totalCombustivel;
+
+    totalGanhoHora = acumulados.totalGanhoHora;
+
+    qtdHoras = acumulados.qtdHoras;
+
+    const ganhosPeriodo = calcularGanhosPorPeriodo({
+      receita: r,
+      ganhosManha,
+      ganhosTarde,
+      ganhosNoite,
+    });
+
+    ganhosManha = ganhosPeriodo.ganhosManha;
+
+    ganhosTarde = ganhosPeriodo.ganhosTarde;
+
+    ganhosNoite = ganhosPeriodo.ganhosNoite;
     // 🔥 AGRUPAMENTO POR DIA
     agruparGanhosPorPeriodo({
       modoGrafico,
