@@ -356,6 +356,59 @@ function calcularGanhosPorPeriodo({
     ganhosNoite,
   };
 }
+function calcularGanhosSemanais({
+  receita,
+  diffDias,
+  ganhosSemanaAtual,
+  ganhosSemanaPassada,
+}) {
+  // SEMANA ATUAL
+  if (diffDias <= 7) {
+    ganhosSemanaAtual += receita.valor;
+  }
+
+  // SEMANA PASSADA
+  else if (diffDias <= 14) {
+    ganhosSemanaPassada += receita.valor;
+  }
+
+  return {
+    ganhosSemanaAtual,
+    ganhosSemanaPassada,
+  };
+}
+function acumularGanhosSemana({ receita, ganhosSemana }) {
+  const partesSemana = receita.data.split("/");
+
+  const dataSemana = new Date(
+    partesSemana[2],
+    partesSemana[1] - 1,
+    partesSemana[0],
+  );
+
+  const dias = [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ];
+
+  const nomeDia = dias[dataSemana.getDay()];
+
+  ganhosSemana[nomeDia] += receita.valor;
+
+  return ganhosSemana;
+}
+function calcularMaiorGanho({ receita, maiorGanho }) {
+  if (receita.valor > maiorGanho) {
+    maiorGanho = receita.valor;
+  }
+
+  return maiorGanho;
+}
 window.salvar = salvar;
 window.salvarPercentual = salvarPercentual;
 window.salvarMeta = salvarMeta;
@@ -376,3 +429,6 @@ window.calcularDesempenhoDiario = calcularDesempenhoDiario;
 window.agruparGanhosPorPeriodo = agruparGanhosPorPeriodo;
 window.calcularAcumuladoresReceita = calcularAcumuladoresReceita;
 window.calcularGanhosPorPeriodo = calcularGanhosPorPeriodo;
+window.calcularGanhosSemanais = calcularGanhosSemanais;
+window.acumularGanhosSemana = acumularGanhosSemana;
+window.calcularMaiorGanho = calcularMaiorGanho;

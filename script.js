@@ -66,44 +66,29 @@ function atualizar() {
     const diffDias = diffTempo / (1000 * 60 * 60 * 24);
 
     // ===== SEMANA ATUAL =====
+    const ganhosSemanais = calcularGanhosSemanais({
+      receita: r,
+      diffDias,
+      ganhosSemanaAtual,
+      ganhosSemanaPassada,
+    });
 
-    if (diffDias <= 7) {
-      ganhosSemanaAtual += r.valor;
-    }
+    ganhosSemanaAtual = ganhosSemanais.ganhosSemanaAtual;
 
-    // ===== SEMANA PASSADA =====
-    else if (diffDias <= 14) {
-      ganhosSemanaPassada += r.valor;
-    }
+    ganhosSemanaPassada = ganhosSemanais.ganhosSemanaPassada;
     // ===== DIA DA SEMANA =====
 
-    const partesSemana = r.data.split("/");
-
-    const dataSemana = new Date(
-      partesSemana[2],
-      partesSemana[1] - 1,
-      partesSemana[0],
-    );
-
-    const dias = [
-      "Domingo",
-      "Segunda",
-      "Terça",
-      "Quarta",
-      "Quinta",
-      "Sexta",
-      "Sábado",
-    ];
-
-    const nomeDia = dias[dataSemana.getDay()];
-
-    ganhosSemana[nomeDia] += r.valor;
+    acumularGanhosSemana({
+      receita: r,
+      ganhosSemana,
+    });
 
     // ===== MAIOR GANHO =====
 
-    if (r.valor > maiorGanho) {
-      maiorGanho = r.valor;
-    }
+    maiorGanho = calcularMaiorGanho({
+      receita: r,
+      maiorGanho,
+    });
 
     // filtro texto
     if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) return;
