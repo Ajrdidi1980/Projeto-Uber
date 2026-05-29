@@ -163,38 +163,117 @@ td:last-child {
 /* =========================
    RESUMO
 ========================= */
+
 .cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 15px;
+
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 20px;
 }
 
 .card-mini {
-  background: rgba(30, 41, 59, 0.6); /* transparência */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  position: relative;
 
-  padding: 20px;
-  border-radius: 12px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.75),
+    rgba(15, 23, 42, 0.9)
+  );
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+
+  padding: 22px;
+
+  border-radius: 18px;
+
   text-align: center;
-  transition: 0.2s;
 
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border 0.25s ease;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* brilho suave */
+.card-mini::before {
+  content: "";
+  position: absolute;
+  top: -120%;
+  left: -120%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+
+  transform: rotate(25deg);
+
+  pointer-events: none;
 }
 
 .card-mini:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-5px) scale(1.02);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
 }
+.card-mini:hover::before {
+  transition: 0.6s;
+  top: -20%;
+  left: -20%;
+}
+
+.card-mini h3 {
+  font-size: 0.95rem;
+
+  color: #cbd5e1;
+
+  margin-bottom: 10px;
+
+  font-weight: 500;
+}
+
+.card-mini p {
+  font-size: 1.7rem;
+
+  font-weight: 700;
+
+  color: #fff;
+
+  margin: 0;
+}
+
+/* CARD DESTAQUE */
 
 .destaque {
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  color: #000;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+
+  color: #fff;
+
   font-weight: bold;
-  box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+
+  border: none;
+
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.45);
 }
 
+.destaque h3,
+.destaque p {
+  color: #fff;
+}
 /* =========================
    RESPONSIVO
 ========================= */
@@ -425,6 +504,10 @@ label {
   margin-bottom: 8px;
   line-height: 1.4;
 }
+#grafico {
+  width: 100% !important;
+  height: 320px !important;
+}
 /* =========================
    LIGHT MODE
 ========================= */
@@ -546,8 +629,15 @@ body.light .tabs button {
   cursor: pointer;
 }
 .grafico-pizza-container {
-  max-width: 280px;
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
   margin: 30px auto;
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 #comparativo-semana {
   margin-top: 12px;
@@ -567,4 +657,77 @@ body.light .tabs button {
 .card {
   width: 100%;
   box-sizing: border-box;
+}
+.grafico-container {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 350px;
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+/* =========================
+   ANIMAÇÃO CARDS
+========================= */
+
+@keyframes subirFade {
+  from {
+    opacity: 0;
+
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+.card-mini {
+  animation: subirFade 0.45s ease;
+}
+/* =========================
+   SKELETON LOADING
+========================= */
+
+#loading-resumo {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 20px;
+}
+
+.skeleton-card {
+  height: 110px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.7) 25%,
+    rgba(51, 65, 85, 0.9) 50%,
+    rgba(30, 41, 59, 0.7) 75%
+  );
+
+  background-size: 300% 100%;
+
+  animation: skeletonLoading 1.4s infinite;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
 }

@@ -12,6 +12,13 @@ import {
   orderBy,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBxAd9aONVUtaMPiyPlrZtEJNserACJySs",
@@ -25,6 +32,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
 
 // ===== SALVAR RECEITA =====
 
@@ -153,5 +163,60 @@ window.escutarGastosFirebase = function (callback) {
     callback(gastosFirebase);
   });
 };
+// ===== LOGIN GOOGLE =====
+
+window.loginGoogle = async function () {
+  console.log("🔥 clicou login");
+  try {
+    console.log("🔥 iniciando popup");
+    const resultado = await signInWithPopup(auth, provider);
+
+    const usuario = resultado.user;
+
+    console.log("✅ Usuário logado:", usuario.displayName);
+  } catch (erro) {
+    console.error("❌ Erro login:", erro);
+  }
+};
+
+// ===== LOGOUT =====
+
+window.logoutGoogle = async function () {
+  await signOut(auth);
+
+  console.log("👋 Logout realizado");
+};
+
+// ===== OBSERVAR LOGIN =====
+
+onAuthStateChanged(auth, (usuario) => {
+  const nomeUsuario = document.getElementById("nome-usuario");
+
+  const btnLogout = document.getElementById("btn-logout");
+
+  const btnLogin = document.querySelector('button[onclick="loginGoogle()"]');
+
+  if (usuario) {
+    console.log("🔥 Logado:", usuario.displayName);
+
+    if (nomeUsuario) {
+      nomeUsuario.innerText = `Olá, ${usuario.displayName} 👋`;
+    }
+
+    btnLogin.style.display = "none";
+
+    btnLogout.style.display = "block";
+  } else {
+    console.log("❌ Não logado");
+
+    if (nomeUsuario) {
+      nomeUsuario.innerText = "";
+    }
+
+    btnLogin.style.display = "block";
+
+    btnLogout.style.display = "none";
+  }
+});
 
 console.log("🔥 Firestore conectado");

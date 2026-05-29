@@ -15,6 +15,9 @@ let modoGrafico = "mes";
 
 // ===== ATUALIZAR TELA =====
 function atualizar() {
+  const loadingResumo = document.getElementById("loading-resumo");
+
+  loadingResumo.style.display = "grid";
   let totalR = 0;
   let totalG = 0;
   let totalKm = 0;
@@ -222,6 +225,7 @@ function atualizar() {
 
   atualizarGrafico(ganhosPorDia);
   atualizarGraficoPizza(totalR, totalG, reserva);
+  loadingResumo.style.display = "none";
 }
 
 if ("serviceWorker" in navigator) {

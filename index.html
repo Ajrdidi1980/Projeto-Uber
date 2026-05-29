@@ -26,6 +26,15 @@
         <div class="logo-area">
           <img src="img/logo.png" />
           <h2>Controle</h2>
+          <button onclick="loginGoogle()">Entrar com Google</button>
+          <p id="nome-usuario"></p>
+          <button
+            id="btn-logout"
+            onclick="logoutGoogle()"
+            style="display: none"
+          >
+            Sair
+          </button>
         </div>
 
         <button onclick="trocarTela('receitas')" id="btn-receitas">
@@ -138,6 +147,12 @@
 
             <button class="btn-verde" onclick="limparFiltros()">Limpar</button>
           </div>
+          <div id="loading-resumo">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
           <div class="card">
             <h3>🏆 Ranking Automático</h3>
 
@@ -222,7 +237,9 @@
             </button>
           </div>
 
-          <canvas id="grafico"></canvas>
+          <div class="grafico-container">
+            <canvas id="grafico"></canvas>
+          </div>
           <div class="grafico-pizza-container">
             <canvas id="graficoPizza"></canvas>
           </div>
