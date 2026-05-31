@@ -40,6 +40,7 @@ async function addReceita() {
       descricao: desc,
       valor: valor,
       data: dataReceita ? formatarData(dataReceita) : hoje(),
+      timestamp: Date.now(),
 
       horaInicio,
       horaFim,
@@ -72,7 +73,7 @@ async function addReceita() {
       descricao: desc,
       valor: valor,
       data: dataReceita ? formatarData(dataReceita) : hoje(),
-
+      timestamp: Date.now(),
       horaInicio,
       horaFim,
 

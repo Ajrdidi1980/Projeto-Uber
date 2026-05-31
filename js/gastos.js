@@ -35,6 +35,7 @@ async function addGasto() {
   const desc = document.getElementById("desc-gasto").value;
 
   const valor = parseFloat(document.getElementById("valor-gasto").value) || 0;
+  const dataGasto = document.getElementById("data-gasto").value;
 
   const tipo = document.getElementById("tipo-gasto").value;
 
@@ -44,7 +45,7 @@ async function addGasto() {
     descricao: desc,
     valor: valor,
     tipo: tipo || "outros",
-    data: hoje(),
+    data: dataGasto ? formatarData(dataGasto) : hoje(),
   };
 
   if (editandoGasto !== null) {
@@ -62,6 +63,7 @@ async function addGasto() {
   document.getElementById("desc-gasto").value = "";
 
   document.getElementById("valor-gasto").value = "";
+  document.getElementById("data-gasto").value = "";
 }
 function limparFiltros() {
   filtroTexto = "";

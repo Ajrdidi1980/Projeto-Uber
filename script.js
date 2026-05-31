@@ -238,8 +238,6 @@ if ("serviceWorker" in navigator) {
 // ===== INICIAR =====
 document.addEventListener("DOMContentLoaded", async function () {
   trocarTela("receitas", document.querySelector(".sidebar button"));
-
-  await iniciarSistema();
 });
 async function exportarPDF() {
   const { jsPDF } = window.jspdf;
@@ -384,16 +382,16 @@ if (temaSalvo === "light") {
   document.body.classList.add("light");
 }
 
-async function iniciarSistema() {
-  window.escutarReceitasFirebase((receitasFirebase) => {
-    receitas = receitasFirebase;
+window.carregarDadosUsuario = function () {
+  window.escutarReceitasFirebase((dados) => {
+    receitas = dados;
 
     atualizar();
   });
 
-  window.escutarGastosFirebase((gastosFirebase) => {
-    gastos = gastosFirebase;
+  window.escutarGastosFirebase((dados) => {
+    gastos = dados;
 
     atualizar();
   });
-}
+};

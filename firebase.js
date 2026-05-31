@@ -77,11 +77,19 @@ window.editarReceitaFirebase = async function (id, dados) {
 
 window.excluirReceitaFirebase = async function (id) {
   try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return;
+    }
+
     console.log("🗑️ Excluindo ID:", id);
 
-    await deleteDoc(doc(db, "receitas", id));
+    await deleteDoc(doc(db, "usuarios", usuario.uid, "receitas", id));
 
-    console.log("✅ Receita excluída do Firebase");
+    console.log("✅ Receita excluída");
   } catch (erro) {
     console.error("❌ Erro ao excluir:", erro);
   }
@@ -188,7 +196,15 @@ window.editarGastoFirebase = async function (id, dados) {
 
 window.excluirGastoFirebase = async function (id) {
   try {
-    await deleteDoc(doc(db, "gastos", id));
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return;
+    }
+
+    await deleteDoc(doc(db, "usuarios", usuario.uid, "gastos", id));
 
     console.log("🗑️ Gasto excluído");
   } catch (erro) {
@@ -260,6 +276,7 @@ onAuthStateChanged(auth, (usuario) => {
 
   if (usuario) {
     console.log("🔥 Logado:", usuario.displayName);
+    window.carregarDadosUsuario();
 
     if (nomeUsuario) {
       nomeUsuario.innerText = `Olá, ${usuario.displayName} 👋`;
@@ -280,5 +297,50 @@ onAuthStateChanged(auth, (usuario) => {
     btnLogout.style.display = "none";
   }
 });
+window.migrarReceitas = async function () {
+  try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return;
+    }
+
+    const receitasAntigas = await getDocs(collection(db, "receitas"));
+
+    const receitasNovas = await getDocs(
+      collection(db, "usuarios", usuario.uid, "receitas"),
+    );
+
+    const descricoesExistentes = [];
+
+    receitasNovas.forEach((doc) => {
+      const dados = doc.data();
+
+      descricoesExistentes.push(dados.descricao + dados.data);
+    });
+
+    for (const documento of receitasAntigas.docs) {
+      const dados = documento.data();
+
+      const chave = dados.descricao + dados.data;
+
+      if (!descricoesExistentes.includes(chave)) {
+        await addDoc(
+          collection(db, "usuarios", usuario.uid, "receitas"),
+
+          dados,
+        );
+
+        console.log("✅ Migrada:", dados.descricao);
+      }
+    }
+
+    console.log("🚀 Migração concluída");
+  } catch (erro) {
+    console.error("❌ Erro migração:", erro);
+  }
+};
 
 console.log("🔥 Firestore conectado");
