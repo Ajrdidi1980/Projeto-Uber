@@ -262,6 +262,21 @@ function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
 
   return textoMeta;
 }
+function atualizarBarraMeta(totalR, metaDiaria) {
+  const barra = document.getElementById("progresso-meta");
+
+  const texto = document.getElementById("texto-progresso");
+
+  if (!barra || !texto) return;
+
+  let porcentagem = (totalR / metaDiaria) * 100;
+
+  porcentagem = Math.min(porcentagem, 100);
+
+  barra.style.width = porcentagem + "%";
+
+  texto.innerText = porcentagem.toFixed(0) + "%";
+}
 function calcularFaltamMeta(totalR, metaDiaria) {
   return Math.max(0, Number(metaDiaria) - totalR);
 }
@@ -424,6 +439,7 @@ window.calcularMelhorPeriodo = calcularMelhorPeriodo;
 window.calcularMelhorDiaSemana = calcularMelhorDiaSemana;
 window.calcularResumoFinanceiro = calcularResumoFinanceiro;
 window.calcularTextoMeta = calcularTextoMeta;
+window.atualizarBarraMeta = atualizarBarraMeta;
 window.calcularFaltamMeta = calcularFaltamMeta;
 window.calcularDesempenhoDiario = calcularDesempenhoDiario;
 window.agruparGanhosPorPeriodo = agruparGanhosPorPeriodo;

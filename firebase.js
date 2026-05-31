@@ -33,6 +33,7 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+const usuarioAtual = () => auth.currentUser;
 
 const provider = new GoogleAuthProvider();
 
@@ -40,11 +41,23 @@ const provider = new GoogleAuthProvider();
 
 window.salvarReceitaFirebase = async function (dados) {
   try {
-    const docRef = await addDoc(collection(db, "receitas"), dados);
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return;
+    }
+
+    const docRef = await addDoc(
+      collection(db, "usuarios", usuario.uid, "receitas"),
+
+      dados,
+    );
+
+    console.log("✅ Receita salva");
 
     return docRef.id;
-
-    console.log("✅ Receita salva na nuvem");
   } catch (erro) {
     console.error("❌ Erro:", erro);
   }
@@ -76,7 +89,19 @@ window.excluirReceitaFirebase = async function (id) {
 
 window.carregarReceitasFirebase = async function () {
   try {
-    const q = query(collection(db, "receitas"), orderBy("data", "desc"));
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return [];
+    }
+
+    const q = query(
+      collection(db, "usuarios", usuario.uid, "receitas"),
+
+      orderBy("data", "desc"),
+    );
 
     const consulta = await getDocs(q);
 
@@ -100,7 +125,17 @@ window.carregarReceitasFirebase = async function () {
   }
 };
 window.escutarReceitasFirebase = function (callback) {
-  const q = query(collection(db, "receitas"), orderBy("data", "desc"));
+  const usuario = usuarioAtual();
+
+  if (!usuario) {
+    console.log("❌ Usuário não logado");
+    return;
+  }
+
+  const q = query(
+    collection(db, "usuarios", usuario.uid, "receitas"),
+    orderBy("data", "desc"),
+  );
 
   onSnapshot(q, (snapshot) => {
     let receitasFirebase = [];
@@ -119,7 +154,21 @@ window.escutarReceitasFirebase = function (callback) {
 
 window.salvarGastoFirebase = async function (dados) {
   try {
-    const docRef = await addDoc(collection(db, "gastos"), dados);
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+
+      return;
+    }
+
+    const docRef = await addDoc(
+      collection(db, "usuarios", usuario.uid, "gastos"),
+
+      dados,
+    );
+
+    console.log("✅ Gasto salvo");
 
     return docRef.id;
   } catch (erro) {
@@ -148,7 +197,19 @@ window.excluirGastoFirebase = async function (id) {
 };
 
 window.escutarGastosFirebase = function (callback) {
-  const q = query(collection(db, "gastos"), orderBy("data", "desc"));
+  const usuario = usuarioAtual();
+
+  if (!usuario) {
+    console.log("❌ Usuário não logado");
+
+    return;
+  }
+
+  const q = query(
+    collection(db, "usuarios", usuario.uid, "gastos"),
+
+    orderBy("data", "desc"),
+  );
 
   onSnapshot(q, (snapshot) => {
     let gastosFirebase = [];
@@ -156,6 +217,7 @@ window.escutarGastosFirebase = function (callback) {
     snapshot.forEach((doc) => {
       gastosFirebase.push({
         id: doc.id,
+
         ...doc.data(),
       });
     });
