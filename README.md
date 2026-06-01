@@ -1,34 +1,54 @@
-# 💰 Controle Financeiro para Motoristas de Aplicativo
+🚗 Controle Financeiro para Motoristas
 
-Aplicação web para controle financeiro de motoristas de aplicativo, com foco em organização, análise de ganhos e tomada de decisão no dia a dia.
+Aplicação web desenvolvida para controle financeiro de motoristas de aplicativo.
 
 ## 📸 Preview
 
 ![Preview](img/preview.png)
 
-## 🔧 Funcionalidades
+🔥 Funcionalidades
+✅ Cadastro de receitas
+✅ Controle de gastos
+✅ Dashboard financeiro
+✅ Metas diárias
+✅ Firebase Realtime
+✅ Login com Google
+✅ Sincronização em tempo real
+✅ PWA instalável no celular
+✅ Sistema responsivo
+🚀 Tecnologias utilizadas
+HTML5
+CSS3
+JavaScript
+Firebase Authentication
+Firestore Database
+Firebase Hosting
+PWA
+🌎 Aplicação Online
 
-- Registro de receitas e despesas
-- Filtro por período
-- Dashboard com gráfico
-- Cálculo automático de saldo e reserva
-- Persistência com LocalStorage
+https://controle-corridas-90795.web.app
 
-## 🛠 Tecnologias
+📱 Funcionalidades do App
 
-- JavaScript (ES6+)
-- HTML5
-- CSS3
-- Chart.js
-- LocalStorage
-- Git e GitHub
+O sistema permite ao motorista:
 
-## 🎯 Objetivo
+acompanhar ganhos diários
+controlar despesas
+visualizar lucro líquido
+acompanhar metas
+acessar pelo celular ou computador
+sincronização em tempo real
+🔥 Diferenciais do Projeto
+Aplicação em nuvem
+Deploy em produção
+Banco de dados realtime
+Multiusuário
+Autenticação Google
+Interface moderna
+Instalável como aplicativo Android
+👨‍💻 Desenvolvedor
 
-Projeto desenvolvido com foco em prática real de desenvolvimento web.
+Antônio Linhares
 
-## 🚀 Como usar
-
-1. Clone ou baixe o repositório
-2. Abra o `index.html`
-3. Utilize o sistema normalmente
+GitHub:
+https://github.com/Ajrdidi1980
