@@ -179,6 +179,37 @@ function atualizarComparativoSemanal(receitas) {
       textoComparativo = `📉 ${Math.abs(diferenca).toFixed(1)}% abaixo da semana passada`;
     }
   }
+  const economiaEletricaTotal = receitas.reduce(
+    (total, r) => {
+      return total + (r.economiaEletrica || 0);
+    },
+
+    0,
+  );
+
+  document.getElementById("economia-eletrica-total").textContent =
+    `R$ ${economiaEletricaTotal.toFixed(2)}`;
+  const gastoEletricoTotal = receitas.reduce(
+    (total, r) => {
+      if (r.tipoVeiculo === "eletrico") {
+        return total + (r.gastoCombustivel || 0);
+      }
+
+      return total;
+    },
+
+    0,
+  );
+  const gastoGasolinaEquivalente = gastoEletricoTotal + economiaEletricaTotal;
+
+  let percentualEconomia = 0;
+
+  if (gastoGasolinaEquivalente > 0) {
+    percentualEconomia =
+      (economiaEletricaTotal / gastoGasolinaEquivalente) * 100;
+  }
+  document.getElementById("percentual-economia").textContent =
+    `⚡ ${percentualEconomia.toFixed(0)}% mais econômico`;
 
   document.getElementById("comparativo-semana").innerHTML = textoComparativo;
 }

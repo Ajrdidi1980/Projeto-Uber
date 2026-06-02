@@ -9,6 +9,7 @@ let editandoGasto = null;
 let grafico = null;
 let graficoPizza = null;
 let filtroTexto = "";
+let filtroVeiculo = "";
 let dataInicio = "";
 let dataFim = "";
 let modoGrafico = "mes";
@@ -95,6 +96,7 @@ function atualizar() {
 
     // filtro texto
     if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) return;
+    if (filtroVeiculo && r.tipoVeiculo !== filtroVeiculo) return;
 
     // converter data
     const partes = r.data.split("/");

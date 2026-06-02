@@ -11,6 +11,7 @@ async function addReceita() {
   const consumo = parseFloat(document.getElementById("consumo").value) || 0;
   const combustivel =
     parseFloat(document.getElementById("combustivel").value) || 0;
+  const tipoVeiculo = document.getElementById("tipo-veiculo").value;
 
   const kmRodado = kmFinal - kmInicial;
   let ganhoPorHora = 0;
@@ -32,6 +33,22 @@ async function addReceita() {
     gastoCombustivel = (kmRodado / consumo) * combustivel;
   }
   const lucroLiquido = valor - gastoCombustivel;
+
+  let economiaEletrica = 0;
+
+  if (tipoVeiculo === "eletrico") {
+    const gasolinaMedia = 6.5;
+
+    const consumoGasolina = 10;
+
+    const gastoGasolina = (kmRodado / consumoGasolina) * gasolinaMedia;
+
+    economiaEletrica = gastoGasolina - gastoCombustivel;
+  }
+
+  if (tipoVeiculo === "eletrico") {
+    economiaEletrica = gastoCombustivel; // Supondo que o gasto de combustível seja o custo elétrico
+  }
 
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
 
@@ -55,6 +72,8 @@ async function addReceita() {
       gastoCombustivel,
       lucroLiquido,
       ganhoPorHora,
+      economiaEletrica,
+      tipoVeiculo,
     };
 
     const idFirebase = receitas[editandoReceita].id;
@@ -87,6 +106,8 @@ async function addReceita() {
       gastoCombustivel,
       lucroLiquido,
       ganhoPorHora,
+      economiaEletrica,
+      tipoVeiculo,
     };
 
     const idFirebase = await salvarReceitaFirebase(novaReceita);
@@ -155,6 +176,7 @@ async function excluirReceita(i) {
 // ===== FILTRO =====
 function filtrarReceitas() {
   filtroTexto = document.getElementById("filtro-receitas").value.toLowerCase();
+  filtroVeiculo = document.getElementById("filtro-veiculo").value;
 
   atualizar();
 }
@@ -178,6 +200,23 @@ function renderizarReceita(r, i) {
       <td>
         ${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}
       </td>
+      <td>
+        ${
+          r.tipoVeiculo === "gasolina"
+            ? `<span class="badge gasolina">
+          🚗 Gasolina
+        </span>`
+            : r.tipoVeiculo === "gnv"
+              ? `<span class="badge gnv">
+          🚙 GNV
+        </span>`
+              : r.tipoVeiculo === "eletrico"
+                ? `<span class="badge eletrico">
+          ⚡ Elétrico
+        </span>`
+                : "---"
+        }
+      </td>
 
       <td>
         ${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}
@@ -188,6 +227,17 @@ function renderizarReceita(r, i) {
           R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}
         </strong>
       </td>
+      <td> ${
+        r.tipoVeiculo === "eletrico"
+          ? `
+      <span class="economia-eletrica">
+         ⚡R$ ${r.economiaEletrica.toFixed(2)}
+      </span>
+      `
+          : "---"
+      }
+      </td>
+ 
 
       <td>
         ${r.ganhoPorHora ? "R$ " + r.ganhoPorHora.toFixed(2) + "/h" : "-"}
@@ -212,6 +262,35 @@ function renderizarTabelaReceitas(receitasFiltradas, listaR) {
     listaR.innerHTML += renderizarReceita(r, i);
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const tipoVeiculo = document.getElementById("tipo-veiculo");
+
+  tipoVeiculo.addEventListener("change", () => {
+    const consumo = document.getElementById("consumo");
+
+    const combustivel = document.getElementById("combustivel");
+
+    if (tipoVeiculo.value === "gasolina") {
+      consumo.placeholder = "Km/L";
+
+      combustivel.placeholder = "R$/L";
+    }
+
+    if (tipoVeiculo.value === "gnv") {
+      consumo.placeholder = "Km/m³";
+
+      combustivel.placeholder = "R$/m³";
+    }
+
+    if (tipoVeiculo.value === "eletrico") {
+      consumo.placeholder = "Km/kWh";
+
+      combustivel.placeholder = "R$/kWh";
+    }
+  });
+});
+
 window.addReceita = addReceita;
 window.editarReceita = editarReceita;
 window.excluirReceita = excluirReceita;

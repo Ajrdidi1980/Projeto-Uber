@@ -808,3 +808,29 @@ body.light .tabs button {
 
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
+.economia-eletrica {
+  color: #22c55e;
+  font-weight: bold;
+}
+.badge {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.gasolina {
+  background: #2563eb;
+  color: white;
+}
+
+.gnv {
+  background: #ea580c;
+  color: white;
+}
+
+.eletrico {
+  background: #22c55e;
+  color: #04130a;
+}
