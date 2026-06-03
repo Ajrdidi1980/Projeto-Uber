@@ -834,3 +834,10 @@ body.light .tabs button {
   background: #22c55e;
   color: #04130a;
 }
+.tabela-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+table {
+  min-width: 1000px;
+}

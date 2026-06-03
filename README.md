@@ -1,6 +1,10 @@
 🚗 Controle Financeiro para Motoristas
 
-Aplicação web desenvolvida para controle financeiro de motoristas de aplicativo.
+Sistema web inteligente para motoristas de aplicativo com suporte a:
+
+🚗 Gasolina
+🚙 GNV
+⚡ Veículos Elétricos
 
 ## 📸 Preview
 
