@@ -52,6 +52,13 @@ function atualizar() {
   };
 
   let maiorGanho = 0;
+  // ===== ORDENAR POR DATA =====
+  receitas.sort((a, b) => {
+    const dataA = new Date(a.data.split("/").reverse().join("-"));
+    const dataB = new Date(b.data.split("/").reverse().join("-"));
+
+    return dataB - dataA;
+  });
   const receitasFiltradas = [];
   receitas.forEach((r, i) => {
     if (!r.data) return;
@@ -148,7 +155,13 @@ function atualizar() {
   });
   renderizarTabelaReceitas(receitasFiltradas, listaR);
   const gastosFiltrados = [];
+  // ===== ORDENAR GASTOS POR DATA =====
+  gastos.sort((a, b) => {
+    const dataA = new Date(a.data.split("/").reverse().join("-"));
+    const dataB = new Date(b.data.split("/").reverse().join("-"));
 
+    return dataB - dataA;
+  });
   // ===== GASTOS =====
   gastos.forEach((g, i) => {
     if (!g.data) return;
@@ -240,6 +253,10 @@ if ("serviceWorker" in navigator) {
 // ===== INICIAR =====
 document.addEventListener("DOMContentLoaded", async function () {
   trocarTela("receitas", document.querySelector(".sidebar button"));
+
+  setTimeout(() => {
+    atualizar();
+  }, 1500);
 });
 async function exportarPDF() {
   const { jsPDF } = window.jspdf;

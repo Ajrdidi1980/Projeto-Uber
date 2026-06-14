@@ -67,7 +67,14 @@ window.salvarReceitaFirebase = async function (dados) {
 
 window.editarReceitaFirebase = async function (id, dados) {
   try {
-    await updateDoc(doc(db, "receitas", id), dados);
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      console.log("❌ Usuário não logado");
+      return;
+    }
+
+    await updateDoc(doc(db, "usuarios", usuario.uid, "receitas", id), dados);
 
     console.log("✏️ Receita atualizada");
   } catch (erro) {
