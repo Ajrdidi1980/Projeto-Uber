@@ -163,20 +163,8 @@ function atualizar() {
     return dataB - dataA;
   });
   // ===== GASTOS =====
-  gastos.forEach((g, i) => {
-    if (!g.data) return;
-
-    const partes = g.data.split("/");
-    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
-
-    if (dataInicio && dataFormatada < dataInicio) return;
-    if (dataFim && dataFormatada > dataFim) return;
-
-    totalG += g.valor;
-
-    gastosFiltrados.push(g);
-  });
-  renderizarTabelaGastos(gastosFiltrados, listaG);
+  const totalGastos = atualizarGastos(listaG);
+  totalG += totalGastos;
 
   // ===== CÁLCULOS =====
   const valores = Object.values(ganhosPorDia);
@@ -241,6 +229,39 @@ function atualizar() {
   atualizarGrafico(ganhosPorDia);
   atualizarGraficoPizza(totalR, totalG, reserva);
   loadingResumo.style.display = "none";
+}
+function atualizarGastos(listaG) {
+  let total = 0;
+
+  const gastosFiltrados = [];
+
+  gastos.forEach((g, i) => {
+    if (!g.data) return;
+
+    const partes = g.data.split("/");
+
+    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+    if (dataInicio && dataFormatada < dataInicio) return;
+
+    if (dataFim && dataFormatada > dataFim) return;
+
+    total += g.valor;
+
+    gastosFiltrados.push(g);
+  });
+
+  gastosFiltrados.sort((a, b) => {
+    const da = new Date(a.data.split("/").reverse().join("-"));
+
+    const db = new Date(b.data.split("/").reverse().join("-"));
+
+    return db - da;
+  });
+
+  renderizarTabelaGastos(gastosFiltrados, listaG);
+
+  return total;
 }
 
 if ("serviceWorker" in navigator) {
