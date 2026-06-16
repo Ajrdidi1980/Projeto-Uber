@@ -194,37 +194,23 @@ function renderizarReceita(r, i) {
       <td>${r.data}</td>
 
       <td>
-        R$ ${r.valor.toFixed(2)}
+        ${formatarMoeda(r.valor)}
       </td>
 
       <td>
-        ${r.kmRodado ? r.kmRodado.toFixed(1) + " km" : "-"}
+       ${formatarKm(r.kmRodado)}
       </td>
       <td>
-        ${
-          r.tipoVeiculo === "gasolina"
-            ? `<span class="badge gasolina">
-          🚗 Gasolina
-        </span>`
-            : r.tipoVeiculo === "gnv"
-              ? `<span class="badge gnv">
-          🚙 GNV
-        </span>`
-              : r.tipoVeiculo === "eletrico"
-                ? `<span class="badge eletrico">
-          ⚡ Elétrico
-        </span>`
-                : "---"
-        }
+        ${renderizarVeiculo(r.tipoVeiculo)}
       </td>
 
       <td>
-        ${r.gastoCombustivel ? "R$ " + r.gastoCombustivel.toFixed(2) : "-"}
+        ${formatarMoeda(r.gastoCombustivel ? r.gastoCombustivel.toFixed(2) : 0)}
       </td>
 
       <td>
         <strong>
-          R$ ${r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2)}
+          ${formatarMoeda(r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2))}
         </strong>
       </td>
       <td> ${
@@ -240,17 +226,11 @@ function renderizarReceita(r, i) {
  
 
       <td>
-        ${r.ganhoPorHora ? "R$ " + r.ganhoPorHora.toFixed(2) + "/h" : "-"}
+        ${formatarMoeda(r.ganhoPorHora ? r.ganhoPorHora.toFixed(2) : 0)}
       </td>
 
       <td>
-        <button onclick="editarReceita(${i})">
-          Editar
-        </button>
-
-        <button onclick="excluirReceita(${i})">
-          Excluir
-        </button>
+      ${renderizarAcoes(i)}
       </td>
     </tr>
   `;

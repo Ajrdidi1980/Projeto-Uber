@@ -53,12 +53,7 @@ function atualizar() {
 
   let maiorGanho = 0;
   // ===== ORDENAR POR DATA =====
-  receitas.sort((a, b) => {
-    const dataA = new Date(a.data.split("/").reverse().join("-"));
-    const dataB = new Date(b.data.split("/").reverse().join("-"));
-
-    return dataB - dataA;
-  });
+  ordenarPorData(receitas);
   const receitasFiltradas = [];
   receitas.forEach((r, i) => {
     if (!r.data) return;
@@ -102,16 +97,7 @@ function atualizar() {
     });
 
     // filtro texto
-    if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) return;
-    if (filtroVeiculo && r.tipoVeiculo !== filtroVeiculo) return;
-
-    // converter data
-    const partes = r.data.split("/");
-    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
-
-    // filtro período
-    if (dataInicio && dataFormatada < dataInicio) return;
-    if (dataFim && dataFormatada > dataFim) return;
+    if (!receitaPassaFiltro(r)) return;
 
     // 🔥 ACUMULADORES
     const acumulados = calcularAcumuladoresReceita({
@@ -163,8 +149,7 @@ function atualizar() {
     return dataB - dataA;
   });
   // ===== GASTOS =====
-  const totalGastos = atualizarGastos(listaG);
-  totalG += totalGastos;
+  totalG = atualizarGastos(listaG);
 
   // ===== CÁLCULOS =====
   const valores = Object.values(ganhosPorDia);
@@ -230,6 +215,89 @@ function atualizar() {
   atualizarGraficoPizza(totalR, totalG, reserva);
   loadingResumo.style.display = "none";
 }
+function ordenarPorData(lista) {
+  lista.sort((a, b) => {
+    const dataA = new Date(a.data.split("/").reverse().join("-"));
+
+    const dataB = new Date(b.data.split("/").reverse().join("-"));
+
+    return dataB - dataA;
+  });
+}
+function formatarMoeda(valor) {
+  return `R$ ${Number(valor).toFixed(2)}`;
+}
+function formatarKm(valor) {
+  return valor ? `${Number(valor).toFixed(1)} km` : "-";
+}
+function converterData(data) {
+  return data.split("/").reverse().join("-");
+}
+function receitaPassaFiltro(r) {
+  if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) {
+    return false;
+  }
+
+  if (filtroVeiculo && r.tipoVeiculo !== filtroVeiculo) {
+    return false;
+  }
+
+  const dataFormatada = converterData(r.data);
+
+  if (dataInicio && dataFormatada < dataInicio) {
+    return false;
+  }
+
+  if (dataFim && dataFormatada > dataFim) {
+    return false;
+  }
+
+  return true;
+}
+function renderizarVeiculo(tipoVeiculo) {
+  if (tipoVeiculo === "gasolina") {
+    return `
+      <span class="badge gasolina">
+        🚗 Gasolina
+      </span>
+    `;
+  }
+
+  if (tipoVeiculo === "gnv") {
+    return `
+      <span class="badge gnv">
+        🚙 GNV
+      </span>
+    `;
+  }
+
+  if (tipoVeiculo === "eletrico") {
+    return `
+      <span class="badge eletrico">
+        ⚡ Elétrico
+      </span>
+    `;
+  }
+
+  return "---";
+}
+function renderizarAcoes(i) {
+  return `
+    <div class="acoes-botoes">
+      <button class="btn-editar" onclick="editarReceita(${i})">
+        Editar
+      </button>
+
+      <button class="btn-excluir" onclick="excluirReceita(${i})">
+        Excluir
+      </button>
+    </div>
+  `;
+}
+function renderizarTabelaReceitas(receitas, listaR) {
+  listaR.innerHTML = receitas.map((r, i) => renderizarReceita(r, i)).join("");
+}
+
 function atualizarGastos(listaG) {
   let total = 0;
 
@@ -238,9 +306,7 @@ function atualizarGastos(listaG) {
   gastos.forEach((g, i) => {
     if (!g.data) return;
 
-    const partes = g.data.split("/");
-
-    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
+    const dataFormatada = converterData(g.data);
 
     if (dataInicio && dataFormatada < dataInicio) return;
 
@@ -251,13 +317,7 @@ function atualizarGastos(listaG) {
     gastosFiltrados.push(g);
   });
 
-  gastosFiltrados.sort((a, b) => {
-    const da = new Date(a.data.split("/").reverse().join("-"));
-
-    const db = new Date(b.data.split("/").reverse().join("-"));
-
-    return db - da;
-  });
+  ordenarPorData(gastos);
 
   renderizarTabelaGastos(gastosFiltrados, listaG);
 

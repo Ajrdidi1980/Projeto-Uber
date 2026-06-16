@@ -16,11 +16,11 @@ function renderizarGasto(g, i) {
 
       <td>
 
-        <button onclick="editarGasto(${i})">
+        <button class="btn-editar" onclick="editarGasto(${i})">
           Editar
         </button>
 
-        <button onclick="excluirGasto(${i})">
+        <button class="btn-excluir" onclick="excluirGasto(${i})">
           Excluir
         </button>
 

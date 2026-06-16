@@ -2,15 +2,21 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Controle Financeiro Motoristas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#22c55e" />
+    <meta name="theme-color" content="#16a34a" />
     <link rel="icon" href="img/logo.png" />
-
-    <!-- 👇 IMPORTANTE -->
     <script type="module" src="firebase.js"></script>
     <script defer src="js/utils.js"></script>
     <script defer src="js/receitas.js"></script>
@@ -22,10 +28,10 @@
   </head>
   <body>
     <div class="layout">
-      <!-- SIDEBAR -->
+      <!-- SIDEBAR (desktop) -->
       <aside class="sidebar">
         <div class="logo-area">
-          <img src="img/logo.png" />
+          <img src="img/logo.png" alt="Logo" />
           <h2>Controle Financeiro Motoristas</h2>
           <button onclick="loginGoogle()">Entrar com Google</button>
           <p id="nome-usuario"></p>
@@ -37,211 +43,187 @@
             Sair
           </button>
         </div>
-
+        <button onclick="trocarTela('resumo')" id="btn-resumo">
+          📊 Resumo
+        </button>
         <button onclick="trocarTela('receitas')" id="btn-receitas">
           🚗 Corridas
         </button>
         <button onclick="trocarTela('gastos')" id="btn-gastos">
           💸 Gastos
         </button>
-        <button onclick="trocarTela('resumo')" id="btn-resumo">
-          📊 Resumo
-        </button>
       </aside>
+
+      <!-- HEADER MOBILE -->
+      <header class="app-header">
+        <div class="header-left">
+          <img src="img/logo.png" class="header-logo" alt="Logo" />
+          <span class="header-titulo">Controle Motoristas</span>
+        </div>
+        <div class="header-right">
+          <span id="nome-usuario-mobile" class="header-user"></span>
+          <button
+            class="btn-login"
+            onclick="loginGoogle()"
+            id="btn-login-mobile"
+          >
+            Entrar
+          </button>
+          <button
+            class="btn-logout-mini"
+            onclick="logoutGoogle()"
+            id="btn-logout-mobile"
+            style="display: none"
+          >
+            Sair
+          </button>
+          <button class="btn-tema-mini" onclick="trocarTema()">🌙</button>
+        </div>
+      </header>
 
       <!-- CONTEÚDO -->
       <main class="conteudo">
-        <!-- RECEITAS -->
-        <div id="receitas" class="tela card">
-          <h2>Corridas</h2>
-
-          <div class="form">
-            <input id="desc-receita" placeholder="Descrição" />
-            <input id="valor-receita" type="number" placeholder="R$ 0,00" />
-            <label for="data-receita">Data da corrida</label>
-            <input id="data-receita" type="date" />
-            <label for="hora-inicio">Hora de início</label>
-            <input id="hora-inicio" type="time" />
-            <label for="hora-fim">Hora de fim</label>
-            <input id="hora-fim" type="time" />
-            <input id="km-inicial" type="number" placeholder="KM inicial" />
-            <input id="km-final" type="number" placeholder="KM final" />
-            <select id="tipo-veiculo">
-              <option value="gasolina">🚗 Gasolina</option>
-              <option value="gnv">🚙 GNV</option>
-              <option value="eletrico">⚡ Elétrico</option>
-            </select>
-            <input id="consumo" type="number" placeholder="Consumo" />
-            <input
-              id="combustivel"
-              type="number"
-              placeholder="Custo combustível"
-            />
-            <button id="btn-receita" onclick="addReceita()">Adicionar</button>
-          </div>
-
-          <div class="filtros">
-            <input
-              id="filtro-receitas"
-              placeholder="Buscar..."
-              oninput="filtrarReceitas()"
-            />
-            <button onclick="limparFiltros()">Limpar</button>
-          </div>
-          <select id="filtro-veiculo" onchange="filtrarReceitas()">
-            <option value="">Todos veículos</option>
-
-            <option value="gasolina">🚗 Gasolina</option>
-
-            <option value="gnv">🚙 GNV</option>
-
-            <option value="eletrico">⚡ Elétrico</option>
-          </select>
-
-          <div class="tabela-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Descrição</th>
-                  <th>Data</th>
-                  <th>Valor</th>
-                  <th>KM</th>
-                  <th>Veículo</th>
-                  <th>Combustível</th>
-                  <th>Lucro Parcial</th>
-                  <th>Economia Elétrica</th>
-                  <th>Ganho/Hora</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-
-              <tbody id="lista-receitas"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- GASTOS -->
-        <div id="gastos" class="tela card">
-          <h2>Gastos</h2>
-          <select id="tipo-gasto">
-            <option value="manutencao">Manutenção</option>
-            <option value="alimentacao">Alimentação</option>
-            <option value="outros">Outros</option>
-          </select>
-          <div class="form">
-            <input id="desc-gasto" placeholder="Descrição" />
-            <input id="valor-gasto" type="number" placeholder="R$ 0,00" />
-            <input id="data-gasto" type="date" />
-            <button id="btn-gasto" onclick="addGasto()">Adicionar</button>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Descrição</th>
-                <th>Data</th>
-                <th>Valor</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="lista-gastos"></tbody>
-          </table>
-        </div>
-
-        <!-- RESUMO -->
-        <div id="resumo" class="tela card">
+        <!-- TELA: RESUMO -->
+        <div id="resumo" class="tela">
           <h2>Resumo</h2>
+
+          <div class="meta-card">
+            <div class="meta-header">
+              <span class="meta-label">🎯 Meta diária</span>
+              <span class="meta-valor"
+                >R$ <span id="meta-diaria">300</span></span
+              >
+            </div>
+            <div class="barra-meta">
+              <div id="progresso-meta"></div>
+            </div>
+            <p id="texto-progresso">0% da meta</p>
+          </div>
+
           <div class="filtros-resumo">
-            <input type="date" id="data-inicio" />
-            <input type="date" id="data-fim" />
             <div class="filtros-rapidos">
               <button onclick="filtrarHoje()">Hoje</button>
-
               <button onclick="filtrarSemana()">Semana</button>
-
               <button onclick="filtrarMes()">Mês</button>
-
               <button onclick="limparFiltros()">Tudo</button>
             </div>
-
-            <button class="btn-verde" onclick="filtrarPorData()">
-              Filtrar período
-            </button>
-
-            <button class="btn-verde" onclick="limparFiltros()">Limpar</button>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <input type="date" id="data-inicio" style="flex: 1" />
+              <input type="date" id="data-fim" style="flex: 1" />
+              <button class="btn-verde" onclick="filtrarPorData()">
+                Filtrar
+              </button>
+            </div>
           </div>
+
           <div id="loading-resumo">
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
           </div>
-          <div class="card">
-            <h3>🏆 Ranking Automático</h3>
-
-            <p id="ranking-dia"></p>
-
-            <p id="ranking-periodo"></p>
-
-            <p id="ranking-maior"></p>
-          </div>
-          <div class="card-resumo">
-            <h3>⚡ Economia elétrica</h3>
-
-            <p id="economia-eletrica-total">R$ 0.00</p>
-          </div>
-          <p id="percentual-economia">0%</p>
 
           <div class="cards">
-            <div class="card-mini">
-              Renda<br />R$ <span id="total-receitas">0</span>
+            <div class="card-mini destaque">
+              <div class="card-mini-label">Renda</div>
+              <div class="card-mini-valor">
+                R$ <span id="total-receitas">0</span>
+              </div>
             </div>
             <div class="card-mini">
-              Gastos<br />R$ <span id="total-gastos">0</span>
-            </div>
-            <div class="card-mini">
-              Reserva<br />R$ <span id="reserva">0</span>
+              <div class="card-mini-label">Gastos</div>
+              <div class="card-mini-valor" style="color: var(--vermelho)">
+                R$ <span id="total-gastos">0</span>
+              </div>
             </div>
             <div class="card-mini destaque">
-              Saldo<br />R$ <span id="saldo">0</span>
+              <div class="card-mini-label">Saldo</div>
+              <div class="card-mini-valor">R$ <span id="saldo">0</span></div>
             </div>
             <div class="card-mini">
-              Melhor dia<br />R$ <span id="melhor-dia">0</span>
+              <div class="card-mini-label">Reserva</div>
+              <div class="card-mini-valor">R$ <span id="reserva">0</span></div>
             </div>
             <div class="card-mini">
-              Melhor período<br />
-              <strong id="melhor-periodo"> - </strong>
+              <div class="card-mini-label">Melhor dia</div>
+              <div class="card-mini-valor">
+                R$ <span id="melhor-dia">0</span>
+              </div>
             </div>
             <div class="card-mini">
-              Média diária<br />R$ <span id="media-dia">0</span>
+              <div class="card-mini-label">Média diária</div>
+              <div class="card-mini-valor">
+                R$ <span id="media-dia">0</span>
+              </div>
             </div>
             <div class="card-mini">
-              Custo por KM<br />R$ <span id="custo-km">0</span>
+              <div class="card-mini-label">Ganho/hora</div>
+              <div class="card-mini-valor">
+                R$ <span id="media-hora">0</span
+                ><span style="font-size: 13px; font-weight: 400">/h</span>
+              </div>
             </div>
             <div class="card-mini">
-              Ganho por KM<br />
-              R$ <span id="ganho-km">0</span>
+              <div class="card-mini-label">Custo/km</div>
+              <div class="card-mini-valor">R$ <span id="custo-km">0</span></div>
             </div>
             <div class="card-mini">
-              Meta diária<br />
-              R$ <span id="meta-diaria">300</span>
+              <div class="card-mini-label">Ganho/km</div>
+              <div class="card-mini-valor">R$ <span id="ganho-km">0</span></div>
             </div>
-            <div class="card-mini destaque">
-              Falta bater meta<br />
-              R$ <span id="faltam-meta">0</span>
+            <div class="card-mini">
+              <div class="card-mini-label">Falta bater</div>
+              <div class="card-mini-valor"><span id="faltam-meta">0</span></div>
             </div>
-            <div class="barra-meta">
-              <div id="progresso-meta"></div>
-            </div>
-            <p id="texto-progresso">0%</p>
-            <p id="texto-progresso">0% da meta</p>
-            <div id="comparativo-semana" class="card-mini">
-              📈 Comparando semanas...
-            </div>
+          </div>
 
-            <div class="card-mini">
-              Ganho/Hora Médio<br />
-              R$ <span id="media-hora">0</span>/h
+          <div id="comparativo-semana">📊 Calculando comparativo...</div>
+
+          <div class="card">
+            <h3>🏆 Ranking</h3>
+            <p id="ranking-dia"></p>
+            <p id="ranking-periodo"></p>
+            <p id="ranking-maior"></p>
+          </div>
+
+          <div
+            class="card"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span style="font-size: 13px; color: var(--cinza-6)"
+              >Melhor período</span
+            >
+            <strong
+              id="melhor-periodo"
+              style="font-size: 14px; color: var(--cinza-9)"
+              >—</strong
+            >
+          </div>
+
+          <div class="card-resumo">
+            <h3>⚡ Economia elétrica</h3>
+            <div>
+              <p
+                id="economia-eletrica-total"
+                style="font-size: 20px; font-weight: 700; color: var(--verde)"
+              >
+                R$ 0,00
+              </p>
+              <p
+                id="percentual-economia"
+                style="
+                  font-size: 11px;
+                  color: var(--verde);
+                  font-weight: 600;
+                  margin-top: 2px;
+                "
+              >
+                0% mais econômico
+              </p>
             </div>
           </div>
 
@@ -254,7 +236,6 @@
             >
               Diário
             </button>
-
             <button
               onclick="
                 modoGrafico = 'mes';
@@ -264,36 +245,400 @@
               Mensal
             </button>
           </div>
-
           <div class="grafico-container">
             <canvas id="grafico"></canvas>
           </div>
           <div class="grafico-pizza-container">
             <canvas id="graficoPizza"></canvas>
           </div>
-          <p class="ajuda-percentual">
-            % reservado automaticamente dos ganhos. Exemplo: 10% para
-            manutenção, emergência ou combustível.
-          </p>
-          <input id="percentual" type="number" placeholder="Reserva (%)" />
-          <button onclick="salvarPercentual()">Salvar</button>
-          <input id="meta-input" type="number" placeholder="Meta diária R$" />
-          <button onclick="salvarMeta()">Salvar Meta</button>
-          <button onclick="exportarPDF()">Exportar PDF</button>
-          <button onclick="exportarBackup()">Exportar Backup</button>
-          <button onclick="trocarTema()">🌙 / ☀️ Tema</button>
 
-          <input
-            type="file"
-            id="importar-backup"
-            accept=".json"
-            onchange="importarBackup(event)"
-          />
+          <div class="card" style="margin-top: 16px">
+            <h3>⚙️ Configurações</h3>
+            <p class="ajuda-percentual">
+              % reservado automaticamente dos ganhos para manutenção ou
+              emergência.
+            </p>
+            <div class="reserva-form">
+              <input
+                id="percentual"
+                type="number"
+                placeholder="Reserva (%)"
+                min="0"
+                max="100"
+              />
+              <button onclick="salvarPercentual()">Salvar</button>
+            </div>
+            <label for="meta-input">Meta diária (R$)</label>
+            <div class="reserva-form">
+              <input
+                id="meta-input"
+                type="number"
+                placeholder="Ex: 300"
+                min="0"
+              />
+              <button onclick="salvarMeta()">Salvar</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>📁 Exportar / Backup</h3>
+            <div class="acoes-grid">
+              <button class="btn-acao" onclick="exportarPDF()">
+                📄 Exportar PDF
+              </button>
+              <button class="btn-acao" onclick="exportarBackup()">
+                💾 Backup JSON
+              </button>
+              <button class="btn-acao" onclick="trocarTema()">
+                🌙 / ☀️ Tema
+              </button>
+              <label
+                class="btn-acao"
+                style="
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 4px;
+                "
+              >
+                📥 Importar
+                <input
+                  type="file"
+                  id="importar-backup"
+                  accept=".json"
+                  onchange="importarBackup(event)"
+                  style="display: none"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TELA: CORRIDAS -->
+        <div id="receitas" class="tela">
+          <h2>Corridas</h2>
+
+          <div class="card">
+            <h3>➕ Nova corrida</h3>
+
+            <div class="form-section">
+              <span class="form-label">Plataforma</span>
+              <div class="selector-grid" id="selector-plataforma">
+                <button
+                  class="selector-btn ativo"
+                  onclick="selecionarPlataforma(this, 'Uber')"
+                >
+                  🚗 Uber
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, '99')"
+                >
+                  🟡 99
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, 'iFood')"
+                >
+                  🛵 iFood
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, 'Outro')"
+                >
+                  📍 Outro
+                </button>
+              </div>
+              <input
+                id="desc-receita"
+                placeholder="Descrição da corrida"
+                style="display: none; margin-top: 8px"
+              />
+            </div>
+
+            <div class="form-section">
+              <label for="valor-receita">Valor recebido (R$)</label>
+              <input
+                id="valor-receita"
+                type="number"
+                placeholder="0,00"
+                step="0.01"
+                inputmode="decimal"
+              />
+            </div>
+
+            <div class="form-section">
+              <label for="data-receita">Data</label>
+              <input id="data-receita" type="date" />
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="hora-inicio">Início</label>
+                <input id="hora-inicio" type="time" />
+              </div>
+              <div>
+                <label for="hora-fim">Fim</label>
+                <input id="hora-fim" type="time" />
+              </div>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="km-inicial">KM inicial</label>
+                <input
+                  id="km-inicial"
+                  type="number"
+                  placeholder="Ex: 45230"
+                  inputmode="numeric"
+                />
+              </div>
+              <div>
+                <label for="km-final">KM final</label>
+                <input
+                  id="km-final"
+                  type="number"
+                  placeholder="Ex: 45242"
+                  inputmode="numeric"
+                />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <label for="tipo-veiculo">Combustível</label>
+              <select id="tipo-veiculo">
+                <option value="gasolina">🚗 Gasolina</option>
+                <option value="gnv">🚙 GNV</option>
+                <option value="eletrico">⚡ Elétrico</option>
+              </select>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="consumo">Consumo</label>
+                <input
+                  id="consumo"
+                  type="number"
+                  placeholder="Km/L"
+                  step="0.1"
+                  inputmode="decimal"
+                />
+              </div>
+              <div>
+                <label for="combustivel">Custo combustível</label>
+                <input
+                  id="combustivel"
+                  type="number"
+                  placeholder="R$/L"
+                  step="0.01"
+                  inputmode="decimal"
+                />
+              </div>
+            </div>
+
+            <button
+              class="btn-primario"
+              id="btn-receita"
+              onclick="addReceita()"
+            >
+              ✅ Salvar corrida
+            </button>
+          </div>
+
+          <div class="filtros">
+            <input
+              id="filtro-receitas"
+              placeholder="🔍 Buscar corrida..."
+              oninput="filtrarReceitas()"
+            />
+            <select id="filtro-veiculo" onchange="filtrarReceitas()">
+              <option value="">Todos veículos</option>
+              <option value="gasolina">🚗 Gasolina</option>
+              <option value="gnv">🚙 GNV</option>
+              <option value="eletrico">⚡ Elétrico</option>
+            </select>
+            <button class="btn-secundario" onclick="limparFiltros()">
+              Limpar
+            </button>
+          </div>
+
+          <div class="tabela-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>KM</th>
+                  <th>Veículo</th>
+                  <th>Combustível</th>
+                  <th>Lucro</th>
+                  <th>Economia ⚡</th>
+                  <th>Ganho/h</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="lista-receitas"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TELA: GASTOS -->
+        <div id="gastos" class="tela">
+          <h2>Gastos</h2>
+          <div class="card">
+            <h3>➕ Novo gasto</h3>
+            <div class="form">
+              <div>
+                <label for="tipo-gasto">Categoria</label>
+                <select id="tipo-gasto">
+                  <option value="manutencao">🔧 Manutenção</option>
+                  <option value="alimentacao">🍽️ Alimentação</option>
+                  <option value="combustivel_gasto">⛽ Combustível</option>
+                  <option value="outros">📦 Outros</option>
+                </select>
+              </div>
+              <div>
+                <label for="desc-gasto">Descrição</label>
+                <input id="desc-gasto" placeholder="Ex: Troca de óleo" />
+              </div>
+              <div>
+                <label for="valor-gasto">Valor (R$)</label>
+                <input
+                  id="valor-gasto"
+                  type="number"
+                  placeholder="0,00"
+                  step="0.01"
+                  inputmode="decimal"
+                />
+              </div>
+              <div>
+                <label for="data-gasto">Data</label>
+                <input id="data-gasto" type="date" />
+              </div>
+              <button class="btn-primario" id="btn-gasto" onclick="addGasto()">
+                ✅ Salvar gasto
+              </button>
+            </div>
+          </div>
+
+          <div class="tabela-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="lista-gastos"></tbody>
+            </table>
+          </div>
         </div>
       </main>
+
+      <!-- BOTTOM NAV (mobile) -->
+      <nav class="bottom-nav">
+        <button class="nav-item" id="nav-resumo" onclick="trocarTela('resumo')">
+          <span class="nav-icon">📊</span>
+          <span>Resumo</span>
+        </button>
+        <button
+          class="nav-item"
+          id="nav-receitas"
+          onclick="trocarTela('receitas')"
+        >
+          <span class="nav-icon">🚗</span>
+          <span>Corridas</span>
+        </button>
+        <button
+          class="btn-fab"
+          onclick="
+            trocarTela('receitas');
+            setTimeout(
+              () => document.getElementById('valor-receita').focus(),
+              200,
+            );
+          "
+          title="Nova corrida"
+        >
+          +
+        </button>
+        <button class="nav-item" id="nav-gastos" onclick="trocarTela('gastos')">
+          <span class="nav-icon">💸</span>
+          <span>Gastos</span>
+        </button>
+        <button
+          class="nav-item"
+          id="nav-config"
+          onclick="
+            trocarTela('resumo');
+            setTimeout(
+              () =>
+                document
+                  .querySelector('.acoes-grid')
+                  .scrollIntoView({ behavior: 'smooth' }),
+              300,
+            );
+          "
+        >
+          <span class="nav-icon">⚙️</span>
+          <span>Config</span>
+        </button>
+      </nav>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <div id="toast"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="js/pdf.js"></script>
+
+    <script>
+      let plataformaSelecionada = "Uber";
+
+      function selecionarPlataforma(btn, nome) {
+        document
+          .querySelectorAll("#selector-plataforma .selector-btn")
+          .forEach((b) => b.classList.remove("ativo"));
+        btn.classList.add("ativo");
+        plataformaSelecionada = nome;
+        const descInput = document.getElementById("desc-receita");
+        if (nome === "Outro") {
+          descInput.style.display = "block";
+          descInput.focus();
+        } else {
+          descInput.style.display = "none";
+          descInput.value = nome;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const _orig = window.trocarTela;
+        window.trocarTela = function (id, el) {
+          _orig && _orig(id, el);
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((b) => b.classList.remove("ativo"));
+          const nav = document.getElementById("nav-" + id);
+          if (nav) nav.classList.add("ativo");
+          document
+            .querySelectorAll(".tela")
+            .forEach((t) => t.classList.remove("ativa"));
+          const tela = document.getElementById(id);
+          if (tela) tela.classList.add("ativa");
+        };
+        trocarTela("resumo");
+      });
+    </script>
   </body>
 </html>
