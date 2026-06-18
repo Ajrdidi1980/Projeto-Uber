@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motorista no Controle — Finanças que te levam mais longe</title>
+    <meta
+      name="description"
+      content="Controle seus ganhos, gastos e bata sua meta diária. O app financeiro feito para motoristas de aplicativo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --azul: #0d1b2a;
+        --verde: #10b981;
+        --verde2: #34d399;
+        --cinza: #6b7280;
+        --claro: #f0fdf8;
+        --branco: #ffffff;
+        --font: "Inter", system-ui, sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font);
+        background: var(--branco);
+        color: var(--azul);
+        overflow-x: hidden;
+      }
+
+      /* === NAV === */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 24px;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--branco);
+        font-weight: 700;
+        font-size: 15px;
+        text-decoration: none;
+      }
+
+      .nav-logo-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--verde);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+
+      .nav-cta {
+        background: var(--verde);
+        color: var(--branco);
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+
+      .nav-cta:hover {
+        background: #059669;
+      }
+
+      /* === HERO === */
+      .hero {
+        min-height: 100vh;
+        background: var(--azul);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 100px 24px 60px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(16, 185, 129, 0.15),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--verde2);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 99px;
+        margin-bottom: 28px;
+        letter-spacing: 0.05em;
+      }
+
+      .hero h1 {
+        font-size: clamp(36px, 8vw, 72px);
+        font-weight: 900;
+        line-height: 1.05;
+        color: var(--branco);
+        margin-bottom: 10px;
+      }
+
+      .hero h1 span {
+        color: var(--verde);
+      }
+
+      .hero-sub {
+        font-size: clamp(14px, 2vw, 18px);
+        color: var(--verde2);
+        font-weight: 600;
+        margin-bottom: 20px;
+        letter-spacing: 0.02em;
+      }
+
+      .hero-desc {
+        font-size: clamp(14px, 1.8vw, 17px);
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 520px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+      }
+
+      .hero-btns {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 60px;
+      }
+
+      .btn-main {
+        background: var(--verde);
+        color: var(--branco);
+        padding: 15px 32px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      }
+
+      .btn-main:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(16, 185, 129, 0.45);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--branco);
+        padding: 15px 32px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* === STATS === */
+      .hero-stats {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 40px;
+      }
+
+      .stat {
+        text-align: center;
+      }
+      .stat-num {
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--verde);
+      }
+      .stat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 2px;
+      }
+
+      /* === SEÇÃO === */
+      section {
+        padding: 80px 24px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--verde);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+
+      .section-title {
+        font-size: clamp(26px, 4vw, 42px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 16px;
+      }
+
+      .section-desc {
+        font-size: 16px;
+        color: var(--cinza);
+        line-height: 1.6;
+        max-width: 540px;
+        margin-bottom: 48px;
+      }
+
+      /* === PROBLEMAS === */
+      .problemas {
+        background: var(--claro);
+      }
+
+      .problemas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+
+      .problema-card {
+        background: var(--branco);
+        border-radius: 14px;
+        padding: 22px;
+        border: 1px solid #d1fae5;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .problema-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: var(--claro);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .problema-titulo {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .problema-desc {
+        font-size: 13px;
+        color: var(--cinza);
+        line-height: 1.5;
+      }
+
+      /* === FUNCIONALIDADES === */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .feature-card {
+        border-radius: 16px;
+        padding: 28px;
+        border: 1px solid #e5e7eb;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+
+      .feature-card:hover {
+        border-color: var(--verde);
+        transform: translateY(-3px);
+      }
+
+      .feature-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--verde);
+        letter-spacing: 0.1em;
+        margin-bottom: 14px;
+      }
+
+      .feature-icon {
+        font-size: 32px;
+        margin-bottom: 14px;
+        display: block;
+      }
+      .feature-title {
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .feature-desc {
+        font-size: 14px;
+        color: var(--cinza);
+        line-height: 1.6;
+      }
+
+      /* === DEPOIMENTOS === */
+      .depoimentos {
+        background: var(--azul);
+      }
+      .depoimentos .section-title {
+        color: var(--branco);
+      }
+      .depoimentos .section-label {
+        color: var(--verde2);
+      }
+      .depoimentos .section-desc {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .dep-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .dep-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+      }
+
+      .dep-stars {
+        color: var(--verde);
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .dep-texto {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+      .dep-autor {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .dep-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--verde);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--branco);
+      }
+      .dep-nome {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--branco);
+      }
+      .dep-cargo {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* === COMO FUNCIONA === */
+      .passos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 32px;
+        position: relative;
+      }
+
+      .passo {
+        text-align: center;
+      }
+
+      .passo-num {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--verde);
+        color: var(--branco);
+        font-size: 20px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+      }
+
+      .passo-titulo {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .passo-desc {
+        font-size: 13px;
+        color: var(--cinza);
+        line-height: 1.5;
+      }
+
+      /* === CTA FINAL === */
+      .cta-final {
+        background: linear-gradient(135deg, var(--azul) 0%, #1a3a2a 100%);
+        text-align: center;
+        padding: 100px 24px;
+      }
+
+      .cta-final h2 {
+        font-size: clamp(28px, 5vw, 52px);
+        font-weight: 900;
+        color: var(--branco);
+        margin-bottom: 16px;
+        line-height: 1.1;
+      }
+
+      .cta-final h2 span {
+        color: var(--verde);
+      }
+
+      .cta-final p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 480px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+      }
+
+      .cta-gratis {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 16px;
+      }
+
+      /* === FOOTER === */
+      footer {
+        background: var(--azul);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        text-align: center;
+        padding: 24px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* === RESPONSIVO === */
+      @media (max-width: 600px) {
+        nav {
+          padding: 12px 16px;
+        }
+        .hero-stats {
+          gap: 24px;
+        }
+        .stat-num {
+          font-size: 26px;
+        }
+        section {
+          padding: 60px 16px;
+        }
+      }
+
+      /* === ANIMAÇÃO SCROLL === */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hero-preview {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+      }
+
+      .preview-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: 0.3s;
+      }
+
+      .preview-card:hover {
+        transform: translateY(-8px);
+      }
+
+      .preview-card img {
+        width: 100%;
+        display: block;
+      }
+
+      .preview-card h3 {
+        padding: 20px 20px 8px;
+        color: white;
+      }
+
+      .preview-card p {
+        padding: 0 20px 20px;
+        color: #b6c0d1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a class="nav-logo" href="#">
+        <div class="nav-logo-icon">🚗</div>
+        Motorista no Controle
+      </a>
+      <a
+        class="nav-cta"
+        href="https://controle-corridas-90795.web.app"
+        target="_blank"
+        >Acessar grátis</a
+      >
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-badge">🚀 Seu financeiro no controle</div>
+      <h1>Motorista<br /><span>no Controle</span></h1>
+      <p class="hero-sub">— Finanças que te levam mais longe —</p>
+      <p class="hero-desc">
+        Você trabalha duro todo dia. Mas sabe exatamente quanto lucrou? Controle
+        seus ganhos, gastos e bata sua meta — tudo em um só lugar.
+      </p>
+      <div class="hero-btns">
+        <a
+          class="btn-main"
+          href="https://controle-corridas-90795.web.app"
+          target="_blank"
+          >🚀 Começar agora — é grátis</a
+        >
+        <a class="btn-ghost" href="#funcionalidades">Ver funcionalidades</a>
+      </div>
+      <div class="hero-preview">
+        <div class="preview-card">
+          <img
+            src="./controle-financeiro-motoristas/img/app/resumo.png"
+            alt="Resumo financeiro"
+          />
+          <h3>Resumo Inteligente</h3>
+          <p>Veja lucro, gastos, saldo e metas em tempo real.</p>
+        </div>
+
+        <div class="preview-card">
+          <img
+            src="./controle-financeiro-motoristas/img/app/corridas.png"
+            alt="Controle de corridas"
+          />
+          <h3>Controle de Corridas</h3>
+          <p>Registre ganhos, quilômetros e combustível.</p>
+        </div>
+
+        <div class="preview-card">
+          <img
+            src="./controle-financeiro-motoristas/img/app/gastos.png"
+            alt="Controle de gastos"
+          />
+          <h3>Gestão de Gastos</h3>
+          <p>Acompanhe manutenção, alimentação e despesas.</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Grátis para usar</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3 min</div>
+          <div class="stat-label">Para configurar</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">R$ 0</div>
+          <div class="stat-label">Para começar</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEMAS -->
+    <section class="problemas">
+      <div class="container">
+        <p class="section-label fade-up">Você se identifica?</p>
+        <h2 class="section-title fade-up">
+          Todo motorista já passou por isso...
+        </h2>
+        <div class="problemas-grid">
+          <div class="problema-card fade-up">
+            <div class="problema-icon">😰</div>
+            <div>
+              <div class="problema-titulo">
+                Roda o dia todo e não sabe quanto lucrou
+              </div>
+              <div class="problema-desc">
+                Faturou R$ 300 mas gastou R$ 120 em gasolina. Quanto sobrou de
+                verdade?
+              </div>
+            </div>
+          </div>
+          <div class="problema-card fade-up">
+            <div class="problema-icon">📱</div>
+            <div>
+              <div class="problema-titulo">
+                Trabalha em várias plataformas ao mesmo tempo
+              </div>
+              <div class="problema-desc">
+                Uber, 99, iFood... mistura tudo e no fim do mês não sabe qual
+                compensa mais.
+              </div>
+            </div>
+          </div>
+          <div class="problema-card fade-up">
+            <div class="problema-icon">📋</div>
+            <div>
+              <div class="problema-titulo">
+                Imposto de renda vira um pesadelo
+              </div>
+              <div class="problema-desc">
+                Sem registros organizados, fica difícil declarar as despesas e
+                pagar menos.
+              </div>
+            </div>
+          </div>
+          <div class="problema-card fade-up">
+            <div class="problema-icon">🎯</div>
+            <div>
+              <div class="problema-titulo">Meta diária? Só no feeling</div>
+              <div class="problema-desc">
+                Sem controle, você não sabe se já bateu a meta ou se precisa
+                rodar mais.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNCIONALIDADES -->
+    <section id="funcionalidades">
+      <div class="container">
+        <p class="section-label fade-up">O que o app faz</p>
+        <h2 class="section-title fade-up">
+          Tudo que você precisa,<br />sem complicação
+        </h2>
+        <p class="section-desc fade-up">
+          Feito por quem entende a rotina do motorista de aplicativo. Simples de
+          usar, poderoso nos resultados.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card fade-up">
+            <span class="feature-icon">💰</span>
+            <div class="feature-num">01 — GANHOS</div>
+            <div class="feature-title">Controle de corridas por plataforma</div>
+            <div class="feature-desc">
+              Registre cada corrida com valor, horário, KM e plataforma. Veja
+              quanto cada app te paga de verdade.
+            </div>
+          </div>
+          <div class="feature-card fade-up">
+            <span class="feature-icon">⛽</span>
+            <div class="feature-num">02 — COMBUSTÍVEL</div>
+            <div class="feature-title">Custo por KM rodado</div>
+            <div class="feature-desc">
+              Gasolina, GNV ou elétrico — o app calcula automaticamente quanto
+              você gasta por quilômetro.
+            </div>
+          </div>
+          <div class="feature-card fade-up">
+            <span class="feature-icon">🎯</span>
+            <div class="feature-num">03 — META</div>
+            <div class="feature-title">Barra de meta diária</div>
+            <div class="feature-desc">
+              Defina sua meta e acompanhe em tempo real. Sabe exatamente quanto
+              falta pra bater o objetivo do dia.
+            </div>
+          </div>
+          <div class="feature-card fade-up">
+            <span class="feature-icon">📊</span>
+            <div class="feature-num">04 — ANÁLISE</div>
+            <div class="feature-title">Gráficos e ranking automático</div>
+            <div class="feature-desc">
+              Veja seu melhor dia da semana, melhor período (manhã/tarde/noite)
+              e compare semana a semana.
+            </div>
+          </div>
+          <div class="feature-card fade-up">
+            <span class="feature-icon">📄</span>
+            <div class="feature-num">05 — RELATÓRIO</div>
+            <div class="feature-title">Exportar PDF e backup</div>
+            <div class="feature-desc">
+              Gere relatórios em PDF com um toque. Ideal para declarar IR e ter
+              tudo organizado.
+            </div>
+          </div>
+          <div class="feature-card fade-up">
+            <span class="feature-icon">☁️</span>
+            <div class="feature-num">06 — NUVEM</div>
+            <div class="feature-title">Seus dados salvos na nuvem</div>
+            <div class="feature-desc">
+              Login com Google. Seus dados ficam seguros e acessíveis em
+              qualquer dispositivo.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section style="background: var(--claro)">
+      <div class="container">
+        <p class="section-label fade-up">Simples assim</p>
+        <h2 class="section-title fade-up">Começa a usar em 3 passos</h2>
+        <div class="passos" style="margin-top: 48px">
+          <div class="passo fade-up">
+            <div class="passo-num">1</div>
+            <div class="passo-titulo">Entra com Google</div>
+            <div class="passo-desc">
+              Cria sua conta em segundos com o Google. Sem formulário, sem
+              burocracia.
+            </div>
+          </div>
+          <div class="passo fade-up">
+            <div class="passo-num">2</div>
+            <div class="passo-titulo">Registra suas corridas</div>
+            <div class="passo-desc">
+              Adiciona o valor, horário e KM de cada corrida. Leva menos de 30
+              segundos.
+            </div>
+          </div>
+          <div class="passo fade-up">
+            <div class="passo-num">3</div>
+            <div class="passo-titulo">Acompanha seu lucro</div>
+            <div class="passo-desc">
+              Veja o resumo do dia, sua meta e os gráficos atualizados em tempo
+              real.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="depoimentos">
+      <div class="container">
+        <p class="section-label fade-up">Quem já usa</p>
+        <h2 class="section-title fade-up">
+          Motoristas que estão<br />no controle
+        </h2>
+        <p class="section-desc fade-up">
+          Resultados reais de quem parou de adivinhar e começou a controlar.
+        </p>
+        <div class="dep-grid">
+          <div class="dep-card fade-up">
+            <div class="dep-stars">★★★★★</div>
+            <p class="dep-texto">
+              "Antes eu achava que estava ganhando bem. Depois do app descobri
+              que meu custo por KM estava muito alto. Mudei minha rota e
+              aumentei o lucro em R$ 400 no mês."
+            </p>
+            <div class="dep-autor">
+              <div class="dep-avatar">C</div>
+              <div>
+                <div class="dep-nome">Carlos Silva</div>
+                <div class="dep-cargo">Motorista Uber — São Paulo</div>
+              </div>
+            </div>
+          </div>
+          <div class="dep-card fade-up">
+            <div class="dep-stars">★★★★★</div>
+            <p class="dep-texto">
+              "A barra de meta diária mudou minha vida. Agora eu sei exatamente
+              quando posso parar de rodar. Durmo mais cedo e ganho a mesma
+              coisa!"
+            </p>
+            <div class="dep-autor">
+              <div class="dep-avatar">M</div>
+              <div>
+                <div class="dep-nome">Marcos Oliveira</div>
+                <div class="dep-cargo">Motorista 99 — Belo Horizonte</div>
+              </div>
+            </div>
+          </div>
+          <div class="dep-card fade-up">
+            <div class="dep-stars">★★★★★</div>
+            <p class="dep-texto">
+              "Na hora do IR foi um alívio. Tinha todos os gastos organizados,
+              consegui deduzir combustível e manutenção. Paguei bem menos
+              imposto esse ano."
+            </p>
+            <div class="dep-autor">
+              <div class="dep-avatar">R</div>
+              <div>
+                <div class="dep-nome">Roberto Santos</div>
+                <div class="dep-cargo">Motorista iFood — Rio de Janeiro</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+      <h2 class="fade-up">Pronto pra estar<br /><span>no controle?</span></h2>
+      <p class="fade-up">
+        Começa agora, é grátis. Em 3 minutos você já tem o controle das suas
+        finanças na palma da mão.
+      </p>
+      <a
+        class="btn-main fade-up"
+        href="https://controle-corridas-90795.web.app"
+        target="_blank"
+        style="display: inline-block"
+        >🚀 Acessar o app agora</a
+      >
+      <p class="cta-gratis fade-up">
+        Grátis • Sem cartão de crédito • Funciona no celular
+      </p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2026 Motorista no Controle — Finanças que te levam mais longe 🚗</p>
+    </footer>
+
+    <script>
+      // Animação scroll
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document
+        .querySelectorAll(".fade-up")
+        .forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>
