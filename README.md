@@ -8,7 +8,7 @@ Sistema web inteligente para motoristas de aplicativo com suporte a:
 
 ## 📸 Preview
 
-![Preview](img/preview.png)
+![Preview](img/app-preview.png)
 
 🔥 Funcionalidades
 ✅ Cadastro de receitas
