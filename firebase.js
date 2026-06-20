@@ -11,6 +11,9 @@ import {
   query,
   orderBy,
   onSnapshot,
+  setDoc,
+  getDoc,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import {
   getAuth,
@@ -52,7 +55,10 @@ window.salvarReceitaFirebase = async function (dados) {
     const docRef = await addDoc(
       collection(db, "usuarios", usuario.uid, "receitas"),
 
-      dados,
+      {
+        ...dados,
+        data: serverTimestamp(),
+      },
     );
 
     console.log("✅ Receita salva");
@@ -180,7 +186,10 @@ window.salvarGastoFirebase = async function (dados) {
     const docRef = await addDoc(
       collection(db, "usuarios", usuario.uid, "gastos"),
 
-      dados,
+      {
+        ...dados,
+        data: serverTimestamp(),
+      },
     );
 
     console.log("✅ Gasto salvo");
@@ -193,7 +202,10 @@ window.salvarGastoFirebase = async function (dados) {
 
 window.editarGastoFirebase = async function (id, dados) {
   try {
-    await updateDoc(doc(db, "gastos", id), dados);
+    await updateDoc(doc(db, "gastos", id), {
+      ...dados,
+      data: serverTimestamp(),
+    });
 
     console.log("✏️ Gasto atualizado");
   } catch (erro) {
@@ -248,6 +260,29 @@ window.escutarGastosFirebase = function (callback) {
     callback(gastosFirebase);
   });
 };
+async function salvarUsuarioFirebase(usuario) {
+  const usuarioRef = doc(db, "usuarios", usuario.uid);
+
+  const usuarioExistente = await getDoc(usuarioRef);
+
+  if (!usuarioExistente.exists()) {
+    await setDoc(usuarioRef, {
+      nome: usuario.displayName,
+      email: usuario.email,
+      dataCadastro: new Date().toISOString(),
+      ultimoAcesso: new Date().toISOString(),
+      plano: "free",
+    });
+
+    console.log("✅ Usuário cadastrado");
+  } else {
+    await updateDoc(usuarioRef, {
+      ultimoAcesso: new Date().toISOString(),
+    });
+
+    console.log("✅ Último acesso atualizado");
+  }
+}
 // ===== LOGIN GOOGLE =====
 
 window.loginGoogle = async function () {
@@ -257,7 +292,7 @@ window.loginGoogle = async function () {
     const resultado = await signInWithPopup(auth, provider);
 
     const usuario = resultado.user;
-
+    await salvarUsuarioFirebase(usuario);
     console.log("✅ Usuário logado:", usuario.displayName);
   } catch (erro) {
     console.error("❌ Erro login:", erro);
@@ -337,7 +372,10 @@ window.migrarReceitas = async function () {
         await addDoc(
           collection(db, "usuarios", usuario.uid, "receitas"),
 
-          dados,
+          {
+            ...dados,
+            data: serverTimestamp(),
+          },
         );
 
         console.log("✅ Migrada:", dados.descricao);
@@ -347,6 +385,26 @@ window.migrarReceitas = async function () {
     console.log("🚀 Migração concluída");
   } catch (erro) {
     console.error("❌ Erro migração:", erro);
+  }
+};
+window.salvarUsuarioFirebase = async function (usuario) {
+  try {
+    await setDoc(
+      doc(db, "usuarios", usuario.uid),
+      {
+        nome: usuario.displayName,
+        email: usuario.email,
+        foto: usuario.photoURL,
+        plano: "gratis",
+        dataCadastro: serverTimestamp(),
+        ultimoAcesso: serverTimestamp(),
+      },
+      { merge: true },
+    );
+
+    console.log("✅ Usuário registrado");
+  } catch (erro) {
+    console.error("❌ Erro ao salvar usuário:", erro);
   }
 };
 
