@@ -140,12 +140,27 @@ function atualizarBarraMeta(totalR, metaDiaria) {
 function atualizarComparativoSemanal(receitas) {
   const hoje = new Date();
 
+  const obterData = (data) => {
+    if (!data) return null;
+
+    // Data antiga em texto
+    if (typeof data === "string") {
+      const partes = data.split("/");
+      return new Date(partes[2], partes[1] - 1, partes[0]);
+    }
+
+    // Timestamp do Firestore
+    if (data.toDate) {
+      return data.toDate();
+    }
+
+    return null;
+  };
+
   const semanaAtual = receitas.filter((r) => {
-    if (!r.data) return false;
+    const data = obterData(r.data);
 
-    const partes = r.data.split("/");
-
-    const data = new Date(partes[2], partes[1] - 1, partes[0]);
+    if (!data) return false;
 
     const diff = (hoje - data) / (1000 * 60 * 60 * 24);
 
@@ -153,20 +168,24 @@ function atualizarComparativoSemanal(receitas) {
   });
 
   const semanaPassada = receitas.filter((r) => {
-    if (!r.data) return false;
+    const data = obterData(r.data);
 
-    const partes = r.data.split("/");
-
-    const data = new Date(partes[2], partes[1] - 1, partes[0]);
+    if (!data) return false;
 
     const diff = (hoje - data) / (1000 * 60 * 60 * 24);
 
     return diff > 7 && diff <= 14;
   });
 
-  const totalAtual = semanaAtual.reduce((acc, r) => acc + r.valor, 0);
+  const totalAtual = semanaAtual.reduce(
+    (acc, r) => acc + Number(r.valor || 0),
+    0,
+  );
 
-  const totalPassado = semanaPassada.reduce((acc, r) => acc + r.valor, 0);
+  const totalPassado = semanaPassada.reduce(
+    (acc, r) => acc + Number(r.valor || 0),
+    0,
+  );
 
   let textoComparativo = "Sem dados suficientes";
 
@@ -179,39 +198,13 @@ function atualizarComparativoSemanal(receitas) {
       textoComparativo = `📉 ${Math.abs(diferenca).toFixed(1)}% abaixo da semana passada`;
     }
   }
+
   const economiaEletricaTotal = receitas.reduce(
-    (total, r) => {
-      return total + (r.economiaEletrica || 0);
-    },
-
+    (total, r) => total + (Number(r.economiaEletrica) || 0),
     0,
   );
 
-  document.getElementById("economia-eletrica-total").textContent =
-    `R$ ${economiaEletricaTotal.toFixed(2)}`;
-  const gastoEletricoTotal = receitas.reduce(
-    (total, r) => {
-      if (r.tipoVeiculo === "eletrico") {
-        return total + (r.gastoCombustivel || 0);
-      }
-
-      return total;
-    },
-
-    0,
-  );
-  const gastoGasolinaEquivalente = gastoEletricoTotal + economiaEletricaTotal;
-
-  let percentualEconomia = 0;
-
-  if (gastoGasolinaEquivalente > 0) {
-    percentualEconomia =
-      (economiaEletricaTotal / gastoGasolinaEquivalente) * 100;
-  }
-  document.getElementById("percentual-economia").textContent =
-    `⚡ ${percentualEconomia.toFixed(0)}% mais econômico`;
-
-  document.getElementById("comparativo-semana").innerHTML = textoComparativo;
+  console.log("Comparativo:", textoComparativo);
 }
 function calcularMetricas({
   totalKm,
@@ -293,21 +286,7 @@ function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
 
   return textoMeta;
 }
-function atualizarBarraMeta(totalR, metaDiaria) {
-  const barra = document.getElementById("progresso-meta");
 
-  const texto = document.getElementById("texto-progresso");
-
-  if (!barra || !texto) return;
-
-  let porcentagem = (totalR / metaDiaria) * 100;
-
-  porcentagem = Math.min(porcentagem, 100);
-
-  barra.style.width = porcentagem + "%";
-
-  texto.innerText = porcentagem.toFixed(0) + "%";
-}
 function calcularFaltamMeta(totalR, metaDiaria) {
   return Math.max(0, Number(metaDiaria) - totalR);
 }
@@ -330,24 +309,39 @@ function calcularDesempenhoDiario({ valores, totalR }) {
 function agruparGanhosPorPeriodo({ modoGrafico, ganhosPorDia, receita }) {
   // AGRUPAR POR DIA
   if (modoGrafico === "dia") {
-    if (!ganhosPorDia[receita.data]) {
-      ganhosPorDia[receita.data] = 0;
+    const chaveDia =
+      typeof receita.data === "string"
+        ? receita.data
+        : converterData(receita.data);
+
+    if (!ganhosPorDia[chaveDia]) {
+      ganhosPorDia[chaveDia] = 0;
     }
 
-    ganhosPorDia[receita.data] += receita.valor;
+    ganhosPorDia[chaveDia] += Number(receita.valor || 0);
   }
 
   // AGRUPAR POR MÊS
   else {
-    const partesMes = receita.data.split("/");
+    let chaveMes;
 
-    const chaveMes = partesMes[1] + "/" + partesMes[2];
+    if (typeof receita.data === "string") {
+      const partesMes = receita.data.split("/");
+      chaveMes = partesMes[1] + "/" + partesMes[2];
+    } else if (receita.data?.toDate) {
+      const d = receita.data.toDate();
+
+      chaveMes =
+        String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
+    } else {
+      return;
+    }
 
     if (!ganhosPorDia[chaveMes]) {
       ganhosPorDia[chaveMes] = 0;
     }
 
-    ganhosPorDia[chaveMes] += receita.valor;
+    ganhosPorDia[chaveMes] += Number(receita.valor || 0);
   }
 }
 function calcularAcumuladoresReceita({
@@ -424,13 +418,21 @@ function calcularGanhosSemanais({
   };
 }
 function acumularGanhosSemana({ receita, ganhosSemana }) {
-  const partesSemana = receita.data.split("/");
+  let dataSemana;
 
-  const dataSemana = new Date(
-    partesSemana[2],
-    partesSemana[1] - 1,
-    partesSemana[0],
-  );
+  if (typeof receita.data === "string") {
+    const partesSemana = receita.data.split("/");
+
+    dataSemana = new Date(
+      partesSemana[2],
+      partesSemana[1] - 1,
+      partesSemana[0],
+    );
+  } else if (receita.data?.toDate) {
+    dataSemana = receita.data.toDate();
+  } else {
+    return ganhosSemana;
+  }
 
   const dias = [
     "Domingo",
@@ -444,7 +446,7 @@ function acumularGanhosSemana({ receita, ganhosSemana }) {
 
   const nomeDia = dias[dataSemana.getDay()];
 
-  ganhosSemana[nomeDia] += receita.valor;
+  ganhosSemana[nomeDia] += Number(receita.valor || 0);
 
   return ganhosSemana;
 }

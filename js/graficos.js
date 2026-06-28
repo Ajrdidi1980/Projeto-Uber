@@ -1,6 +1,11 @@
+let grafico = null;
+let graficoPizza = null;
+
 // ===== GRÁFICO =====
 function atualizarGrafico(dadosPorDia) {
   const canvas = document.getElementById("grafico");
+  console.log("Canvas:", canvas);
+  console.log("Chart:", typeof Chart);
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
@@ -9,84 +14,60 @@ function atualizarGrafico(dadosPorDia) {
     grafico.destroy();
   }
 
-  const labels = Object.keys(dadosPorDia);
-  const valores = Object.values(dadosPorDia);
-
   grafico = new Chart(ctx, {
     type: "bar",
+
     data: {
-      labels: labels,
+      labels: Object.keys(dadosPorDia),
+
       datasets: [
         {
-          label: "Ganhos por dia (R$)",
+          label: "Ganhos",
 
-          data: valores,
+          data: Object.values(dadosPorDia),
 
-          backgroundColor: "rgba(34, 197, 94, 0.75)",
+          backgroundColor: "#16a34a",
 
-          borderColor: "#22c55e",
+          borderColor: "#15803d",
 
           borderWidth: 2,
-
-          borderRadius: 6,
-
-          borderSkipped: false,
-
-          hoverBackgroundColor: "rgba(34, 197, 94, 1)",
-
-          hoverBorderColor: "#4ade80",
         },
       ],
     },
+
     options: {
       responsive: true,
 
       maintainAspectRatio: false,
 
-      plugins: {
-        legend: {
-          labels: {
-            color: "#e2e8f0",
+      scales: {
+        y: {
+          beginAtZero: true,
 
-            font: {
-              size: 12,
-            },
+          ticks: {
+            color: "#111827",
+          },
+
+          grid: {
+            color: "#dddddd",
           },
         },
 
-        tooltip: {
-          backgroundColor: "rgba(15, 23, 42, 0.95)",
-
-          titleColor: "#fff",
-
-          bodyColor: "#e2e8f0",
-
-          borderColor: "rgba(34, 197, 94, 0.3)",
-
-          borderWidth: 1,
-
-          padding: 10,
-        },
-      },
-
-      scales: {
         x: {
+          ticks: {
+            color: "#111827",
+          },
+
           grid: {
             display: false,
           },
-
-          ticks: {
-            color: "#94a3b8",
-          },
         },
+      },
 
-        y: {
-          grid: {
-            color: "rgba(255,255,255,0.04)",
-          },
-
-          ticks: {
-            color: "#94a3b8",
+      plugins: {
+        legend: {
+          labels: {
+            color: "#111827",
           },
         },
       },

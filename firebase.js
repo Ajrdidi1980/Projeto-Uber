@@ -48,17 +48,12 @@ window.salvarReceitaFirebase = async function (dados) {
 
     if (!usuario) {
       console.log("❌ Usuário não logado");
-
       return;
     }
 
     const docRef = await addDoc(
       collection(db, "usuarios", usuario.uid, "receitas"),
-
-      {
-        ...dados,
-        data: serverTimestamp(),
-      },
+      dados,
     );
 
     console.log("✅ Receita salva");
@@ -185,11 +180,7 @@ window.salvarGastoFirebase = async function (dados) {
 
     const docRef = await addDoc(
       collection(db, "usuarios", usuario.uid, "gastos"),
-
-      {
-        ...dados,
-        data: serverTimestamp(),
-      },
+      dados,
     );
 
     console.log("✅ Gasto salvo");
@@ -202,10 +193,9 @@ window.salvarGastoFirebase = async function (dados) {
 
 window.editarGastoFirebase = async function (id, dados) {
   try {
-    await updateDoc(doc(db, "gastos", id), {
-      ...dados,
-      data: serverTimestamp(),
-    });
+    const usuario = usuarioAtual();
+
+    await updateDoc(doc(db, "usuarios", usuario.uid, "gastos", id), dados);
 
     console.log("✏️ Gasto atualizado");
   } catch (erro) {
@@ -260,29 +250,7 @@ window.escutarGastosFirebase = function (callback) {
     callback(gastosFirebase);
   });
 };
-async function salvarUsuarioFirebase(usuario) {
-  const usuarioRef = doc(db, "usuarios", usuario.uid);
 
-  const usuarioExistente = await getDoc(usuarioRef);
-
-  if (!usuarioExistente.exists()) {
-    await setDoc(usuarioRef, {
-      nome: usuario.displayName,
-      email: usuario.email,
-      dataCadastro: new Date().toISOString(),
-      ultimoAcesso: new Date().toISOString(),
-      plano: "free",
-    });
-
-    console.log("✅ Usuário cadastrado");
-  } else {
-    await updateDoc(usuarioRef, {
-      ultimoAcesso: new Date().toISOString(),
-    });
-
-    console.log("✅ Último acesso atualizado");
-  }
-}
 // ===== LOGIN GOOGLE =====
 
 window.loginGoogle = async function () {
@@ -318,6 +286,7 @@ onAuthStateChanged(auth, (usuario) => {
 
   if (usuario) {
     console.log("🔥 Logado:", usuario.displayName);
+
     window.carregarDadosUsuario();
 
     if (nomeUsuario) {
@@ -327,6 +296,11 @@ onAuthStateChanged(auth, (usuario) => {
     btnLogin.style.display = "none";
 
     btnLogout.style.display = "block";
+    const btnAdmin = document.getElementById("btn-admin");
+
+    if (btnAdmin && usuario.email === "antoniojrlinhares@gmail.com") {
+      btnAdmin.style.display = "block";
+    }
   } else {
     console.log("❌ Não logado");
 
@@ -337,6 +311,11 @@ onAuthStateChanged(auth, (usuario) => {
     btnLogin.style.display = "block";
 
     btnLogout.style.display = "none";
+    const btnAdmin = document.getElementById("btn-admin");
+
+    if (btnAdmin) {
+      btnAdmin.style.display = "none";
+    }
   }
 });
 window.migrarReceitas = async function () {
@@ -371,11 +350,7 @@ window.migrarReceitas = async function () {
       if (!descricoesExistentes.includes(chave)) {
         await addDoc(
           collection(db, "usuarios", usuario.uid, "receitas"),
-
-          {
-            ...dados,
-            data: serverTimestamp(),
-          },
+          dados,
         );
 
         console.log("✅ Migrada:", dados.descricao);
@@ -405,6 +380,37 @@ window.salvarUsuarioFirebase = async function (usuario) {
     console.log("✅ Usuário registrado");
   } catch (erro) {
     console.error("❌ Erro ao salvar usuário:", erro);
+  }
+};
+window.listarUsuariosFirebase = async function () {
+  try {
+    const snapshot = await getDocs(collection(db, "usuarios"));
+
+    const usuarios = [];
+
+    snapshot.forEach((doc) => {
+      usuarios.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    console.log("Usuários:", usuarios);
+
+    return usuarios;
+  } catch (erro) {
+    console.error("Erro ao listar usuários:", erro);
+  }
+};
+window.totalUsuariosFirebase = async function () {
+  try {
+    const snapshot = await getDocs(collection(db, "usuarios"));
+
+    console.log("👥 Total de usuários:", snapshot.size);
+
+    return snapshot.size;
+  } catch (erro) {
+    console.error("❌ Erro:", erro);
   }
 };
 

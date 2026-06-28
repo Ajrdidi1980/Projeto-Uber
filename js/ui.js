@@ -20,6 +20,12 @@ function trocarTela(id, el) {
   // atualizar resumo
   if (id === "resumo") {
     atualizar();
+
+    setTimeout(() => {
+      atualizar();
+
+      window.dispatchEvent(new Event("resize"));
+    }, 150);
   }
 }
 window.trocarTela = trocarTela;

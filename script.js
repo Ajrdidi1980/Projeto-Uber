@@ -6,8 +6,6 @@ let metaDiaria = parseFloat(localStorage.getItem("metaDiaria")) || 300;
 
 let editandoReceita = null;
 let editandoGasto = null;
-let grafico = null;
-let graficoPizza = null;
 let filtroTexto = "";
 let filtroVeiculo = "";
 let dataInicio = "";
@@ -15,7 +13,7 @@ let dataFim = "";
 let modoGrafico = "mes";
 
 // ===== ATUALIZAR TELA =====
-function atualizar() {
+window.atualizar = function () {
   const loadingResumo = document.getElementById("loading-resumo");
 
   loadingResumo.style.display = "grid";
@@ -59,13 +57,15 @@ function atualizar() {
     if (!r.data) return;
     const hoje = new Date();
 
-    const partesData = r.data.split("/");
+    let dataCorrida;
 
-    const dataCorrida = new Date(
-      partesData[2],
-      partesData[1] - 1,
-      partesData[0],
-    );
+    if (typeof r.data === "string") {
+      const partesData = r.data.split("/");
+
+      dataCorrida = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+    } else {
+      dataCorrida = r.data.toDate();
+    }
 
     const diffTempo = hoje - dataCorrida;
 
@@ -142,12 +142,7 @@ function atualizar() {
   renderizarTabelaReceitas(receitasFiltradas, listaR);
   const gastosFiltrados = [];
   // ===== ORDENAR GASTOS POR DATA =====
-  gastos.sort((a, b) => {
-    const dataA = new Date(a.data.split("/").reverse().join("-"));
-    const dataB = new Date(b.data.split("/").reverse().join("-"));
-
-    return dataB - dataA;
-  });
+  ordenarPorData(gastos); // ✅ já trata Timestamp e string
   // ===== GASTOS =====
   totalG = atualizarGastos(listaG);
 
@@ -210,16 +205,27 @@ function atualizar() {
   atualizarBarraMeta(totalR, metaDiaria);
 
   atualizarComparativoSemanal(receitas);
-
+  console.log("ganhosPorDia =", ganhosPorDia);
   atualizarGrafico(ganhosPorDia);
   atualizarGraficoPizza(totalR, totalG, reserva);
   loadingResumo.style.display = "none";
-}
+};
 function ordenarPorData(lista) {
   lista.sort((a, b) => {
-    const dataA = new Date(a.data.split("/").reverse().join("-"));
+    let dataA;
+    let dataB;
 
-    const dataB = new Date(b.data.split("/").reverse().join("-"));
+    if (typeof a.data === "string") {
+      dataA = new Date(a.data.split("/").reverse().join("-"));
+    } else {
+      dataA = a.data.toDate();
+    }
+
+    if (typeof b.data === "string") {
+      dataB = new Date(b.data.split("/").reverse().join("-"));
+    } else {
+      dataB = b.data.toDate();
+    }
 
     return dataB - dataA;
   });
@@ -231,7 +237,20 @@ function formatarKm(valor) {
   return valor ? `${Number(valor).toFixed(1)} km` : "-";
 }
 function converterData(data) {
-  return data.split("/").reverse().join("-");
+  if (typeof data === "string") {
+    return data.split("/").reverse().join("-");
+  }
+
+  if (data?.toDate) {
+    const d = data.toDate();
+
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+      2,
+      "0",
+    )}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  return "";
 }
 function receitaPassaFiltro(r) {
   if (filtroTexto && !r.descricao.toLowerCase().includes(filtroTexto)) {
@@ -483,15 +502,18 @@ if (temaSalvo === "light") {
 }
 
 window.carregarDadosUsuario = function () {
+  let receitasOk = false;
+  let gastosOk = false;
+
   window.escutarReceitasFirebase((dados) => {
     receitas = dados;
-
-    atualizar();
+    receitasOk = true;
+    if (gastosOk) atualizar(); // ✅ só roda quando os dois chegarem
   });
 
   window.escutarGastosFirebase((dados) => {
     gastos = dados;
-
-    atualizar();
+    gastosOk = true;
+    if (receitasOk) atualizar(); // ✅ só roda quando os dois chegarem
   });
 };
