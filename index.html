@@ -333,13 +333,37 @@
             <div class="card" style="margin-top: 15px">
               <h4>📅 Período</h4>
               <div class="acoes-grid">
-                <button id="rel-hoje" class="btn-acao">Hoje</button>
+                <button
+                  id="rel-hoje"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'hoje')"
+                >
+                  Hoje
+                </button>
 
-                <button id="rel-semana" class="btn-acao">Semana</button>
+                <button
+                  id="rel-semana"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'semana')"
+                >
+                  Semana
+                </button>
 
-                <button id="rel-mes" class="btn-acao">Mês</button>
+                <button
+                  id="rel-mes"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'mes')"
+                >
+                  Mês
+                </button>
 
-                <button id="rel-tudo" class="btn-acao">Tudo</button>
+                <button
+                  id="rel-tudo"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'tudo')"
+                >
+                  Tudo
+                </button>
               </div>
               <p>Gere um relatório completo contendo:</p>
             </div>

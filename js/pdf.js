@@ -26,6 +26,7 @@ function adicionarCabecalho(doc, logo) {
     align: "center",
   });
 }
+let periodoSelecionado = "tudo";
 
 function adicionarTitulo(doc, titulo) {
   doc.setTextColor(0, 0, 0);
@@ -38,6 +39,15 @@ function adicionarTitulo(doc, titulo) {
   doc.setDrawColor(22, 163, 74);
   doc.setLineWidth(0.6);
   doc.line(20, 49, 190, 49);
+}
+function selecionarPeriodo(btn, periodo) {
+  document
+    .querySelectorAll("#relatorios .selector-btn")
+    .forEach((b) => b.classList.remove("ativo"));
+
+  btn.classList.add("ativo");
+
+  periodoSelecionado = periodo;
 }
 
 function adicionarRodape(doc) {
