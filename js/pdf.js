@@ -187,7 +187,9 @@ async function gerarRelatorioPDF() {
 
   doc.text(`Saldo: R$ ${moeda(saldo)}`, 25, 130);
 
-  y = adicionarTabelaCorridas(doc, y, receitas, logo);
+  const receitasFiltradas = filtrarReceitas(receitas, periodoSelecionado);
+
+  y = adicionarTabelaCorridas(doc, y, receitasFiltradas, logo);
 
   const totalPaginas = doc.getNumberOfPages();
 

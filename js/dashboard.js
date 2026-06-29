@@ -29,43 +29,28 @@ function limparFiltros() {
 }
 // ===== FILTRO HOJE =====
 function filtrarHoje() {
-  const d = new Date();
+  const periodo = obterPeriodo("hoje");
 
-  const dia = String(d.getDate()).padStart(2, "0");
-
-  const mes = String(d.getMonth() + 1).padStart(2, "0");
-
-  const ano = d.getFullYear();
-
-  const hoje = `${ano}-${mes}-${dia}`;
-
-  dataInicio = hoje;
-  dataFim = hoje;
+  dataInicio = periodo.inicio;
+  dataFim = periodo.fim;
 
   atualizar();
 }
 // ===== FILTRO SEMANA =====
 function filtrarSemana() {
-  const hoje = new Date();
+  const periodo = obterPeriodo("semana");
 
-  const primeiroDia = new Date();
-  primeiroDia.setDate(hoje.getDate() - 7);
-
-  dataInicio = primeiroDia.toISOString().split("T")[0];
-
-  dataFim = hoje.toISOString().split("T")[0];
+  dataInicio = periodo.inicio;
+  dataFim = periodo.fim;
 
   atualizar();
 }
 // ===== FILTRO MÊS =====
 function filtrarMes() {
-  const hoje = new Date();
+  const periodo = obterPeriodo("mes");
 
-  const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-
-  dataInicio = primeiroDia.toISOString().split("T")[0];
-
-  dataFim = hoje.toISOString().split("T")[0];
+  dataInicio = periodo.inicio;
+  dataFim = periodo.fim;
 
   atualizar();
 }
