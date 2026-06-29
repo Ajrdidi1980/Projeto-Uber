@@ -28,7 +28,6 @@
   </head>
   <body>
     <div class="layout">
-      <!-- SIDEBAR (desktop) -->
       <aside class="sidebar">
         <div class="logo-area">
           <img src="img/logo.png" alt="Logo" />
@@ -59,8 +58,11 @@
         >
           ⚙ Administração
         </button>
-        <button onclick="gerarRelatorioPDF()">📄 Gerar PDF</button>
+        <button onclick="trocarTela('relatorios')" id="btn-relatorios">
+          📊 Relatórios
+        </button>
       </aside>
+      <!-- SIDEBAR (desktop) -->
 
       <!-- HEADER MOBILE -->
       <header class="app-header">
@@ -322,6 +324,37 @@
             </div>
           </div>
         </div>
+        <!-- TELA: RELATÓRIOS -->
+        <div id="relatorios" class="tela" style="display: none">
+          <h2>📊 Relatórios</h2>
+
+          <div class="card">
+            <h3>📄 Relatório Financeiro</h3>
+            <div class="card" style="margin-top: 15px">
+              <h4>📅 Período</h4>
+              <div class="acoes-grid">
+                <button id="rel-hoje" class="btn-acao">Hoje</button>
+
+                <button id="rel-semana" class="btn-acao">Semana</button>
+
+                <button id="rel-mes" class="btn-acao">Mês</button>
+
+                <button id="rel-tudo" class="btn-acao">Tudo</button>
+              </div>
+              <p>Gere um relatório completo contendo:</p>
+            </div>
+            <ul style="list-style: none; padding-left: 0">
+              <li>✅ Receitas</li>
+              <li>✅ Gastos</li>
+              <li>✅ Saldo</li>
+              <li>✅ Corridas</li>
+              <li>✅ Lucro líquido</li>
+            </ul>
+            <button class="btn-login" onclick="gerarRelatorioPDF()">
+              📄 Gerar PDF
+            </button>
+          </div>
+        </div>
 
         <!-- TELA: CORRIDAS -->
         <div id="receitas" class="tela">
@@ -512,7 +545,6 @@
                 <select id="tipo-gasto">
                   <option value="manutencao">🔧 Manutenção</option>
                   <option value="alimentacao">🍽️ Alimentação</option>
-                  <option value="combustivel_gasto">⛽ Combustível</option>
                   <option value="outros">📦 Outros</option>
                 </select>
               </div>

@@ -75,43 +75,7 @@ function carregarImagem(src) {
     img.src = src;
   });
 }
-function adicionarTabelaCorridasAntiga(doc, y, receitas) {
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
 
-  doc.text("Corridas", 20, y);
-
-  y += 10;
-
-  doc.setFillColor(230, 230, 230);
-  doc.rect(20, y - 6, 170, 8, "F");
-
-  doc.setFontSize(10);
-
-  doc.text("Data", 22, y);
-  doc.text("Plataforma", 55, y);
-  doc.text("Valor", 120, y);
-  doc.text("KM", 150, y);
-  doc.text("Lucro", 170, y);
-
-  doc.setFont("helvetica", "normal");
-  y += 8;
-
-  receitas.forEach((r) => {
-    doc.text(r.data, 22, y);
-
-    doc.text(r.descricao, 55, y);
-
-    doc.text("R$ " + moeda(r.valor), 120, y);
-
-    doc.text((r.kmRodado || 0).toFixed(1), 150, y);
-
-    doc.text("R$ " + moeda(r.lucroLiquido || r.valor), 170, y);
-    y += 8;
-  });
-
-  return y;
-}
 function adicionarTabelaCorridas(doc, y, receitas, logo) {
   const linhas = receitas.map((r) => [
     r.data,
