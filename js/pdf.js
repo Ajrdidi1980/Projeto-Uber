@@ -97,12 +97,17 @@ function adicionarTabelaCorridas(doc, y, receitas, logo) {
 
   doc.autoTable({
     startY: y,
+    margin: {
+      top: 35,
+    },
 
     head: [["Data", "Plataforma", "Valor", "KM", "Lucro"]],
 
     body: linhas,
 
     theme: "grid",
+
+    showHead: "everyPage",
 
     headStyles: {
       fillColor: [22, 163, 74],
@@ -140,7 +145,7 @@ async function gerarRelatorioPDF() {
   adicionarCabecalho(doc, logo);
 
   adicionarTitulo(doc, "Relatório Financeiro");
-  let y = 140;
+  let y = 170;
 
   doc.setFontSize(12);
 
@@ -164,11 +169,16 @@ async function gerarRelatorioPDF() {
 
   doc.setFont("helvetica", "normal");
   doc.text(`R$ ${moeda(meta)}`, 55, 75);
+  doc.setFont("helvetica", "bold");
+  doc.text("Período:", 20, 85);
+
+  doc.setFont("helvetica", "normal");
+  doc.text(obterTextoPeriodo(periodoSelecionado), 55, 85);
   // ===== RESUMO FINANCEIRO =====
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
 
-  doc.text("Resumo Financeiro", 20, 95);
+  doc.text("Resumo Financeiro", 20, 105);
 
   doc.setFontSize(12);
 
@@ -179,19 +189,35 @@ async function gerarRelatorioPDF() {
     (total, receita) => total + Number(receita.valor || 0),
     0,
   );
+  const gastosFiltrados = filtrarGastos(gastos, periodoSelecionado);
 
-  const totalGastos = gastos.reduce(
+  const totalGastos = gastosFiltrados.reduce(
     (total, gasto) => total + Number(gasto.valor || 0),
     0,
   );
 
   const saldo = totalReceitas - totalGastos;
-  
-  doc.text(`Receitas: R$ ${moeda(totalReceitas)}`, 25, 110);
 
-  doc.text(`Gastos: R$ ${moeda(totalGastos)}`, 25, 120);
+  const quantidadeCorridas = receitasFiltradas.length;
 
-  doc.text(`Saldo: R$ ${moeda(saldo)}`, 25, 130);
+  const kmRodados = calcularKmRodados(receitasFiltradas);
+
+  doc.text(`Receitas: R$ ${moeda(totalReceitas)}`, 25, 120);
+
+  doc.text(`Gastos: R$ ${moeda(totalGastos)}`, 25, 130);
+
+  doc.text(`Saldo: R$ ${moeda(saldo)}`, 25, 140);
+
+  doc.text(`Corridas: ${quantidadeCorridas}`, 25, 150);
+
+  doc.text(
+    `KM Rodados: ${kmRodados.toLocaleString("pt-BR", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    })} `,
+    25,
+    160,
+  );
 
   y = adicionarTabelaCorridas(doc, y, receitasFiltradas, logo);
 

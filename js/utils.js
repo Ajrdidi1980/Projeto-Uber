@@ -29,8 +29,14 @@ function calcularGastoCombustivel({ kmRodado, consumo, combustivel }) {
 
   return gastoCombustivel;
 }
+function calcularKmRodados(receitas) {
+  return receitas.reduce((total, receita) => {
+    return total + Number(receita.kmRodado || 0);
+  }, 0);
+}
 
 window.hoje = hoje;
 window.formatarData = formatarData;
 window.calcularGastoCombustivel = calcularGastoCombustivel;
 window.converterDataISO = converterDataISO;
+window.calcularKmRodados = calcularKmRodados;
