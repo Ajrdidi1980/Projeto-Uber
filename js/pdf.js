@@ -145,13 +145,6 @@ async function gerarRelatorioPDF() {
   doc.setFontSize(12);
 
   // ===== DADOS DO SISTEMA =====
-  const totalReceitas =
-    document.getElementById("total-receitas")?.textContent || "0,00";
-
-  const totalGastos =
-    document.getElementById("total-gastos")?.textContent || "0,00";
-
-  const saldo = document.getElementById("saldo")?.textContent || "0,00";
 
   const meta = document.getElementById("meta-diaria")?.textContent || "0,00";
 
@@ -181,13 +174,24 @@ async function gerarRelatorioPDF() {
 
   doc.setFont("helvetica", "normal");
 
+  const receitasFiltradas = filtrarReceitas(receitas, periodoSelecionado);
+  const totalReceitas = receitasFiltradas.reduce(
+    (total, receita) => total + Number(receita.valor || 0),
+    0,
+  );
+
+  const totalGastos = gastos.reduce(
+    (total, gasto) => total + Number(gasto.valor || 0),
+    0,
+  );
+
+  const saldo = totalReceitas - totalGastos;
+  
   doc.text(`Receitas: R$ ${moeda(totalReceitas)}`, 25, 110);
 
   doc.text(`Gastos: R$ ${moeda(totalGastos)}`, 25, 120);
 
   doc.text(`Saldo: R$ ${moeda(saldo)}`, 25, 130);
-
-  const receitasFiltradas = filtrarReceitas(receitas, periodoSelecionado);
 
   y = adicionarTabelaCorridas(doc, y, receitasFiltradas, logo);
 

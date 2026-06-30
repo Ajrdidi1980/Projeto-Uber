@@ -15,6 +15,11 @@ function formatarData(dataISO) {
 
   return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
+function converterDataISO(dataBR) {
+  const partes = dataBR.split("/");
+
+  return `${partes[2]}-${partes[1]}-${partes[0]}`;
+}
 function calcularGastoCombustivel({ kmRodado, consumo, combustivel }) {
   let gastoCombustivel = 0;
 
@@ -28,3 +33,4 @@ function calcularGastoCombustivel({ kmRodado, consumo, combustivel }) {
 window.hoje = hoje;
 window.formatarData = formatarData;
 window.calcularGastoCombustivel = calcularGastoCombustivel;
+window.converterDataISO = converterDataISO;

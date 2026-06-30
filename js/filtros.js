@@ -43,7 +43,37 @@ function obterPeriodo(tipo) {
   }
 }
 function filtrarReceitas(receitas, periodo) {
-  return receitas;
+  switch (periodo) {
+    case "hoje": {
+      const hoje = obterPeriodo("hoje");
+
+      return receitas.filter((receita) => {
+        return converterDataISO(receita.data) === hoje.inicio;
+      });
+    }
+    case "semana": {
+      const semana = obterPeriodo("semana");
+
+      return receitas.filter((receita) => {
+        const data = converterDataISO(receita.data);
+
+        return data >= semana.inicio && data <= semana.fim;
+      });
+    }
+    case "mes": {
+      const mes = obterPeriodo("mes");
+
+      return receitas.filter((receita) => {
+        const data = converterDataISO(receita.data);
+
+        return data >= mes.inicio && data <= mes.fim;
+      });
+    }
+
+    case "tudo":
+    default:
+      return receitas;
+  }
 }
 
 window.obterPeriodo = obterPeriodo;
