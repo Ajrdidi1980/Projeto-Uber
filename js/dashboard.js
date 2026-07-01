@@ -11,12 +11,19 @@ function salvarPercentual() {
   salvar();
   atualizar();
 }
-function salvarMeta() {
+async function salvarMeta() {
   const valor = document.getElementById("meta-input").value;
 
   metaDiaria = Number(valor);
 
+  // Continua salvando localmente
   localStorage.setItem("metaDiaria", metaDiaria);
+
+  // Novo: salva no Firestore
+  await window.salvarConfiguracoesFirebase({
+    metaDiaria,
+    percentual,
+  });
 
   atualizar();
 }

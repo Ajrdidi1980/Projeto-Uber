@@ -63,6 +63,44 @@ window.salvarReceitaFirebase = async function (dados) {
     console.error("❌ Erro:", erro);
   }
 };
+window.salvarConfiguracoesFirebase = async function (dados) {
+  try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) return;
+
+    await setDoc(
+      doc(db, "usuarios", usuario.uid, "configuracoes", "dados"),
+      dados,
+      { merge: true },
+    );
+
+    console.log("✅ Configurações salvas");
+  } catch (erro) {
+    console.error("❌ Erro ao salvar configurações:", erro);
+  }
+};
+
+window.carregarConfiguracoesFirebase = async function () {
+  try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) return null;
+
+    const snap = await getDoc(
+      doc(db, "usuarios", usuario.uid, "configuracoes", "dados"),
+    );
+
+    if (snap.exists()) {
+      return snap.data();
+    }
+
+    return null;
+  } catch (erro) {
+    console.error("❌ Erro ao carregar configurações:", erro);
+    return null;
+  }
+};
 
 // ===== CARREGAR RECEITAS =====
 
@@ -277,7 +315,7 @@ window.logoutGoogle = async function () {
 
 // ===== OBSERVAR LOGIN =====
 
-onAuthStateChanged(auth, (usuario) => {
+onAuthStateChanged(auth, async (usuario) => {
   const nomeUsuario = document.getElementById("nome-usuario");
 
   const btnLogout = document.getElementById("btn-logout");
@@ -288,6 +326,24 @@ onAuthStateChanged(auth, (usuario) => {
     console.log("🔥 Logado:", usuario.displayName);
 
     window.carregarDadosUsuario();
+
+    const config = await window.carregarConfiguracoesFirebase();
+
+    if (config) {
+      if (config.metaDiaria !== undefined) {
+        metaDiaria = config.metaDiaria;
+        localStorage.setItem("metaDiaria", metaDiaria);
+      }
+
+      if (config.percentual !== undefined) {
+        percentual = config.percentual;
+        localStorage.setItem("percentual", percentual);
+      }
+
+      atualizar();
+
+      console.log("✅ Configurações carregadas");
+    }
 
     if (nomeUsuario) {
       nomeUsuario.innerText = `Olá, ${usuario.displayName} 👋`;

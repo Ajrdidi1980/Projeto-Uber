@@ -174,7 +174,7 @@ window.atualizar = function () {
     totalG,
     percentual,
   });
-  let metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
+  metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
 
   const faltamMeta = calcularFaltamMeta(totalR, metaDiaria);
   console.log("META:", metaDiaria);
@@ -344,10 +344,21 @@ function atualizarGastos(listaG) {
 }
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("./sw.js")
-    .then(() => console.log("PWA ativo"))
-    .catch((err) => console.log(err));
+  window.addEventListener("load", async () => {
+    try {
+      const registration = await navigator.serviceWorker.register("./sw.js");
+
+      console.log("✅ PWA ativo");
+
+      // procura atualização sempre que abrir o app
+      registration.update();
+      registration.addEventListener("updatefound", () => {
+        console.log("🔄 Nova versão encontrada");
+      });
+    } catch (err) {
+      console.error("Erro ao registrar Service Worker:", err);
+    }
+  });
 }
 
 // ===== INICIAR =====

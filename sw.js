@@ -1,4 +1,4 @@
-const CACHE_NAME = "controle-v2";
+const CACHE_NAME = "controle-v4";
 
 self.addEventListener("install", (event) => {
   console.log("🔥 SW instalado");
