@@ -90,6 +90,17 @@ body.light {
   justify-content: space-between;
   padding: 0 16px;
 }
+body.dark .app-header {
+  background: #111827;
+  border-bottom: 1px solid #374151;
+}
+body.dark .header-titulo {
+  color: #f9fafb;
+}
+
+body.dark .header-user {
+  color: #d1d5db;
+}
 
 .header-left {
   display: flex;
@@ -1269,4 +1280,17 @@ body.dark .card {
   background: #1f2937;
   border-color: #374151;
   color: #f9fafb;
+}
+body.dark .bottom-nav {
+  background: #111827;
+  border-top: 1px solid #374151;
+}
+body.dark .nav-item {
+  color: #9ca3af;
+}
+body.dark .nav-item.ativo {
+  color: var(--verde);
+}
+body.dark .nav-icon {
+  color: inherit;
 }
