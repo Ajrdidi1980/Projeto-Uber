@@ -47,12 +47,18 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* === TEMA === */
+
+/* Tema escuro (padrão) */
 body {
-  font-family: var(--font);
+  background: #111827;
+  color: #f9fafb;
+}
+
+/* Tema claro */
+body.light {
   background: var(--cinza-2);
   color: var(--cinza-8);
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* === LAYOUT PRINCIPAL === */
@@ -1254,4 +1260,13 @@ body.light {
     opacity: 1;
     transform: translateY(0);
   }
+}
+/* =======================================
+   TEMA ESCURO
+======================================= */
+
+body.dark .card {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f9fafb;
 }
