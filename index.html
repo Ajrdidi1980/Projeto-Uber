@@ -628,17 +628,12 @@
           <span>Corridas</span>
         </button>
         <button
-          class="btn-fab"
-          onclick="
-            trocarTela('receitas');
-            setTimeout(
-              () => document.getElementById('valor-receita').focus(),
-              200,
-            );
-          "
-          title="Nova corrida"
+          class="nav-item"
+          id="nav-relatorios"
+          onclick="trocarTela('relatorios')"
         >
-          +
+          <span class="nav-icon">📈</span>
+          <span>Relatórios</span>
         </button>
         <button class="nav-item" id="nav-gastos" onclick="trocarTela('gastos')">
           <span class="nav-icon">💸</span>
