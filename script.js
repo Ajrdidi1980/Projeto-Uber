@@ -496,12 +496,22 @@ function mostrarToast(mensagem) {
 }
 // ===== TROCAR TEMA =====
 function trocarTema() {
-  document.body.classList.toggle("light");
+  const btnTema = document.querySelector(".btn-tema-mini");
 
-  if (document.body.classList.contains("light")) {
+  if (document.body.classList.contains("dark")) {
+    document.body.classList.remove("dark");
+    document.body.classList.add("light");
+
     localStorage.setItem("tema", "light");
+
+    if (btnTema) btnTema.textContent = "☀️";
   } else {
+    document.body.classList.remove("light");
+    document.body.classList.add("dark");
+
     localStorage.setItem("tema", "dark");
+
+    if (btnTema) btnTema.textContent = "🌙";
   }
 }
 

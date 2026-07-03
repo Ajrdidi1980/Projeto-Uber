@@ -168,14 +168,42 @@ body.dark .header-user {
 }
 
 .btn-tema-mini {
-  background: none;
-  border: 1px solid var(--cinza-3);
-  padding: 5px 8px;
-  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
-  width: auto;
-  transform: none;
+  font-size: 20px;
+  transition: all 0.25s ease;
+}
+/* ===== Botão do tema - modo claro ===== */
+
+body.light .btn-tema-mini {
+  background: #ffffff;
+  border: 1px solid var(--cinza-3);
+  color: #d97706;
+}
+
+/* ===== Botão do tema - modo escuro ===== */
+
+body.dark .btn-tema-mini {
+  background: #1f2937;
+  border: 1px solid #4b5563;
+  color: #fbbf24;
+}
+
+.btn-tema-mini:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--verde);
+}
+
+.btn-tema-mini:active {
+  transform: scale(0.94);
 }
 
 /* === CONTEÚDO === */
