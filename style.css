@@ -1294,3 +1294,68 @@ body.dark .nav-item.ativo {
 body.dark .nav-icon {
   color: inherit;
 }
+/* =======================================
+   INPUTS E SELECTS - TEMA ESCURO
+======================================= */
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #374151;
+  color: #f9fafb;
+  border: 1px solid #4b5563;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #9ca3af;
+}
+
+body.dark input:focus,
+body.dark select:focus,
+body.dark textarea:focus {
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+}
+
+body.dark label {
+  color: #d1d5db;
+}
+/* =======================================
+   REFINAMENTO DO TEMA ESCURO
+======================================= */
+
+/* Títulos das telas */
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4 {
+  color: #f9fafb;
+}
+
+/* Labels */
+body.dark label {
+  color: #d1d5db;
+}
+
+/* Botões de plataforma */
+body.dark .plataformas button,
+body.dark .btn-plataforma {
+  background: #374151;
+  color: #f9fafb;
+  border: 1px solid #4b5563;
+}
+
+/* Plataforma ativa */
+body.dark .plataformas button.ativo,
+body.dark .btn-plataforma.ativo {
+  background: rgba(22, 163, 74, 0.18);
+  border-color: var(--verde);
+  color: #ffffff;
+}
+
+/* Navegação inferior ativa */
+body.dark .nav-item.ativo {
+  background: rgba(22, 163, 74, 0.18);
+  border-radius: 12px;
+}
