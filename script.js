@@ -231,7 +231,10 @@ function ordenarPorData(lista) {
   });
 }
 function formatarMoeda(valor) {
-  return `R$ ${Number(valor).toFixed(2)}`;
+  return Number(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 }
 function formatarKm(valor) {
   return valor ? `${Number(valor).toFixed(1)} km` : "-";

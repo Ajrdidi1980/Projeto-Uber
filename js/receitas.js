@@ -205,19 +205,19 @@ function renderizarReceita(r, i) {
       </td>
 
       <td>
-        ${formatarMoeda(r.gastoCombustivel ? r.gastoCombustivel.toFixed(2) : 0)}
+        ${formatarMoeda(r.gastoCombustivel || 0)}
       </td>
 
       <td>
         <strong>
-          ${formatarMoeda(r.lucroLiquido ? r.lucroLiquido.toFixed(2) : r.valor.toFixed(2))}
+          ${formatarMoeda(r.lucroLiquido ?? r.valor)}
         </strong>
       </td>
       <td> ${
         r.tipoVeiculo === "eletrico"
           ? `
       <span class="economia-eletrica">
-         ⚡R$ ${r.economiaEletrica.toFixed(2)}
+         ⚡R$  ${formatarMoeda(r.economiaEletrica)}
       </span>
       `
           : "---"
@@ -226,7 +226,7 @@ function renderizarReceita(r, i) {
  
 
       <td>
-        ${formatarMoeda(r.ganhoPorHora ? r.ganhoPorHora.toFixed(2) : 0)}
+        ${formatarMoeda(r.ganhoPorHora || 0)}
       </td>
 
       <td>

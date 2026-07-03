@@ -11,7 +11,7 @@ function renderizarGasto(g, i) {
       </td>
 
       <td>
-        R$ ${g.valor.toFixed(2)}
+       ${formatarMoeda(g.valor)}
       </td>
 
       <td>

@@ -62,30 +62,41 @@ function filtrarMes() {
   atualizar();
 }
 function atualizarCardsDashboard(dados) {
-  document.getElementById("total-receitas").textContent =
-    dados.totalR.toFixed(2);
+  document.getElementById("total-receitas").textContent = formatarMoeda(
+    dados.totalR,
+  );
 
-  document.getElementById("total-gastos").textContent = dados.totalG.toFixed(2);
+  document.getElementById("total-gastos").textContent = formatarMoeda(
+    dados.totalG,
+  );
 
-  document.getElementById("reserva").textContent = dados.reserva.toFixed(2);
+  document.getElementById("reserva").textContent = formatarMoeda(dados.reserva);
 
-  document.getElementById("saldo").textContent = dados.saldo.toFixed(2);
+  document.getElementById("saldo").textContent = formatarMoeda(dados.saldo);
 
-  document.getElementById("melhor-dia").textContent =
-    dados.melhorDia.toFixed(2);
+  document.getElementById("melhor-dia").textContent = formatarMoeda(
+    dados.melhorDia,
+  );
 
-  document.getElementById("media-dia").textContent = dados.mediaDia.toFixed(2);
+  document.getElementById("media-dia").textContent = formatarMoeda(
+    dados.mediaDia,
+  );
 
-  document.getElementById("custo-km").textContent = dados.custoPorKm.toFixed(2);
+  document.getElementById("custo-km").textContent = formatarMoeda(
+    dados.custoPorKm,
+  );
 
-  document.getElementById("ganho-km").textContent = dados.ganhoPorKm.toFixed(2);
+  document.getElementById("ganho-km").textContent = formatarMoeda(
+    dados.ganhoPorKm,
+  );
 
-  document.getElementById("media-hora").textContent =
-    dados.mediaHora.toFixed(2);
+  document.getElementById("media-hora").textContent = formatarMoeda(
+    dados.mediaHora,
+  );
 
-  document.getElementById("meta-diaria").textContent = Number(
+  document.getElementById("meta-diaria").textContent = formatarMoeda(
     dados.metaDiaria,
-  ).toFixed(2);
+  );
 
   document.getElementById("faltam-meta").textContent = dados.textoMeta;
 
@@ -98,7 +109,7 @@ function atualizarCardsDashboard(dados) {
     "🔥 Melhor período: " + dados.melhorPeriodo;
 
   document.getElementById("ranking-maior").textContent =
-    "💰 Maior corrida: R$ " + dados.maiorGanho.toFixed(2);
+    "💰 Maior corrida: " + formatarMoeda(dados.maiorGanho);
 }
 function atualizarBarraMeta(totalR, metaDiaria) {
   let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
