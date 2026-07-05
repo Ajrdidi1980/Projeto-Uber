@@ -139,20 +139,23 @@ body.dark .header-user {
 .btn-login {
   background: var(--verde);
   color: var(--branco);
+  margin-top: 12px;
   border: none;
   padding: 6px 12px;
   border-radius: var(--radius-sm);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   width: auto;
   transform: none;
+  width: 100%;
 }
 
 .btn-login:hover {
   background: #15803d;
-  transform: none;
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-md);
 }
 
 .btn-logout-mini {
@@ -565,15 +568,19 @@ label {
 }
 
 .selector-btn:hover {
-  border-color: var(--verde-borda);
-  background: var(--verde-bg);
-  transform: none;
-}
-.selector-btn.ativo {
   background: var(--verde-bg);
   border-color: var(--verde);
   color: var(--verde);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-sm);
+  transition: all 0.2s ease;
+}
+.selector-btn.ativo {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: white;
   font-weight: 600;
+  box-shadow: var(--sombra-sm);
 }
 
 /* === BOTÕES === */
@@ -1424,4 +1431,33 @@ body.dark .sobre-app p {
   font-style: italic;
   color: var(--verde);
   text-align: center;
+}
+/* ===== TESTE RELATÓRIOS ===== */
+
+#relatorios h3,
+#relatorios h4,
+#relatorios p,
+#relatorios li {
+  color: var(--cinza-8);
+}
+/* ===== RELATÓRIOS ===== */
+
+.lista-relatorio {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0;
+}
+
+.lista-relatorio li {
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: var(--cinza-1);
+  border: 1px solid var(--cinza-3);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+body.dark .lista-relatorio li {
+  background: #111827;
+  border-color: #374151;
 }

@@ -350,7 +350,7 @@
           <div class="card">
             <h3>📄 Relatório Financeiro</h3>
             <div class="card" style="margin-top: 15px">
-              <h4>📅 Período</h4>
+              <h4>📅 Escolha o período</h4>
               <div class="acoes-grid">
                 <button
                   id="rel-hoje"
@@ -384,9 +384,9 @@
                   Tudo
                 </button>
               </div>
-              <p>Gere um relatório completo contendo:</p>
             </div>
-            <ul style="list-style: none; padding-left: 0">
+            <p><strong>O relatório incluirá:</strong></p>
+            <ul class="lista-relatorio">
               <li>✅ Receitas</li>
               <li>✅ Gastos</li>
               <li>✅ Saldo</li>
@@ -394,7 +394,7 @@
               <li>✅ Lucro líquido</li>
             </ul>
             <button class="btn-login" onclick="gerarRelatorioPDF()">
-              📄 Gerar PDF
+              📄 Gerar Relatório em PDF
             </button>
           </div>
         </div>
