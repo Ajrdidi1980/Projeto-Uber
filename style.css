@@ -1387,3 +1387,41 @@ body.dark .nav-item.ativo {
   background: rgba(22, 163, 74, 0.18);
   border-radius: 12px;
 }
+/* ===== SOBRE O APP ===== */
+
+.sobre-app {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sobre-app h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--verde);
+}
+
+.sobre-app p {
+  margin-bottom: 12px;
+  margin: 0;
+  color: var(--cinza-7);
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+body.dark .sobre-app p {
+  color: #d1d5db;
+}
+
+.versao-app {
+  font-weight: 600;
+}
+.frase-app {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cinza-3);
+  font-style: italic;
+  color: var(--verde);
+  text-align: center;
+}
