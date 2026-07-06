@@ -2,12 +2,6 @@
 // PDF.JS
 // Responsável pela geração de relatórios
 // ==========================================
-function moeda(valor) {
-  return parseFloat(valor).toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
 
 function adicionarCabecalho(doc, logo) {
   // Fundo verde
@@ -90,13 +84,13 @@ function adicionarTabelaCorridas(doc, y, receitas, logo) {
   const linhas = receitas.map((r) => [
     r.data,
     r.descricao,
-    "R$ " + moeda(r.valor),
+    " " + formatarMoeda(r.valor),
     (r.kmRodado || 0).toFixed(1),
-    "R$ " + moeda(r.lucroLiquido || r.valor),
+    " " + formatarMoeda(r.lucroLiquido || r.valor),
   ]);
 
   doc.autoTable({
-    startY: y,
+    startY: 175,
     margin: {
       top: 35,
     },
@@ -151,7 +145,7 @@ async function gerarRelatorioPDF() {
 
   // ===== DADOS DO SISTEMA =====
 
-  const meta = document.getElementById("meta-diaria")?.textContent || "0,00";
+  const meta = Number(localStorage.getItem("metaDiaria") || 0);
 
   const dataAtual = new Date().toLocaleDateString("pt-BR");
 
@@ -168,7 +162,7 @@ async function gerarRelatorioPDF() {
   doc.text("Meta diária:", 20, 75);
 
   doc.setFont("helvetica", "normal");
-  doc.text(`R$ ${moeda(meta)}`, 55, 75);
+  doc.text(formatarMoeda(meta), 55, 75);
   doc.setFont("helvetica", "bold");
   doc.text("Período:", 20, 85);
 
@@ -202,21 +196,27 @@ async function gerarRelatorioPDF() {
 
   const kmRodados = calcularKmRodados(receitasFiltradas);
 
-  doc.text(`Receitas: R$ ${moeda(totalReceitas)}`, 25, 120);
+  const dias = Math.max(new Set(receitasFiltradas.map((r) => r.data)).size, 1);
 
-  doc.text(`Gastos: R$ ${moeda(totalGastos)}`, 25, 130);
+  const mediaDiaria = totalReceitas / dias;
 
-  doc.text(`Saldo: R$ ${moeda(saldo)}`, 25, 140);
+  doc.text(`Receitas:  ${formatarMoeda(totalReceitas)}`, 25, 120);
 
-  doc.text(`Corridas: ${quantidadeCorridas}`, 25, 150);
+  doc.text(`Gastos:  ${formatarMoeda(totalGastos)}`, 25, 130);
+
+  doc.text(`Saldo:  ${formatarMoeda(saldo)}`, 25, 140);
+
+  doc.text(`Média diária: ${formatarMoeda(mediaDiaria)}`, 25, 150);
+
+  doc.text(`Corridas: ${quantidadeCorridas}`, 25, 160);
 
   doc.text(
     `KM Rodados: ${kmRodados.toLocaleString("pt-BR", {
       minimumFractionDigits: 1,
       maximumFractionDigits: 1,
-    })} `,
+    })} km`,
     25,
-    160,
+    170,
   );
 
   y = adicionarTabelaCorridas(doc, y, receitasFiltradas, logo);
