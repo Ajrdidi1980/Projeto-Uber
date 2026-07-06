@@ -5,6 +5,16 @@ function trocarTela(id, el) {
 
   // mostrar tela selecionada
   document.getElementById(id).style.display = "block";
+  // Atualiza navegação inferior
+  document
+    .querySelectorAll(".bottom-nav .nav-item")
+    .forEach((b) => b.classList.remove("ativo"));
+
+  const botao = document.getElementById("nav-" + id);
+
+  if (botao) {
+    botao.classList.add("ativo");
+  }
 
   // remover ativo
   document

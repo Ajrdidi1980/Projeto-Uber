@@ -633,7 +633,17 @@
 
       <!-- BOTTOM NAV (mobile) -->
       <nav class="bottom-nav">
-        <button class="nav-item" id="nav-resumo" onclick="trocarTela('resumo')">
+        <button
+          class="nav-item"
+          id="nav-resumo"
+          onclick="
+            trocarTela('resumo');
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            });
+          "
+        >
           <span class="nav-icon">📊</span>
           <span>Resumo</span>
         </button>
