@@ -174,7 +174,7 @@ async function excluirReceita(i) {
   atualizar();
 }
 // ===== FILTRO =====
-function filtrarReceitas() {
+function aplicarFiltrosReceitas() {
   filtroTexto = document.getElementById("filtro-receitas").value.toLowerCase();
   filtroVeiculo = document.getElementById("filtro-veiculo").value;
 
