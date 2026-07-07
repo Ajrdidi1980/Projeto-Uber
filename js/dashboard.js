@@ -65,6 +65,7 @@ function filtrarMes() {
   atualizar();
 }
 function atualizarCardsDashboard(dados) {
+  console.log("Horas trabalhadas:", dados.totalHorasTrabalhadas);
   document.getElementById("total-receitas").textContent = formatarMoeda(
     dados.totalR,
   );
@@ -96,6 +97,14 @@ function atualizarCardsDashboard(dados) {
   document.getElementById("media-hora").textContent = formatarMoeda(
     dados.mediaHora,
   );
+
+  const horas = Math.floor(dados.totalHorasTrabalhadas || 0);
+
+  const minutos = Math.round(((dados.totalHorasTrabalhadas || 0) - horas) * 60);
+
+  document.getElementById("horas-trabalhadas").innerHTML =
+    `🚗 ${dados.quantidadeCorridas} corridas<br>` +
+    `🕒 ${horas}h ${String(minutos).padStart(2, "0")}min`;
 
   document.getElementById("meta-diaria").textContent = formatarMoeda(
     dados.metaDiaria,
@@ -209,6 +218,11 @@ function atualizarComparativoSemanal(receitas) {
     (total, r) => total + (Number(r.economiaEletrica) || 0),
     0,
   );
+  const comparativo = document.getElementById("comparativo-semana");
+
+  if (comparativo) {
+    comparativo.textContent = textoComparativo;
+  }
 
   console.log("Comparativo:", textoComparativo);
 }

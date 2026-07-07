@@ -14,7 +14,9 @@ async function addReceita() {
   const tipoVeiculo = document.getElementById("tipo-veiculo").value;
 
   const kmRodado = kmFinal - kmInicial;
+
   let ganhoPorHora = 0;
+  let horasTrabalhadas = 0;
 
   if (horaInicio && horaFim) {
     const inicio = new Date(`2000-01-01T${horaInicio}`);
@@ -24,6 +26,7 @@ async function addReceita() {
 
     if (horas > 0) {
       ganhoPorHora = valor / horas;
+      horasTrabalhadas = horas;
     }
   }
 
@@ -61,17 +64,15 @@ async function addReceita() {
 
       horaInicio,
       horaFim,
-
       kmInicial,
       kmFinal,
-
       consumo,
       combustivel,
-
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
       ganhoPorHora,
+      horasTrabalhadas,
       economiaEletrica,
       tipoVeiculo,
     };
@@ -95,17 +96,15 @@ async function addReceita() {
       timestamp: Date.now(),
       horaInicio,
       horaFim,
-
       kmInicial,
       kmFinal,
-
       consumo,
       combustivel,
-
       kmRodado,
       gastoCombustivel,
       lucroLiquido,
       ganhoPorHora,
+      horasTrabalhadas,
       economiaEletrica,
       tipoVeiculo,
     };
@@ -274,7 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addReceita = addReceita;
 window.editarReceita = editarReceita;
 window.excluirReceita = excluirReceita;
-window.filtrarReceitas = filtrarReceitas;
 window.filtrarPorData = filtrarPorData;
 window.renderizarReceita = renderizarReceita;
 window.renderizarTabelaReceitas = renderizarTabelaReceitas;

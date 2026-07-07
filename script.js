@@ -23,6 +23,8 @@ window.atualizar = function () {
   let totalCombustivel = 0;
   let totalGanhoHora = 0;
   let qtdHoras = 0;
+  let totalHorasTrabalhadas = 0;
+  let quantidadeCorridas = 0;
 
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
@@ -137,6 +139,15 @@ window.atualizar = function () {
       ganhosPorDia,
       receita: r,
     });
+    if (r.horaInicio && r.horaFim) {
+      const inicio = new Date(`2000-01-01T${r.horaInicio}`);
+      const fim = new Date(`2000-01-01T${r.horaFim}`);
+
+      const horas = (fim - inicio) / 1000 / 60 / 60;
+
+      totalHorasTrabalhadas += horas;
+      quantidadeCorridas++;
+    }
     receitasFiltradas.push(r);
   });
   renderizarTabelaReceitas(receitasFiltradas, listaR);
@@ -196,6 +207,8 @@ window.atualizar = function () {
     custoPorKm,
     ganhoPorKm,
     mediaHora,
+    totalHorasTrabalhadas,
+    quantidadeCorridas,
     metaDiaria,
     textoMeta,
     melhorPeriodo,

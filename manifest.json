@@ -1,6 +1,6 @@
 {
   "name": "Motorista no Controle",
-  "short_name": "Moto Controle",
+  "short_name": "Controle Motoristas",
   "description": "Finanças que te levam mais longe. Controle financeiro completo para motoristas de aplicativo.",
   "start_url": "./",
   "display": "standalone",
