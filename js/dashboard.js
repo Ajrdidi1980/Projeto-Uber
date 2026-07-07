@@ -41,6 +41,9 @@ function filtrarHoje() {
   dataInicio = periodo.inicio;
   dataFim = periodo.fim;
 
+  console.log("Início:", dataInicio);
+  console.log("Fim:", dataFim);
+
   atualizar();
 }
 // ===== FILTRO SEMANA =====

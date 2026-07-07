@@ -5,10 +5,12 @@
 
 function obterPeriodo(tipo) {
   const hoje = new Date();
+  console.log("Hoje ISO:", hoje.toISOString().split("T")[0]);
+  console.log("Hoje Local:", hoje.toLocaleDateString("pt-BR"));
 
   switch (tipo) {
     case "hoje": {
-      const data = hoje.toISOString().split("T")[0];
+      const data = hoje.toLocaleDateString("sv-SE");
 
       return {
         inicio: data,
