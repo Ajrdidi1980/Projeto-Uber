@@ -64,49 +64,6 @@
         </button>
       </aside>
 
-      <div id="diario" class="tela">
-        <h2>📅 Meu Dia</h2>
-
-        <div class="card">
-          <h3>Resumo do Dia</h3>
-
-          <div class="linha-resumo">
-            <span>📅 Data</span>
-            <span id="diario-data"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>🚗 Corridas</span>
-            <span id="diario-corridas"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>⏱ Horas Trabalhadas</span>
-            <span id="diario-horas"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>💰 Faturamento</span>
-            <span id="diario-faturamento"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>📈 Lucro</span>
-            <span id="diario-lucro"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>🛣 Quilômetros</span>
-            <span id="diario-km"></span>
-          </div>
-
-          <div class="linha-resumo">
-            <span>🎯 Meta</span>
-            <span id="diario-meta"></span>
-          </div>
-        </div>
-      </div>
-
       <!-- SIDEBAR (desktop) -->
 
       <!-- HEADER MOBILE -->
@@ -138,6 +95,48 @@
 
       <!-- CONTEÚDO -->
       <main class="conteudo">
+        <div id="diario" class="tela">
+          <h2>📅 Meu Dia</h2>
+
+          <div class="card">
+            <h3>Resumo do Dia</h3>
+
+            <div class="linha-resumo">
+              <span>📅 Data</span>
+              <span id="diario-data"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>🚗 Corridas</span>
+              <span id="diario-corridas"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>⏱ Horas Trabalhadas</span>
+              <span id="diario-horas"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>💰 Faturamento</span>
+              <span id="diario-faturamento"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>📈 Lucro</span>
+              <span id="diario-lucro"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>🛣 Quilômetros</span>
+              <span id="diario-km"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>🎯 Meta</span>
+              <span id="diario-meta"></span>
+            </div>
+          </div>
+        </div>
         <!-- TELA: RESUMO -->
         <div id="resumo" class="tela">
           <h2>Resumo</h2>
@@ -713,9 +712,9 @@
           <span class="nav-icon">📈</span>
           <span>Relatórios</span>
         </button>
-        <button class="nav-item" id="nav-gastos" onclick="trocarTela('gastos')">
-          <span class="nav-icon">💸</span>
-          <span>Gastos</span>
+        <button class="nav-item" id="nav-diario" onclick="trocarTela('diario')">
+          <span class="nav-icon">📅</span>
+          <span>Meu Dia</span>
         </button>
         <button
           class="nav-item"

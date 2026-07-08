@@ -22,10 +22,10 @@ function trocarTela(id, el) {
     .forEach((b) => b.classList.remove("ativo"));
 
   // adiciona ativo
-  document.getElementById("btn-" + id).classList.add("ativo");
+  const botaoSidebar = document.getElementById("btn-" + id);
 
-  if (el) {
-    el.classList.add("ativo");
+  if (botaoSidebar) {
+    botaoSidebar.classList.add("ativo");
   }
   // atualizar resumo
   if (id === "resumo") {
