@@ -37,5 +37,8 @@ function trocarTela(id, el) {
       window.dispatchEvent(new Event("resize"));
     }, 150);
   }
+  if (id === "diario") {
+    atualizarMeuDia();
+  }
 }
 window.trocarTela = trocarTela;

@@ -103,7 +103,7 @@ function atualizarCardsDashboard(dados) {
   const minutos = Math.round(((dados.totalHorasTrabalhadas || 0) - horas) * 60);
 
   document.getElementById("horas-trabalhadas").innerHTML =
-    `🚗 ${dados.quantidadeCorridas} corridas<br>` +
+    `📅 ${dados.quantidadeDiasTrabalhados} dias<br>` +
     `🕒 ${horas}h ${String(minutos).padStart(2, "0")}min`;
 
   document.getElementById("meta-diaria").textContent = formatarMoeda(

@@ -1,5 +1,9 @@
 # Arquitetura do Controle Motoristas
 
+## Regra
+
+O Controle Motoristas não deve repetir informações que o motorista já vê na Uber. Deve mostrar aquilo que a Uber não mostra.
+
 ## Resumo
 
 - Dashboard

@@ -24,7 +24,7 @@ window.atualizar = function () {
   let totalGanhoHora = 0;
   let qtdHoras = 0;
   let totalHorasTrabalhadas = 0;
-  let quantidadeCorridas = 0;
+  let quantidadeDiasTrabalhados = 0;
 
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
@@ -146,7 +146,7 @@ window.atualizar = function () {
       const horas = (fim - inicio) / 1000 / 60 / 60;
 
       totalHorasTrabalhadas += horas;
-      quantidadeCorridas++;
+      quantidadeDiasTrabalhados++;
     }
     receitasFiltradas.push(r);
   });
@@ -208,7 +208,7 @@ window.atualizar = function () {
     ganhoPorKm,
     mediaHora,
     totalHorasTrabalhadas,
-    quantidadeCorridas,
+    quantidadeDiasTrabalhados,
     metaDiaria,
     textoMeta,
     melhorPeriodo,
@@ -428,7 +428,7 @@ async function exportarPDF() {
 
   doc.setFontSize(14);
 
-  doc.text("Corridas", 20, y);
+  doc.text("Dias Trabalhados", 20, y);
 
   y += 10;
 

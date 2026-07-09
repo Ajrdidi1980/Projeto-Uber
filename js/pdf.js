@@ -192,7 +192,7 @@ async function gerarRelatorioPDF() {
 
   const saldo = totalReceitas - totalGastos;
 
-  const quantidadeCorridas = receitasFiltradas.length;
+  const quantidadeDiasTrabalhados = receitasFiltradas.length;
 
   const kmRodados = calcularKmRodados(receitasFiltradas);
 
@@ -208,7 +208,7 @@ async function gerarRelatorioPDF() {
 
   doc.text(`Média diária: ${formatarMoeda(mediaDiaria)}`, 25, 150);
 
-  doc.text(`Corridas: ${quantidadeCorridas}`, 25, 160);
+  doc.text(`Dias Trabalhados: ${quantidadeDiasTrabalhados}`, 25, 160);
 
   doc.text(
     `KM Rodados: ${kmRodados.toLocaleString("pt-BR", {
