@@ -197,7 +197,7 @@ window.atualizar = function () {
     faltamMeta,
   });
 
-  atualizarCardsDashboard({
+  const resumo = {
     totalR,
     totalG,
     reserva,
@@ -214,7 +214,11 @@ window.atualizar = function () {
     melhorPeriodo,
     melhorDiaSemana,
     maiorGanho,
-  });
+  };
+
+  atualizarCardsDashboard(resumo);
+
+  atualizarMeuDia(resumo);
   atualizarBarraMeta(totalR, metaDiaria);
 
   atualizarComparativoSemanal(receitas);
