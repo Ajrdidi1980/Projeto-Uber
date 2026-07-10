@@ -50,9 +50,12 @@ function atualizarMeuDia() {
     (total, r) => total + (r.lucroLiquido || 0),
     0,
   );
-
   document.getElementById("diario-lucro").textContent =
     formatarMoeda(lucroHoje);
+  const ganhoHoraHoje = horasHoje > 0 ? lucroHoje / horasHoje : 0;
+
+  document.getElementById("diario-ganho-hora").textContent =
+    formatarMoeda(ganhoHoraHoje);
 
   document.getElementById("diario-data").textContent =
     hoje.toLocaleDateString("pt-BR");
