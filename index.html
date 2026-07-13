@@ -316,62 +316,6 @@
             <canvas id="graficoPizza"></canvas>
           </div>
 
-          <div class="card" style="margin-top: 16px">
-            <h3>💰 Configurações Financeiras</h3>
-            <p class="ajuda-percentual">
-              Defina a porcentagem dos ganhos que será reservada automaticamente
-              para manutenção do veículo ou para formar sua reserva financeira.
-            </p>
-            <div class="reserva-form">
-              <input
-                id="percentual"
-                type="number"
-                placeholder="Reserva (%)"
-                min="0"
-                max="100"
-              />
-              <button onclick="salvarPercentual()">Salvar</button>
-            </div>
-            <label for="meta-input">Meta diária (R$)</label>
-            <div class="reserva-form">
-              <input
-                id="meta-input"
-                type="number"
-                placeholder="Ex: 300"
-                min="0"
-              />
-              <button onclick="salvarMeta()">Salvar</button>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>💾 Backup dos Dados</h3>
-            <div class="acoes-grid">
-              <button class="btn-acao" onclick="exportarBackup()">
-                💾 Backup JSON
-              </button>
-
-              <label
-                class="btn-acao"
-                style="
-                  cursor: pointer;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 4px;
-                "
-              >
-                📥 Importar
-                <input
-                  type="file"
-                  id="importar-backup"
-                  accept=".json"
-                  onchange="importarBackup(event)"
-                  style="display: none"
-                />
-              </label>
-            </div>
-          </div>
           <div class="card">
             <h3>ℹ️ Sobre o Aplicativo</h3>
 
@@ -684,6 +628,96 @@
             </table>
           </div>
         </div>
+        <div id="mais" class="tela">
+          <h2>☰ Mais</h2>
+
+          <div class="card">
+            <h3>Acessos</h3>
+
+            <button class="btn-acao" onclick="trocarTela('gastos')">
+              💸 Gastos
+            </button>
+          </div>
+          <div class="card" style="margin-top: 16px">
+            <h3>💰 Configurações Financeiras</h3>
+            <p class="ajuda-percentual">
+              Defina a porcentagem dos ganhos que será reservada automaticamente
+              para manutenção do veículo ou para formar sua reserva financeira.
+            </p>
+            <div class="reserva-form">
+              <input
+                id="percentual"
+                type="number"
+                placeholder="Reserva (%)"
+                min="0"
+                max="100"
+              />
+              <button onclick="salvarPercentual()">Salvar</button>
+            </div>
+            <label for="meta-input">Meta diária (R$)</label>
+            <div class="reserva-form">
+              <input
+                id="meta-input"
+                type="number"
+                placeholder="Ex: 300"
+                min="0"
+              />
+              <button onclick="salvarMeta()">Salvar</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>💾 Backup dos Dados</h3>
+            <div class="acoes-grid">
+              <button class="btn-acao" onclick="exportarBackup()">
+                💾 Backup JSON
+              </button>
+
+              <label
+                class="btn-acao"
+                style="
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 4px;
+                "
+              >
+                📥 Importar
+                <input
+                  type="file"
+                  id="importar-backup"
+                  accept=".json"
+                  onchange="importarBackup(event)"
+                  style="display: none"
+                />
+              </label>
+            </div>
+          </div>
+          <div class="card">
+            <h3>ℹ️ Sobre o Aplicativo</h3>
+
+            <div class="sobre-app">
+              <h4>🚗 Controle Motoristas</h4>
+
+              <p class="versao-app"><strong>Versão:</strong> 2.0.0</p>
+
+              <p><strong>Desenvolvido por:</strong><br />Antônio Linhares</p>
+
+              <p>
+                O Controle Motoristas foi desenvolvido para auxiliar motoristas
+                de aplicativo no gerenciamento de receitas, despesas, metas
+                financeiras e acompanhamento dos resultados do dia a dia, de
+                forma simples, rápida e organizada.
+              </p>
+
+              <p class="frase-app">
+                🚗 Dirija com segurança.<br />
+                💰 Controle seus resultados.<br />
+                📈 Cresça todos os dias.
+              </p>
+            </div>
+          </div>
+        </div>
       </main>
 
       <!-- BOTTOM NAV (mobile) -->
@@ -722,22 +756,9 @@
           <span class="nav-icon">📅</span>
           <span>Meu Dia</span>
         </button>
-        <button
-          class="nav-item"
-          id="nav-config"
-          onclick="
-            trocarTela('resumo');
-            setTimeout(
-              () =>
-                document
-                  .querySelector('.acoes-grid')
-                  .scrollIntoView({ behavior: 'smooth' }),
-              300,
-            );
-          "
-        >
-          <span class="nav-icon">⚙️</span>
-          <span>Config</span>
+        <button class="nav-item" id="nav-mais" onclick="trocarTela('mais')">
+          <span class="nav-icon">☰</span>
+          <span>Mais</span>
         </button>
       </nav>
     </div>
@@ -773,7 +794,8 @@
           document
             .querySelectorAll(".nav-item")
             .forEach((b) => b.classList.remove("ativo"));
-          const nav = document.getElementById("nav-" + id);
+          const idNav = id === "gastos" ? "mais" : id;
+          const nav = document.getElementById("nav-" + idNav);
           if (nav) nav.classList.add("ativo");
           document
             .querySelectorAll(".tela")

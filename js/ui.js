@@ -10,7 +10,8 @@ function trocarTela(id, el) {
     .querySelectorAll(".bottom-nav .nav-item")
     .forEach((b) => b.classList.remove("ativo"));
 
-  const botao = document.getElementById("nav-" + id);
+  const idNav = id === "gastos" ? "mais" : id;
+  const botao = document.getElementById("nav-" + idNav);
 
   if (botao) {
     botao.classList.add("ativo");

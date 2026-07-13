@@ -90,7 +90,7 @@ function adicionarTabelaCorridas(doc, y, receitas, logo) {
   ]);
 
   doc.autoTable({
-    startY: 175,
+    startY: 190,
     margin: {
       top: 35,
     },
@@ -183,6 +183,11 @@ async function gerarRelatorioPDF() {
     (total, receita) => total + Number(receita.valor || 0),
     0,
   );
+
+  const totalCombustivel = receitasFiltradas.reduce(
+    (total, receita) => total + Number(receita.gastoCombustivel || 0),
+    0,
+  );
   const gastosFiltrados = filtrarGastos(gastos, periodoSelecionado);
 
   const totalGastos = gastosFiltrados.reduce(
@@ -190,7 +195,7 @@ async function gerarRelatorioPDF() {
     0,
   );
 
-  const saldo = totalReceitas - totalGastos;
+  const saldo = totalReceitas - totalGastos - totalCombustivel;
 
   const quantidadeDiasTrabalhados = receitasFiltradas.length;
 
@@ -202,13 +207,15 @@ async function gerarRelatorioPDF() {
 
   doc.text(`Receitas:  ${formatarMoeda(totalReceitas)}`, 25, 120);
 
-  doc.text(`Gastos:  ${formatarMoeda(totalGastos)}`, 25, 130);
+  doc.text(`Combustível:  ${formatarMoeda(totalCombustivel)}`, 25, 130);
 
-  doc.text(`Saldo:  ${formatarMoeda(saldo)}`, 25, 140);
+  doc.text(`Outros gastos:  ${formatarMoeda(totalGastos)}`, 25, 140);
 
-  doc.text(`Média diária: ${formatarMoeda(mediaDiaria)}`, 25, 150);
+  doc.text(`Saldo líquido:  ${formatarMoeda(saldo)}`, 25, 150);
 
-  doc.text(`Dias Trabalhados: ${quantidadeDiasTrabalhados}`, 25, 160);
+  doc.text(`Média diária: ${formatarMoeda(mediaDiaria)}`, 25, 160);
+
+  doc.text(`Dias Trabalhados: ${quantidadeDiasTrabalhados}`, 25, 170);
 
   doc.text(
     `KM Rodados: ${kmRodados.toLocaleString("pt-BR", {
@@ -216,7 +223,7 @@ async function gerarRelatorioPDF() {
       maximumFractionDigits: 1,
     })} km`,
     25,
-    170,
+    180,
   );
 
   y = adicionarTabelaCorridas(doc, y, receitasFiltradas, logo);
