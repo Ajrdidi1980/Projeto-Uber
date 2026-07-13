@@ -19,6 +19,13 @@
 - Comparativo Semanal
 - Gráficos
 - Meu Dia (Versão 1)
+- [x] Correção da lógica financeira do Dashboard
+- [x] Integração do combustível ao Resumo
+- [x] Separação entre faturamento bruto e resultado líquido
+- [x] Reserva calculada sobre o saldo líquido
+- [x] Correção do Melhor Dia e da Média Diária
+- [x] Padronização dos indicadores de desempenho pelo resultado líquido
+- [x] Transparência dos indicadores financeiros
 
 ---
 

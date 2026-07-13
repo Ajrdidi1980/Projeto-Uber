@@ -74,6 +74,10 @@ function atualizarCardsDashboard(dados) {
     dados.totalG,
   );
 
+  document.getElementById("total-combustivel").textContent = formatarMoeda(
+    dados.totalCombustivel,
+  );
+
   document.getElementById("reserva").textContent = formatarMoeda(dados.reserva);
 
   document.getElementById("saldo").textContent = formatarMoeda(dados.saldo);
@@ -285,10 +289,15 @@ function calcularMelhorDiaSemana(ganhosSemana) {
 
   return melhorDiaSemana;
 }
-function calcularResumoFinanceiro({ totalR, totalG, percentual }) {
-  const reserva = totalR * (percentual / 100);
+function calcularResumoFinanceiro({
+  totalR,
+  totalG,
+  totalCombustivel,
+  percentual,
+}) {
+  const saldo = totalR - totalCombustivel - totalG;
 
-  const saldo = totalR - totalG - reserva;
+  const reserva = saldo * (percentual / 100);
 
   return {
     reserva,
@@ -310,6 +319,8 @@ function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
 function calcularFaltamMeta(totalR, metaDiaria) {
   return Math.max(0, Number(metaDiaria) - totalR);
 }
+console.log("VALORES PARA MÉDIA:", valores);
+console.log("TOTAL R:", totalR);
 function calcularDesempenhoDiario({ valores, totalR }) {
   let melhorDia = 0;
 
@@ -318,7 +329,8 @@ function calcularDesempenhoDiario({ valores, totalR }) {
   if (valores.length > 0) {
     melhorDia = Math.max(...valores);
 
-    mediaDia = totalR / valores.length;
+    mediaDia =
+      valores.reduce((total, valor) => total + valor, 0) / valores.length;
   }
 
   return {
@@ -338,7 +350,9 @@ function agruparGanhosPorPeriodo({ modoGrafico, ganhosPorDia, receita }) {
       ganhosPorDia[chaveDia] = 0;
     }
 
-    ganhosPorDia[chaveDia] += Number(receita.valor || 0);
+    ganhosPorDia[chaveDia] += Number(
+      receita.lucroLiquido ?? receita.valor ?? 0,
+    );
   }
 
   // AGRUPAR POR MÊS
@@ -372,7 +386,7 @@ function calcularAcumuladoresReceita({
   totalGanhoHora,
   qtdHoras,
 }) {
-  totalR += receita.lucroLiquido || receita.valor;
+  totalR += Number(receita.valor || 0);
 
   totalKm += receita.kmRodado || 0;
 
@@ -401,12 +415,14 @@ function calcularGanhosPorPeriodo({
   if (receita.horaInicio) {
     const hora = Number(receita.horaInicio.split(":")[0]);
 
+    const resultadoLiquido = Number(receita.lucroLiquido ?? receita.valor ?? 0);
+
     if (hora >= 5 && hora < 12) {
-      ganhosManha += receita.valor;
+      ganhosManha += resultadoLiquido;
     } else if (hora >= 12 && hora < 18) {
-      ganhosTarde += receita.valor;
+      ganhosTarde += resultadoLiquido;
     } else {
-      ganhosNoite += receita.valor;
+      ganhosNoite += resultadoLiquido;
     }
   }
 
@@ -466,7 +482,7 @@ function acumularGanhosSemana({ receita, ganhosSemana }) {
 
   const nomeDia = dias[dataSemana.getDay()];
 
-  ganhosSemana[nomeDia] += Number(receita.valor || 0);
+  ganhosSemana[nomeDia] += Number(receita.lucroLiquido ?? receita.valor ?? 0);
 
   return ganhosSemana;
 }

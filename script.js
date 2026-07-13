@@ -34,6 +34,7 @@ window.atualizar = function () {
 
   // 🔥 AGRUPAR GANHOS POR DIA
   const ganhosPorDia = {};
+  const resultadosDiarios = {};
   let ganhosSemanaAtual = 0;
   let ganhosSemanaPassada = 0;
 
@@ -139,6 +140,14 @@ window.atualizar = function () {
       ganhosPorDia,
       receita: r,
     });
+    const chaveDia =
+      typeof r.data === "string" ? r.data : converterData(r.data);
+
+    if (!resultadosDiarios[chaveDia]) {
+      resultadosDiarios[chaveDia] = 0;
+    }
+
+    resultadosDiarios[chaveDia] += Number(r.lucroLiquido ?? r.valor ?? 0);
     if (r.horaInicio && r.horaFim) {
       const inicio = new Date(`2000-01-01T${r.horaInicio}`);
       const fim = new Date(`2000-01-01T${r.horaFim}`);
@@ -158,7 +167,7 @@ window.atualizar = function () {
   totalG = atualizarGastos(listaG);
 
   // ===== CÁLCULOS =====
-  const valores = Object.values(ganhosPorDia);
+  const valores = Object.values(resultadosDiarios);
 
   const { melhorDia, mediaDia } = calcularDesempenhoDiario({
     valores,
@@ -183,6 +192,7 @@ window.atualizar = function () {
   const { reserva, saldo } = calcularResumoFinanceiro({
     totalR,
     totalG,
+    totalCombustivel,
     percentual,
   });
   metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
@@ -200,6 +210,7 @@ window.atualizar = function () {
   const resumo = {
     totalR,
     totalG,
+    totalCombustivel,
     reserva,
     saldo,
     melhorDia,
