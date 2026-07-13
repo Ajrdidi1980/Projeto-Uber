@@ -25,7 +25,6 @@ async function addReceita() {
     const horas = (fim - inicio) / 1000 / 60 / 60;
 
     if (horas > 0) {
-      ganhoPorHora = valor / horas;
       horasTrabalhadas = horas;
     }
   }
@@ -36,6 +35,9 @@ async function addReceita() {
     gastoCombustivel = (kmRodado / consumo) * combustivel;
   }
   const lucroLiquido = valor - gastoCombustivel;
+  if (horasTrabalhadas > 0) {
+    ganhoPorHora = lucroLiquido / horasTrabalhadas;
+  }
 
   let economiaEletrica = 0;
 

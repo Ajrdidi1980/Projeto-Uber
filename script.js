@@ -181,13 +181,6 @@ window.atualizar = function () {
     ganhosNoite,
   });
 
-  const { custoPorKm, ganhoPorKm, mediaHora } = calcularMetricas({
-    totalKm,
-    totalCombustivel,
-    totalR,
-    totalGanhoHora,
-    qtdHoras,
-  });
   // ===== RESUMO =====
   const { reserva, saldo } = calcularResumoFinanceiro({
     totalR,
@@ -195,12 +188,19 @@ window.atualizar = function () {
     totalCombustivel,
     percentual,
   });
+
+  const { custoPorKm, ganhoPorKm, mediaHora } = calcularMetricas({
+    totalKm,
+    totalCombustivel,
+    totalR,
+    totalGanhoHora,
+    qtdHoras,
+    saldo,
+  });
   metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
 
   const faltamMeta = calcularFaltamMeta(totalR, metaDiaria);
-  console.log("META:", metaDiaria);
-  console.log("TOTALR:", totalR);
-  console.log("FALTAM:", faltamMeta);
+
   const textoMeta = calcularTextoMeta({
     totalR,
     metaDiaria,

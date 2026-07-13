@@ -236,6 +236,7 @@ function calcularMetricas({
   totalR,
   totalGanhoHora,
   qtdHoras,
+  saldo,
 }) {
   let custoPorKm = 0;
 
@@ -252,7 +253,7 @@ function calcularMetricas({
   let mediaHora = 0;
 
   if (qtdHoras && qtdHoras > 0) {
-    mediaHora = totalGanhoHora / qtdHoras;
+    mediaHora = saldo / qtdHoras;
   }
 
   return {
@@ -319,8 +320,7 @@ function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
 function calcularFaltamMeta(totalR, metaDiaria) {
   return Math.max(0, Number(metaDiaria) - totalR);
 }
-console.log("VALORES PARA MÉDIA:", valores);
-console.log("TOTAL R:", totalR);
+
 function calcularDesempenhoDiario({ valores, totalR }) {
   let melhorDia = 0;
 
@@ -392,10 +392,10 @@ function calcularAcumuladoresReceita({
 
   totalCombustivel += receita.gastoCombustivel || 0;
 
-  if (receita.ganhoPorHora) {
-    totalGanhoHora += receita.ganhoPorHora;
+  if (receita.horasTrabalhadas > 0) {
+    totalGanhoHora += Number(receita.lucroLiquido ?? receita.valor ?? 0);
 
-    qtdHoras++;
+    qtdHoras += Number(receita.horasTrabalhadas);
   }
 
   return {

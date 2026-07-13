@@ -27,6 +27,17 @@ function atualizarMeuDia() {
     (total, r) => total + (r.kmRodado || 0),
     0,
   );
+
+  const gastosHoje = gastos.filter((g) => converterData(g.data) === hojeISO);
+
+  const outrosGastosHoje = gastosHoje.reduce(
+    (total, g) => total + Number(g.valor || 0),
+    0,
+  );
+
+  document.getElementById("diario-outros-gastos").textContent =
+    formatarMoeda(outrosGastosHoje);
+
   document.getElementById("diario-km").textContent = kmHoje.toFixed(0) + " km";
 
   const percentualMeta = (faturamentoHoje / metaDiaria) * 100;
@@ -46,12 +57,15 @@ function atualizarMeuDia() {
 
   document.getElementById("diario-horas").textContent =
     horasHoje.toFixed(1) + " h";
-  const lucroHoje = receitasHoje.reduce(
-    (total, r) => total + (r.lucroLiquido || 0),
+  const lucroCorridasHoje = receitasHoje.reduce(
+    (total, r) => total + Number(r.lucroLiquido ?? r.valor ?? 0),
     0,
   );
+
+  const lucroHoje = lucroCorridasHoje - outrosGastosHoje;
   document.getElementById("diario-lucro").textContent =
     formatarMoeda(lucroHoje);
+
   const ganhoHoraHoje = horasHoje > 0 ? lucroHoje / horasHoje : 0;
 
   document.getElementById("diario-ganho-hora").textContent =
