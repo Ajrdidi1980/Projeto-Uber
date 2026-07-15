@@ -26,6 +26,7 @@ window.atualizar = function () {
   let totalHorasTrabalhadas = 0;
   let quantidadeDiasTrabalhados = 0;
 
+  const diasTrabalhados = new Set();
   const listaR = document.getElementById("lista-receitas");
   const listaG = document.getElementById("lista-gastos");
 
@@ -33,8 +34,9 @@ window.atualizar = function () {
   listaG.innerHTML = "";
 
   // 🔥 AGRUPAR GANHOS POR DIA
-  const ganhosPorDia = {};
+  const gastosPorDia = {};
   const resultadosDiarios = {};
+  const ganhosPorDia = {};
   let ganhosSemanaAtual = 0;
   let ganhosSemanaPassada = 0;
 
@@ -140,8 +142,7 @@ window.atualizar = function () {
       ganhosPorDia,
       receita: r,
     });
-    const chaveDia =
-      typeof r.data === "string" ? r.data : converterData(r.data);
+    const chaveDia = converterData(r.data);
 
     if (!resultadosDiarios[chaveDia]) {
       resultadosDiarios[chaveDia] = 0;
@@ -155,24 +156,44 @@ window.atualizar = function () {
       const horas = (fim - inicio) / 1000 / 60 / 60;
 
       totalHorasTrabalhadas += horas;
-      quantidadeDiasTrabalhados++;
+      diasTrabalhados.add(chaveDia);
     }
     receitasFiltradas.push(r);
   });
+
+  quantidadeDiasTrabalhados = diasTrabalhados.size;
+
   renderizarTabelaReceitas(receitasFiltradas, listaR);
   const gastosFiltrados = [];
   // ===== ORDENAR GASTOS POR DATA =====
   ordenarPorData(gastos); // ✅ já trata Timestamp e string
   // ===== GASTOS =====
   totalG = atualizarGastos(listaG);
+  gastos.forEach((g) => {
+    if (!g.data) return;
 
+    const chaveDia = converterData(g.data);
+
+    if (dataInicio && chaveDia < dataInicio) return;
+    if (dataFim && chaveDia > dataFim) return;
+
+    if (!gastosPorDia[chaveDia]) {
+      gastosPorDia[chaveDia] = 0;
+    }
+
+    gastosPorDia[chaveDia] += Number(g.valor || 0);
+  });
+  Object.keys(gastosPorDia).forEach((chaveDia) => {
+    if (!resultadosDiarios[chaveDia]) {
+      resultadosDiarios[chaveDia] = 0;
+    }
+
+    resultadosDiarios[chaveDia] -= gastosPorDia[chaveDia];
+  });
   // ===== CÁLCULOS =====
+
   const valores = Object.values(resultadosDiarios);
 
-  const { melhorDia, mediaDia } = calcularDesempenhoDiario({
-    valores,
-    totalR,
-  });
   // ===== MELHOR DIA =====
   const melhorDiaSemana = calcularMelhorDiaSemana(ganhosSemana);
   const melhorPeriodo = calcularMelhorPeriodo({
@@ -189,12 +210,18 @@ window.atualizar = function () {
     percentual,
   });
 
+  const { melhorDia, mediaDia } = calcularDesempenhoDiario({
+    valores,
+    saldo,
+    quantidadeDiasTrabalhados,
+  });
+
   const { custoPorKm, ganhoPorKm, mediaHora } = calcularMetricas({
     totalKm,
     totalCombustivel,
     totalR,
     totalGanhoHora,
-    qtdHoras,
+    qtdHoras: totalHorasTrabalhadas,
     saldo,
   });
   metaDiaria = Number(localStorage.getItem("metaDiaria")) || 300;
@@ -233,7 +260,7 @@ window.atualizar = function () {
   atualizarBarraMeta(totalR, metaDiaria);
 
   atualizarComparativoSemanal(receitas);
-  console.log("ganhosPorDia =", ganhosPorDia);
+
   atualizarGrafico(ganhosPorDia);
   atualizarGraficoPizza(totalR, totalG, reserva);
   loadingResumo.style.display = "none";

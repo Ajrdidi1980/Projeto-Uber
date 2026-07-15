@@ -41,9 +41,6 @@ function filtrarHoje() {
   dataInicio = periodo.inicio;
   dataFim = periodo.fim;
 
-  console.log("Início:", dataInicio);
-  console.log("Fim:", dataFim);
-
   atualizar();
 }
 // ===== FILTRO SEMANA =====
@@ -65,7 +62,6 @@ function filtrarMes() {
   atualizar();
 }
 function atualizarCardsDashboard(dados) {
-  console.log("Horas trabalhadas:", dados.totalHorasTrabalhadas);
   document.getElementById("total-receitas").textContent = formatarMoeda(
     dados.totalR,
   );
@@ -227,8 +223,6 @@ function atualizarComparativoSemanal(receitas) {
   if (comparativo) {
     comparativo.textContent = textoComparativo;
   }
-
-  console.log("Comparativo:", textoComparativo);
 }
 function calcularMetricas({
   totalKm,
@@ -247,7 +241,7 @@ function calcularMetricas({
   let ganhoPorKm = 0;
 
   if (totalKm && totalKm > 0) {
-    ganhoPorKm = totalR / totalKm;
+    ganhoPorKm = saldo / totalKm;
   }
 
   let mediaHora = 0;
@@ -321,7 +315,11 @@ function calcularFaltamMeta(totalR, metaDiaria) {
   return Math.max(0, Number(metaDiaria) - totalR);
 }
 
-function calcularDesempenhoDiario({ valores, totalR }) {
+function calcularDesempenhoDiario({
+  valores,
+  saldo,
+  quantidadeDiasTrabalhados,
+}) {
   let melhorDia = 0;
 
   let mediaDia = 0;
@@ -329,8 +327,9 @@ function calcularDesempenhoDiario({ valores, totalR }) {
   if (valores.length > 0) {
     melhorDia = Math.max(...valores);
 
-    mediaDia =
-      valores.reduce((total, valor) => total + valor, 0) / valores.length;
+    if (quantidadeDiasTrabalhados > 0) {
+      mediaDia = saldo / quantidadeDiasTrabalhados;
+    }
   }
 
   return {
