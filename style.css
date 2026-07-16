@@ -835,9 +835,10 @@ tr:hover td {
   background: #22c55e;
   border: none;
   color: white;
-  padding: 5px 12px;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 18px;
+  line-height: 1;
   font-weight: 600;
   cursor: pointer;
 }
@@ -846,9 +847,10 @@ tr:hover td {
   background: #16a34a;
   border: none;
   color: white;
-  padding: 5px 12px;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 18px;
+  line-height: 1;
   font-weight: 600;
   cursor: pointer;
   margin-left: 6px;

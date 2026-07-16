@@ -592,18 +592,19 @@ const temaSalvo = localStorage.getItem("tema");
 if (temaSalvo === "light") {
   document.body.classList.add("light");
 }
-
+let unsubscribeReceitas = null;
+let unsubscribeGastos = null;
 window.carregarDadosUsuario = function () {
   let receitasOk = false;
   let gastosOk = false;
 
-  window.escutarReceitasFirebase((dados) => {
+  unsubscribeReceitas = window.escutarReceitasFirebase((dados) => {
     receitas = dados;
     receitasOk = true;
     if (gastosOk) atualizar(); // ✅ só roda quando os dois chegarem
   });
 
-  window.escutarGastosFirebase((dados) => {
+  unsubscribeGastos = window.escutarGastosFirebase((dados) => {
     gastos = dados;
     gastosOk = true;
     if (receitasOk) atualizar(); // ✅ só roda quando os dois chegarem

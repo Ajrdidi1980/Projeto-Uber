@@ -191,7 +191,7 @@ window.escutarReceitasFirebase = function (callback) {
     orderBy("data", "desc"),
   );
 
-  onSnapshot(q, (snapshot) => {
+  return onSnapshot(q, (snapshot) => {
     let receitasFirebase = [];
 
     snapshot.forEach((doc) => {
@@ -274,7 +274,7 @@ window.escutarGastosFirebase = function (callback) {
     orderBy("data", "desc"),
   );
 
-  onSnapshot(q, (snapshot) => {
+  return onSnapshot(q, (snapshot) => {
     let gastosFirebase = [];
 
     snapshot.forEach((doc) => {
@@ -308,11 +308,20 @@ window.loginGoogle = async function () {
 // ===== LOGOUT =====
 
 window.logoutGoogle = async function () {
+  if (unsubscribeReceitas) {
+    unsubscribeReceitas();
+    unsubscribeReceitas = null;
+  }
+
+  if (unsubscribeGastos) {
+    unsubscribeGastos();
+    unsubscribeGastos = null;
+  }
+
   await signOut(auth);
 
   console.log("👋 Logout realizado");
 };
-
 // ===== OBSERVAR LOGIN =====
 
 onAuthStateChanged(auth, async (usuario) => {
