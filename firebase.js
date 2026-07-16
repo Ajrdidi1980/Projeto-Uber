@@ -319,8 +319,10 @@ onAuthStateChanged(auth, async (usuario) => {
   const nomeUsuario = document.getElementById("nome-usuario");
 
   const btnLogout = document.getElementById("btn-logout");
+  const btnLogoutMobile = document.getElementById("btn-logout-mobile");
 
   const btnLogin = document.querySelector('button[onclick="loginGoogle()"]');
+  const btnLoginMobile = document.getElementById("btn-login-mobile");
 
   if (usuario) {
     console.log("🔥 Logado:", usuario.displayName);
@@ -349,9 +351,19 @@ onAuthStateChanged(auth, async (usuario) => {
       nomeUsuario.innerText = `Olá, ${usuario.displayName} 👋`;
     }
 
-    btnLogin.style.display = "none";
+    if (btnLogin) {
+      btnLogin.style.display = "none";
+    }
+
+    if (btnLoginMobile) {
+      btnLoginMobile.style.display = "none";
+    }
 
     btnLogout.style.display = "block";
+    if (btnLogoutMobile) {
+      btnLogoutMobile.style.display = "block";
+    }
+
     const btnAdmin = document.getElementById("btn-admin");
 
     if (btnAdmin && usuario.email === "antoniojrlinhares@gmail.com") {
@@ -363,10 +375,23 @@ onAuthStateChanged(auth, async (usuario) => {
     if (nomeUsuario) {
       nomeUsuario.innerText = "";
     }
+    receitas = [];
+    gastos = [];
+    atualizar();
 
-    btnLogin.style.display = "block";
+    if (btnLogin) {
+      btnLogin.style.display = "block";
+    }
 
+    if (btnLoginMobile) {
+      btnLoginMobile.style.display = "block";
+    }
     btnLogout.style.display = "none";
+
+    if (btnLogoutMobile) {
+      btnLogoutMobile.style.display = "none";
+    }
+
     const btnAdmin = document.getElementById("btn-admin");
 
     if (btnAdmin) {
