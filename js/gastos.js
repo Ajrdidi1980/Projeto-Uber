@@ -3,7 +3,11 @@ function renderizarGasto(g, i) {
     <tr>
 
       <td>
-        ${g.descricao} (${g.tipo})
+        ${formatarTipoGasto(g.tipo)}
+      </td>
+
+      <td>
+        ${g.descricao}
       </td>
 
       <td>
@@ -11,17 +15,17 @@ function renderizarGasto(g, i) {
       </td>
 
       <td>
-       ${formatarMoeda(g.valor)}
+        ${formatarMoeda(g.valor)}
       </td>
 
       <td>
 
         <button class="btn-editar" onclick="editarGasto(${i})">
-          Editar
+          ✏️
         </button>
 
         <button class="btn-excluir" onclick="excluirGasto(${i})">
-          Excluir
+          🗑️
         </button>
 
       </td>

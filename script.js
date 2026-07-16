@@ -294,6 +294,19 @@ function formatarMoeda(valor) {
 function formatarKm(valor) {
   return valor ? `${Number(valor).toFixed(1)} km` : "-";
 }
+function formatarTipoGasto(tipo) {
+  const tipos = {
+    manutencao: "🔧",
+    alimentacao: "🍽️",
+    pedagio: "🛣️",
+    estacionamento: "🅿️",
+    lavagem: "🚿",
+    internet: "📱",
+    outros: "📦",
+  };
+
+  return tipos[tipo] || "📦";
+}
 function converterData(data) {
   if (typeof data === "string") {
     return data.split("/").reverse().join("-");

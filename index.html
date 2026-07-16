@@ -569,10 +569,14 @@
             <h3>➕ Novo gasto</h3>
             <div class="form">
               <div>
-                <label for="tipo-gasto">Categoria</label>
+                <label for="tipo-gasto">Tipo de gasto</label>
                 <select id="tipo-gasto">
                   <option value="manutencao">🔧 Manutenção</option>
                   <option value="alimentacao">🍽️ Alimentação</option>
+                  <option value="pedagio">🛣️ Pedágio</option>
+                  <option value="estacionamento">🅿️ Estacionamento</option>
+                  <option value="lavagem">🚿 Lavagem</option>
+                  <option value="internet">📱 Internet</option>
                   <option value="outros">📦 Outros</option>
                 </select>
               </div>
@@ -604,6 +608,7 @@
             <table>
               <thead>
                 <tr>
+                  <th>TIPO</th>
                   <th>Descrição</th>
                   <th>Data</th>
                   <th>Valor</th>
