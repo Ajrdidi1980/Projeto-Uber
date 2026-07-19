@@ -1,4 +1,5 @@
 // ===== ADICIONAR / EDITAR RECEITA =====
+
 async function addReceita() {
   const desc = document.getElementById("desc-receita").value;
   const valor = parseFloat(document.getElementById("valor-receita").value) || 0;
@@ -22,8 +23,11 @@ async function addReceita() {
     const inicio = new Date(`2000-01-01T${horaInicio}`);
     const fim = new Date(`2000-01-01T${horaFim}`);
 
-    const horas = (fim - inicio) / 1000 / 60 / 60;
+    if (fim < inicio) {
+      fim.setDate(fim.getDate() + 1);
+    }
 
+    const horas = (fim - inicio) / 1000 / 60 / 60;
     if (horas > 0) {
       horasTrabalhadas = horas;
     }
@@ -34,6 +38,7 @@ async function addReceita() {
   if (consumo > 0 && combustivel > 0 && kmRodado > 0) {
     gastoCombustivel = (kmRodado / consumo) * combustivel;
   }
+
   const lucroLiquido = valor - gastoCombustivel;
   if (horasTrabalhadas > 0) {
     ganhoPorHora = lucroLiquido / horasTrabalhadas;
@@ -85,7 +90,6 @@ async function addReceita() {
       id: idFirebase,
       ...receitaEditada,
     };
-    console.log(receitas[editandoReceita]);
 
     await editarReceitaFirebase(idFirebase, receitaEditada);
 
@@ -127,10 +131,10 @@ async function addReceita() {
   document.getElementById("data-receita").value = "";
   document.getElementById("hora-inicio").value = "";
   document.getElementById("hora-fim").value = "";
-  document.getElementById("km-inicial").value = "";
+  document.getElementById("km-inicial").value = kmFinal;
   document.getElementById("km-final").value = "";
-  document.getElementById("consumo").value = "";
-  document.getElementById("combustivel").value = "";
+  document.getElementById("consumo").value = consumo;
+  document.getElementById("combustivel").value = combustivel;
   document.getElementById("tipo-gasto").value = "outros";
   document.getElementById("btn-gasto").textContent = "Adicionar";
 }

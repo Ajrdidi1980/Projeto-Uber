@@ -386,13 +386,13 @@
 
         <!-- TELA: CORRIDAS -->
         <div id="receitas" class="tela">
-          <h2>Corridas</h2>
+          <h2>Fechamento do dia</h2>
 
           <div class="card">
-            <h3>➕ Nova corrida</h3>
+            <h3>➕ Dados do dia</h3>
 
             <div class="form-section">
-              <span class="form-label">Plataforma</span>
+              <span class="form-label">Onde você trabalhou hoje?</span>
               <div class="selector-grid" id="selector-plataforma">
                 <button
                   class="selector-btn ativo"
@@ -408,9 +408,9 @@
                 </button>
                 <button
                   class="selector-btn"
-                  onclick="selecionarPlataforma(this, 'iFood')"
+                  onclick="selecionarPlataforma(this, 'InDrive')"
                 >
-                  🛵 iFood
+                  🔵 InDrive
                 </button>
                 <button
                   class="selector-btn"
@@ -421,13 +421,13 @@
               </div>
               <input
                 id="desc-receita"
-                placeholder="Descrição da corrida"
+                placeholder="Plataforma"
                 style="display: none; margin-top: 8px"
               />
             </div>
 
             <div class="form-section">
-              <label for="valor-receita">Valor recebido (R$)</label>
+              <label for="valor-receita">Faturamento do dia (R$)</label>
               <input
                 id="valor-receita"
                 type="number"
@@ -447,11 +447,11 @@
               class="form-section"
             >
               <div>
-                <label for="hora-inicio">Início</label>
+                <label for="hora-inicio">Início da jornada</label>
                 <input id="hora-inicio" type="time" />
               </div>
               <div>
-                <label for="hora-fim">Fim</label>
+                <label for="hora-fim">Fim da jornada</label>
                 <input id="hora-fim" type="time" />
               </div>
             </div>
@@ -483,7 +483,7 @@
             <div class="form-section">
               <label for="tipo-veiculo">Combustível</label>
               <select id="tipo-veiculo">
-                <option value="gasolina">🚗 Gasolina</option>
+                <option value="gasolina">⛽ Gasolina / Etanol</option>
                 <option value="gnv">🚙 GNV</option>
                 <option value="eletrico">⚡ Elétrico</option>
               </select>
@@ -494,7 +494,7 @@
               class="form-section"
             >
               <div>
-                <label for="consumo">Consumo</label>
+                <label for="consumo">Consumo do veículo</label>
                 <input
                   id="consumo"
                   type="number"
@@ -504,7 +504,7 @@
                 />
               </div>
               <div>
-                <label for="combustivel">Custo combustível</label>
+                <label for="combustivel">Preço do combustível</label>
                 <input
                   id="combustivel"
                   type="number"
@@ -520,7 +520,7 @@
               id="btn-receita"
               onclick="addReceita()"
             >
-              ✅ Salvar corrida
+              ✅ Salvar dia
             </button>
           </div>
 
@@ -532,7 +532,7 @@
             />
             <select id="filtro-veiculo" onchange="aplicarFiltrosReceitas()">
               <option value="">Todos veículos</option>
-              <option value="gasolina">🚗 Gasolina</option>
+              <option value="gasolina">⛽ Gasolina / Etanol</option>
               <option value="gnv">🚙 GNV</option>
               <option value="eletrico">⚡ Elétrico</option>
             </select>
@@ -545,7 +545,7 @@
             <table>
               <thead>
                 <tr>
-                  <th>Descrição</th>
+                  <th>Plataforma</th>
                   <th>Data</th>
                   <th>Valor</th>
                   <th>KM</th>

@@ -153,6 +153,14 @@ window.atualizar = function () {
       const inicio = new Date(`2000-01-01T${r.horaInicio}`);
       const fim = new Date(`2000-01-01T${r.horaFim}`);
 
+      if (fim < inicio) {
+        fim.setDate(fim.getDate() + 1);
+      }
+
+      if (fim < inicio) {
+        fim.setDate(fim.getDate() + 1);
+      }
+
       const horas = (fim - inicio) / 1000 / 60 / 60;
 
       totalHorasTrabalhadas += horas;
