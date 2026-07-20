@@ -382,15 +382,52 @@ function renderizarVeiculo(tipoVeiculo) {
 function renderizarAcoes(i) {
   return `
     <div class="acoes-botoes">
-      <button class="btn-editar" onclick="editarReceita(${i})">
-        Editar
+      <button class="btn-acao btn-editar" onclick="editarReceita(${i})" title="Editar">
+        ✏️
       </button>
 
-      <button class="btn-excluir" onclick="excluirReceita(${i})">
-        Excluir
+      <button class="btn-acao btn-excluir" onclick="excluirReceita(${i})" title="Excluir">
+        🗑️
       </button>
     </div>
   `;
+}
+function atualizarConsumoPadrao() {
+  const tipo = document.getElementById("tipo-veiculo").value;
+  const consumo = document.getElementById("consumo");
+  const combustivel = document.getElementById("combustivel");
+  const ultimoPreco = parseFloat(localStorage.getItem(`ultimoPreco_${tipo}`));
+  const labelCombustivel = document.querySelector('label[for="combustivel"]');
+  const labelConsumo = document.querySelector('label[for="consumo"]');
+
+  if (!consumo) return;
+
+  switch (tipo) {
+    case "gasolina":
+      consumo.value = 10;
+      combustivel.value = ultimoPreco || 6.49;
+      labelCombustivel.textContent = "Preço do combustível";
+      combustivel.placeholder = "R$/L";
+      labelConsumo.textContent = "Consumo (km/L)";
+      break;
+
+    case "gnv":
+      consumo.value = 13;
+      combustivel.value = ultimoPreco || 4.89;
+      labelCombustivel.textContent = "Preço do combustível";
+      combustivel.placeholder = "R$/m³";
+      labelConsumo.textContent = "Consumo (km/m³)";
+      break;
+
+    case "eletrico":
+      consumo.value = 6.5;
+      combustivel.value = 1.2;
+      labelConsumo.textContent = "Consumo (km/kWh)";
+      labelCombustivel.textContent = "Preço da recarga";
+      consumo.placeholder = "km/kWh";
+      combustivel.placeholder = "R$/kWh";
+      break;
+  }
 }
 function renderizarTabelaReceitas(receitas, listaR) {
   listaR.innerHTML = receitas.map((r, i) => renderizarReceita(r, i)).join("");
@@ -441,8 +478,11 @@ if ("serviceWorker" in navigator) {
 }
 
 // ===== INICIAR =====
+// ===== INICIAR =====
 document.addEventListener("DOMContentLoaded", async function () {
   trocarTela("receitas", document.querySelector(".sidebar button"));
+
+  atualizarConsumoPadrao(); // 👈 adicione esta linha
 
   setTimeout(() => {
     atualizar();

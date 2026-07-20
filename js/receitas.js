@@ -12,6 +12,7 @@ async function addReceita() {
   const consumo = parseFloat(document.getElementById("consumo").value) || 0;
   const combustivel =
     parseFloat(document.getElementById("combustivel").value) || 0;
+  localStorage.setItem(`ultimoPreco_${tipoVeiculo}`, combustivel);
   const tipoVeiculo = document.getElementById("tipo-veiculo").value;
 
   const kmRodado = kmFinal - kmInicial;
@@ -56,11 +57,19 @@ async function addReceita() {
     economiaEletrica = gastoGasolina - gastoCombustivel;
   }
 
-  if (tipoVeiculo === "eletrico") {
-    economiaEletrica = gastoCombustivel; // Supondo que o gasto de combustível seja o custo elétrico
-  }
-
   if (!desc || isNaN(valor)) return alert("Preencha tudo");
+
+  if (tipoVeiculo !== "eletrico") {
+    if (consumo <= 0) {
+      alert("Informe o consumo do veículo.");
+      return;
+    }
+
+    if (combustivel <= 0) {
+      alert("Informe o preço do combustível.");
+      return;
+    }
+  }
 
   if (editandoReceita !== null) {
     const receitaEditada = {
@@ -225,7 +234,7 @@ function renderizarReceita(r, i) {
          ⚡R$  ${formatarMoeda(r.economiaEletrica)}
       </span>
       `
-          : "---"
+          : "N/A"
       }
       </td>
  

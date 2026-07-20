@@ -74,3 +74,49 @@ Tela Meu Dia
 - Melhor dia da semana = resultado líquido acumulado.
 - Melhor período = resultado líquido acumulado por período do dia.
 - Maior corrida = maior valor bruto recebido em uma corrida.
+
+## [19/07/2026] - Inteligência no formulário de Fechamento
+
+### Implementado
+
+- Preenchimento automático do consumo conforme o tipo de veículo.
+- Preenchimento automático do preço do combustível/recarga.
+- Atualização dinâmica das unidades de consumo.
+- Atualização dinâmica do texto do campo de combustível para veículos elétricos.
+- Armazenamento automático do último preço informado por tipo de veículo.
+
+### Melhorias na Interface
+
+- Gasolina → Consumo (km/L).
+- GNV → Consumo (km/m³).
+- Elétrico → Consumo (km/kWh).
+- Gasolina/GNV → Preço do combustível.
+- Elétrico → Preço da recarga.
+- Placeholders atualizados automaticamente conforme o tipo de veículo.
+
+### Validações
+
+- Gasolina e GNV exigem consumo maior que zero.
+- Gasolina e GNV exigem preço maior que zero.
+- Veículos elétricos possuem tratamento específico para consumo e recarga.
+
+### Melhorias de Código
+
+- Criada a função `atualizarConsumoPadrao()`.
+- Removida lógica duplicada do cálculo da economia elétrica.
+- Implementado armazenamento do último preço por tipo de veículo:
+  - `ultimoPreco_gasolina`
+  - `ultimoPreco_gnv`
+  - `ultimoPreco_eletrico`
+
+### Resultado
+
+- Redução do preenchimento manual no fechamento do dia.
+- Interface mais intuitiva para diferentes tipos de veículos.
+- Código mais organizado e de fácil manutenção.
+- Melhor experiência para motoristas de combustão, GNV e elétricos.
+
+### Próximos passos
+
+- Continuar simplificando o formulário de fechamento.
+- Priorizar funcionalidades essenciais para publicação do MVP.
