@@ -120,3 +120,40 @@ Tela Meu Dia
 
 - Continuar simplificando o formulário de fechamento.
 - Priorizar funcionalidades essenciais para publicação do MVP.
+
+## [20/07/2026] - Dashboard
+
+### Implementado
+
+- Card "Economia elétrica" exibido apenas para veículos elétricos.
+
+### Resultado
+
+- Dashboard mais limpo para motoristas de gasolina e GNV.
+- Interface adaptada automaticamente conforme o tipo de veículo.
+- Melhor experiência do usuário.
+
+## [21/07/2026] - Revisão Visual do Dashboard e Meu Dia
+
+### Tela Meu Dia
+
+- Destaque visual para o Saldo Líquido.
+- Valor do Saldo Líquido destacado em verde.
+- Melhor organização visual dos indicadores.
+- Ajustes de acabamento da interface.
+
+### Dashboard
+
+- Card Saldo Líquido recebeu destaque visual.
+- Revisão da identidade visual dos cards.
+- Inclusão de ícones nos indicadores principais.
+- Correção da unidade do indicador Ganho/Hora (`R$/h`).
+- Removido caractere indevido (`>`).
+- Pequenos ajustes de acabamento visual.
+
+### Resultado
+
+- Interface mais limpa.
+- Melhor hierarquia das informações.
+- Leitura mais rápida dos indicadores.
+- Dashboard e Meu Dia padronizados visualmente.

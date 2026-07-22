@@ -1,8 +1,3 @@
----
----
-
-## [09/07/2026] - Tela Meu Dia (Versão 1)
-
 # ROADMAP
 
 ## ✅ Concluído
@@ -18,32 +13,35 @@
 - Ranking
 - Comparativo Semanal
 - Gráficos
-- Meu Dia (Versão 1)
-- [x] Correção da lógica financeira do Dashboard
-- [x] Integração do combustível ao Resumo
-- [x] Separação entre faturamento bruto e resultado líquido
-- [x] Reserva calculada sobre o saldo líquido
-- [x] Correção do Melhor Dia e da Média Diária
-- [x] Padronização dos indicadores de desempenho pelo resultado líquido
-- [x] Transparência dos indicadores financeiros
+- Meu Dia (Versão 2)
+- Correção da lógica financeira do Dashboard
+- Integração do combustível ao Resumo
+- Separação entre faturamento bruto e resultado líquido
+- Reserva calculada sobre o saldo líquido
+- Correção do Melhor Dia e da Média Diária
+- Padronização dos indicadores de desempenho pelo resultado líquido
+- Transparência dos indicadores financeiros
+- Inteligência do formulário de fechamento
+- Dashboard adaptado ao tipo de veículo
+- Revisão visual do Dashboard
+- Revisão visual da tela Meu Dia
 
 ---
 
----
+## 🚧 Próximas etapas
 
-## Próximas etapas
-
-- Revisão da tela Meu Dia
-- Revisão do Dashboard
 - Relatórios Inteligentes
 - Backup
 - Publicação
 
-🔥 Próxima grande etapa
+---
 
-Aprimorar a tela Meu Dia
+## 🔥 Próxima grande etapa
 
-- Melhorar layout
-- Indicadores financeiros
-- Comparativo com dias anteriores
-- Insights para o motorista
+### Relatórios Inteligentes
+
+- Insights financeiros
+- Comparativos automáticos
+- Tendências de desempenho
+- Recomendações para o motorista
+- Alertas inteligentes

@@ -242,6 +242,15 @@ window.atualizar = function () {
     faltamMeta,
   });
 
+  const insights = [];
+
+  if (mediaHora >= 30) {
+    insights.push({
+      tipo: "positivo",
+      texto: `💵 Excelente! Seu ganho por hora foi de ${formatarMoeda(mediaHora)}.`,
+    });
+  }
+
   const resumo = {
     totalR,
     totalG,
@@ -260,6 +269,7 @@ window.atualizar = function () {
     melhorPeriodo,
     melhorDiaSemana,
     maiorGanho,
+    insights,
   };
 
   atualizarCardsDashboard(resumo);
@@ -396,12 +406,16 @@ function atualizarConsumoPadrao() {
   const tipo = document.getElementById("tipo-veiculo").value;
   const consumo = document.getElementById("consumo");
   const combustivel = document.getElementById("combustivel");
+  const cardEconomia = document.getElementById("card-economia-eletrica");
   const ultimoPreco = parseFloat(localStorage.getItem(`ultimoPreco_${tipo}`));
   const labelCombustivel = document.querySelector('label[for="combustivel"]');
   const labelConsumo = document.querySelector('label[for="consumo"]');
 
   if (!consumo) return;
 
+  if (cardEconomia) {
+    cardEconomia.style.display = tipo === "eletrico" ? "flex" : "none";
+  }
   switch (tipo) {
     case "gasolina":
       consumo.value = 10;

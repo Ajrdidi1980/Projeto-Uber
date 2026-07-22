@@ -374,7 +374,9 @@ function agruparGanhosPorPeriodo({ modoGrafico, ganhosPorDia, receita }) {
       ganhosPorDia[chaveMes] = 0;
     }
 
-    ganhosPorDia[chaveMes] += Number(receita.valor || 0);
+    ganhosPorDia[chaveMes] += Number(
+      receita.lucroLiquido ?? receita.valor ?? 0,
+    );
   }
 }
 function calcularAcumuladoresReceita({
@@ -492,6 +494,7 @@ function calcularMaiorGanho({ receita, maiorGanho }) {
 
   return maiorGanho;
 }
+
 window.salvar = salvar;
 window.salvarPercentual = salvarPercentual;
 window.salvarMeta = salvarMeta;

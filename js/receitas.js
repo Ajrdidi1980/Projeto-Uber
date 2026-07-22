@@ -12,9 +12,8 @@ async function addReceita() {
   const consumo = parseFloat(document.getElementById("consumo").value) || 0;
   const combustivel =
     parseFloat(document.getElementById("combustivel").value) || 0;
-  localStorage.setItem(`ultimoPreco_${tipoVeiculo}`, combustivel);
   const tipoVeiculo = document.getElementById("tipo-veiculo").value;
-
+  localStorage.setItem(`ultimoPreco_${tipoVeiculo}`, combustivel);
   const kmRodado = kmFinal - kmInicial;
 
   let ganhoPorHora = 0;
