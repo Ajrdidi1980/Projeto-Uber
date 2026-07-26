@@ -112,20 +112,24 @@ function atualizarCardsDashboard(dados) {
 
   document.getElementById("faltam-meta").textContent = dados.textoMeta;
 
-  document.getElementById("melhor-periodo").textContent = dados.melhorPeriodo;
+  // document.getElementById("melhor-periodo").textContent = dados.melhorPeriodo;
 
-  document.getElementById("ranking-dia").textContent =
-    "🏆 Melhor dia: " + dados.melhorDiaSemana;
+  // document.getElementById("ranking-dia").textContent =
+  //    "🏆 Melhor dia: " + dados.melhorDiaSemana;
 
-  document.getElementById("ranking-periodo").textContent =
-    "🔥 Melhor período: " + dados.melhorPeriodo;
+  // document.getElementById("ranking-periodo").textContent =
+  //  "🔥 Melhor período: " + dados.melhorPeriodo;
 
-  document.getElementById("ranking-maior").textContent =
-    "💰 Maior corrida: " + formatarMoeda(dados.maiorGanho);
+  // document.getElementById("ranking-maior").textContent =
+  //  "💰 Maior corrida: " + formatarMoeda(dados.maiorGanho);
 
   const divInsights = document.getElementById("insights");
 
-  divInsights.innerHTML = dados.insights
+  const insightsOrdenados = [...dados.insights].sort(
+    (a, b) => a.prioridade - b.prioridade,
+  );
+
+  divInsights.innerHTML = insightsOrdenados
     .map(
       (i) => `
       <div class="insight ${i.tipo}">
@@ -343,15 +347,11 @@ function calcularResumoFinanceiro({
   };
 }
 function calcularTextoMeta({ totalR, metaDiaria, faltamMeta }) {
-  let textoMeta = "";
-
   if (totalR >= Number(metaDiaria)) {
-    textoMeta = "Meta batida 🚀";
-  } else {
-    textoMeta = "R$ " + faltamMeta.toFixed(2);
+    return "🚀 Meta superada";
   }
 
-  return textoMeta;
+  return `🎯 Faltam ${formatarMoeda(faltamMeta)}`;
 }
 
 function calcularFaltamMeta(totalR, metaDiaria) {

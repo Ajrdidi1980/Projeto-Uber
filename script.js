@@ -246,16 +246,19 @@ window.atualizar = function () {
 
   if (mediaHora >= 30) {
     insights.push({
+      prioridade: 6,
       tipo: "positivo",
       texto: `💰 Ganho por hora excelente (${formatarMoeda(mediaHora)}/h).`,
     });
   } else if (mediaHora >= 20) {
     insights.push({
+      prioridade: 6,
       tipo: "info",
       texto: `💰 Ganho por hora dentro da média (${formatarMoeda(mediaHora)}/h).`,
     });
   } else {
     insights.push({
+      prioridade: 6,
       tipo: "alerta",
       texto: `⚠️ Ganho por hora abaixo da meta (${formatarMoeda(mediaHora)}/h).`,
     });
@@ -264,6 +267,7 @@ window.atualizar = function () {
 
   if (desempenhoMeta.totalDias > 0) {
     insights.push({
+      prioridade: 3,
       tipo: desempenhoMeta.diasMeta >= 5 ? "positivo" : "alerta",
       texto:
         desempenhoMeta.diasMeta >= 5
@@ -273,12 +277,14 @@ window.atualizar = function () {
   }
   if (melhorPeriodo) {
     insights.push({
+      prioridade: 4,
       tipo: "info",
       texto: `🔥 Seu melhor período foi ${melhorPeriodo.toLowerCase()}.`,
     });
   }
   if (melhorDiaSemana) {
     insights.push({
+      prioridade: 5,
       tipo: "info",
       texto: `🏆 Seu melhor dia foi ${melhorDiaSemana.toLowerCase()}.`,
     });
@@ -288,11 +294,32 @@ window.atualizar = function () {
       ((ganhosSemanaAtual - ganhosSemanaPassada) / ganhosSemanaPassada) * 100;
 
     insights.push({
+      prioridade: 2,
       tipo: percentual >= 0 ? "positivo" : "alerta",
       texto:
         percentual >= 0
           ? `📈 ${percentual.toFixed(1)}% acima da semana passada.`
           : `📉 ${Math.abs(percentual).toFixed(1)}% abaixo da semana passada.`,
+    });
+  }
+  if (totalR > 0) {
+    const percentualCombustivel = (totalCombustivel / totalR) * 100;
+
+    insights.push({
+      prioridade: 1,
+      tipo:
+        percentualCombustivel <= 20
+          ? "positivo"
+          : percentualCombustivel <= 30
+            ? "alerta"
+            : "negativo",
+
+      texto:
+        percentualCombustivel <= 20
+          ? `⛽ Combustível consumiu apenas ${percentualCombustivel.toFixed(1)}% do faturamento.`
+          : percentualCombustivel <= 30
+            ? `⛽ Combustível consumiu ${percentualCombustivel.toFixed(1)}% do faturamento.`
+            : `⚠️ Combustível consumiu ${percentualCombustivel.toFixed(1)}% do faturamento. Revise seus custos.`,
     });
   }
 

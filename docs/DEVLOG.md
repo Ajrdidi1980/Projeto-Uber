@@ -157,3 +157,24 @@ Tela Meu Dia
 - Melhor hierarquia das informações.
 - Leitura mais rápida dos indicadores.
 - Dashboard e Meu Dia padronizados visualmente.
+
+## [26/07/2026] - Relatórios Inteligentes (Versão 1)
+
+### Implementado
+
+- Criado sistema de insights inteligentes.
+- Insights ordenados por prioridade.
+- Adicionado indicador de consumo do combustível sobre o faturamento.
+- Adicionado comparativo automático com a semana anterior.
+- Indicador de desempenho da meta dos últimos 7 dias.
+- Indicador do melhor período de trabalho.
+- Indicador do melhor dia da semana.
+- Indicador de ganho por hora.
+- Revisão visual do Dashboard.
+- Removidos componentes redundantes (Ranking e card Melhor período).
+
+### Resultado
+
+- Dashboard mais limpo.
+- Informações priorizadas conforme relevância.
+- Motorista recebe recomendações que a Uber não fornece.
