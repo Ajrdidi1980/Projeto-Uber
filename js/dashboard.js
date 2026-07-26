@@ -122,7 +122,20 @@ function atualizarCardsDashboard(dados) {
 
   document.getElementById("ranking-maior").textContent =
     "💰 Maior corrida: " + formatarMoeda(dados.maiorGanho);
+
+  const divInsights = document.getElementById("insights");
+
+  divInsights.innerHTML = dados.insights
+    .map(
+      (i) => `
+      <div class="insight ${i.tipo}">
+        ${i.texto}
+      </div>
+    `,
+    )
+    .join("");
 }
+
 function atualizarBarraMeta(totalR, metaDiaria) {
   let porcentagemMeta = (totalR / Number(metaDiaria)) * 100;
 
@@ -284,6 +297,36 @@ function calcularMelhorDiaSemana(ganhosSemana) {
 
   return melhorDiaSemana;
 }
+function calcularMetaUltimos7Dias(receitas, metaDiaria) {
+  const dias = {};
+
+  receitas.forEach((receita) => {
+    const data =
+      typeof receita.data === "string"
+        ? receita.data
+        : converterData(receita.data);
+
+    if (!dias[data]) {
+      dias[data] = 0;
+    }
+
+    dias[data] += Number(receita.valor || 0);
+  });
+
+  const ultimos7Dias = Object.entries(dias)
+    .sort((a, b) => converterData(a[0]).localeCompare(converterData(b[0])))
+    .slice(-7);
+
+  const diasMeta = ultimos7Dias.filter(
+    ([, valor]) => valor >= metaDiaria,
+  ).length;
+
+  return {
+    diasMeta,
+    totalDias: ultimos7Dias.length,
+  };
+}
+
 function calcularResumoFinanceiro({
   totalR,
   totalG,

@@ -247,7 +247,52 @@ window.atualizar = function () {
   if (mediaHora >= 30) {
     insights.push({
       tipo: "positivo",
-      texto: `💵 Excelente! Seu ganho por hora foi de ${formatarMoeda(mediaHora)}.`,
+      texto: `💰 Ganho por hora excelente (${formatarMoeda(mediaHora)}/h).`,
+    });
+  } else if (mediaHora >= 20) {
+    insights.push({
+      tipo: "info",
+      texto: `💰 Ganho por hora dentro da média (${formatarMoeda(mediaHora)}/h).`,
+    });
+  } else {
+    insights.push({
+      tipo: "alerta",
+      texto: `⚠️ Ganho por hora abaixo da meta (${formatarMoeda(mediaHora)}/h).`,
+    });
+  }
+  const desempenhoMeta = calcularMetaUltimos7Dias(receitas, metaDiaria);
+
+  if (desempenhoMeta.totalDias > 0) {
+    insights.push({
+      tipo: desempenhoMeta.diasMeta >= 5 ? "positivo" : "alerta",
+      texto:
+        desempenhoMeta.diasMeta >= 5
+          ? `✅ Meta atingida em ${desempenhoMeta.diasMeta} dos últimos ${desempenhoMeta.totalDias} dias.`
+          : `⚠️ Meta atingida em apenas ${desempenhoMeta.diasMeta} dos últimos ${desempenhoMeta.totalDias} dias.`,
+    });
+  }
+  if (melhorPeriodo) {
+    insights.push({
+      tipo: "info",
+      texto: `🔥 Seu melhor período foi ${melhorPeriodo.toLowerCase()}.`,
+    });
+  }
+  if (melhorDiaSemana) {
+    insights.push({
+      tipo: "info",
+      texto: `🏆 Seu melhor dia foi ${melhorDiaSemana.toLowerCase()}.`,
+    });
+  }
+  if (ganhosSemanaAtual > 0 && ganhosSemanaPassada > 0) {
+    const percentual =
+      ((ganhosSemanaAtual - ganhosSemanaPassada) / ganhosSemanaPassada) * 100;
+
+    insights.push({
+      tipo: percentual >= 0 ? "positivo" : "alerta",
+      texto:
+        percentual >= 0
+          ? `📈 ${percentual.toFixed(1)}% acima da semana passada.`
+          : `📉 ${Math.abs(percentual).toFixed(1)}% abaixo da semana passada.`,
     });
   }
 
