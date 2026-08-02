@@ -946,9 +946,9 @@ tr:hover td {
 
 .grafico-pizza-container {
   width: 100%;
-  max-width: 260px;
-  height: 220px;
-  margin: 16px auto 0;
+  max-width: 320px;
+  height: 280px;
+  margin: 24px auto 0;
 }
 
 #grafico {
@@ -983,6 +983,28 @@ tr:hover td {
 .filtros-grafico button:hover {
   background: var(--cinza-3);
   transform: none;
+}
+/* ===== MODO ESCURO - GRÁFICOS ===== */
+
+body.dark .grafico-container {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.dark .filtros-grafico button {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+body.dark .filtros-grafico button:hover {
+  background: #4b5563;
+}
+body.dark .grafico-pizza-container {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: var(--radius-md);
+  padding: 12px;
 }
 
 /* === RANKING === */
@@ -1481,14 +1503,7 @@ body.dark .sobre-app p {
   color: var(--verde);
   text-align: center;
 }
-/* ===== TESTE RELATÓRIOS ===== */
 
-#relatorios h3,
-#relatorios h4,
-#relatorios p,
-#relatorios li {
-  color: var(--cinza-8);
-}
 /* ===== RELATÓRIOS ===== */
 
 .lista-relatorio {
@@ -1534,4 +1549,92 @@ body.dark .lista-relatorio li {
   background: #eff6ff;
   color: #1d4ed8;
   border-left: 4px solid #3b82f6;
+}
+body.dark .insight.positivo {
+  background: rgba(22, 163, 74, 0.15);
+  color: #86efac;
+}
+
+body.dark .insight.alerta {
+  background: rgba(234, 179, 8, 0.15);
+  color: #fde68a;
+}
+
+body.dark .insight.info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+/* ===== TABELAS - MODO ESCURO ===== */
+
+body.dark table {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+body.dark thead {
+  background: #111827;
+}
+
+body.dark th {
+  color: #d1d5db;
+  border-bottom: 1px solid #374151;
+}
+
+body.dark td {
+  color: #f3f4f6;
+  border-bottom: 1px solid #374151;
+}
+
+body.dark tbody tr:hover {
+  background: #374151;
+}
+/* ===== BOTÕES DAS TABELAS - MODO ESCURO ===== */
+
+body.dark .btn-editar,
+body.dark .btn-excluir {
+  border: none;
+  box-shadow: none;
+}
+
+body.dark .btn-editar:hover,
+body.dark .btn-excluir:hover {
+  filter: brightness(1.1);
+}
+/* ===== RELATÓRIOS - MODO ESCURO ===== */
+
+body.dark #relatorios {
+  color: var(--cor-texto);
+}
+
+body.dark #relatorios h2,
+body.dark #relatorios h3,
+body.dark #relatorios h4,
+body.dark #relatorios p,
+body.dark #relatorios li,
+body.dark #relatorios label {
+  color: inherit;
+}
+/* ===== VARIÁVEIS DO TEMA ESCURO ===== */
+
+body.dark {
+  --cor-fundo: #111827;
+  --cor-card: #1f2937;
+  --cor-texto: #f3f4f6;
+  --cor-borda: #374151;
+}
+/* ===== BASE DO TEMA ESCURO ===== */
+
+body.dark {
+  background: #111827;
+  color: #f3f4f6;
+}
+
+body.dark .tela {
+  background: #111827;
+}
+
+body.dark .card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #f3f4f6;
 }

@@ -45,17 +45,23 @@ function atualizarGrafico(dadosPorDia) {
           beginAtZero: true,
 
           ticks: {
-            color: "#111827",
+            color: document.body.classList.contains("dark")
+              ? "#f3f4f6"
+              : "#111827",
           },
 
           grid: {
-            color: "#dddddd",
+            color: document.body.classList.contains("dark")
+              ? "#374151"
+              : "#dddddd",
           },
         },
 
         x: {
           ticks: {
-            color: "#111827",
+            color: document.body.classList.contains("dark")
+              ? "#f3f4f6"
+              : "#111827",
           },
 
           grid: {
@@ -67,7 +73,8 @@ function atualizarGrafico(dadosPorDia) {
       plugins: {
         legend: {
           labels: {
-            color: "#111827",
+            color: "#f3f4f6",
+            usePointStyle: true,
           },
         },
       },
@@ -126,6 +133,23 @@ function atualizarGraficoPizza(receitas, gastos, reserva) {
 
           labels: {
             color: "#e2e8f0",
+
+            padding: 20,
+
+            font: {
+              size: 13,
+              weight: "bold",
+            },
+          },
+        },
+
+        legend: {
+          position: "bottom",
+
+          labels: {
+            color: document.body.classList.contains("dark")
+              ? "#f3f4f6"
+              : "#111827",
 
             padding: 20,
 

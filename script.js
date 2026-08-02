@@ -708,6 +708,7 @@ function trocarTema() {
     document.body.classList.add("light");
 
     localStorage.setItem("tema", "light");
+    atualizar();
 
     if (btnTema) btnTema.textContent = "☀️";
   } else {
@@ -715,6 +716,7 @@ function trocarTema() {
     document.body.classList.add("dark");
 
     localStorage.setItem("tema", "dark");
+    atualizar();
 
     if (btnTema) btnTema.textContent = "🌙";
   }

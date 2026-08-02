@@ -336,7 +336,11 @@ onAuthStateChanged(auth, async (usuario) => {
   if (usuario) {
     console.log("🔥 Logado:", usuario.displayName);
 
-    window.carregarDadosUsuario();
+    if (typeof window.carregarDadosUsuario === "function") {
+      window.carregarDadosUsuario();
+    } else {
+      console.error("carregarDadosUsuario ainda não foi carregada.");
+    }
 
     const config = await window.carregarConfiguracoesFirebase();
 
