@@ -407,7 +407,7 @@
               <span class="form-label">Onde você trabalhou hoje?</span>
               <div class="selector-grid" id="selector-plataforma">
                 <button
-                  class="selector-btn ativo"
+                  class="selector-btn"
                   onclick="selecionarPlataforma(this, 'Uber')"
                 >
                   🚗 Uber
@@ -772,20 +772,15 @@
     <script>
       let plataformaSelecionada = "Uber";
 
-      function selecionarPlataforma(btn, nome) {
+      function selecionarPlataforma(botao, plataforma) {
         document
           .querySelectorAll("#selector-plataforma .selector-btn")
-          .forEach((b) => b.classList.remove("ativo"));
-        btn.classList.add("ativo");
-        plataformaSelecionada = nome;
-        const descInput = document.getElementById("desc-receita");
-        if (nome === "Outro") {
-          descInput.style.display = "block";
-          descInput.focus();
-        } else {
-          descInput.style.display = "none";
-          descInput.value = nome;
-        }
+          .forEach((btn) => btn.classList.remove("ativo"));
+
+        botao.classList.add("ativo");
+
+        plataformaSelecionada = plataforma;
+        document.getElementById("desc-receita").value = plataforma;
       }
 
       document.addEventListener("DOMContentLoaded", () => {

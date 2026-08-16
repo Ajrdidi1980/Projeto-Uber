@@ -1,6 +1,10 @@
 // ===== ADICIONAR / EDITAR RECEITA =====
 
 async function addReceita() {
+  if (!document.querySelector("#selector-plataforma .ativo")) {
+    alert("Selecione onde você trabalhou");
+    return;
+  }
   const desc = document.getElementById("desc-receita").value;
   const valor = parseFloat(document.getElementById("valor-receita").value) || 0;
   const dataReceita = document.getElementById("data-receita").value;
@@ -56,7 +60,7 @@ async function addReceita() {
     economiaEletrica = gastoGasolina - gastoCombustivel;
   }
 
-  if (!desc || isNaN(valor)) return alert("Preencha tudo");
+  if (isNaN(valor)) return alert("Preencha o faturamento");
 
   if (tipoVeiculo !== "eletrico") {
     if (consumo <= 0) {
