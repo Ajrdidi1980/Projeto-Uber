@@ -14,6 +14,9 @@
 - Comparativo Semanal
 - Gráficos
 - Meu Dia (Versão 2)
+- Relatórios Inteligentes (Versão 1)
+- Backup e Importação
+- Publicação
 - Correção da lógica financeira do Dashboard
 - Integração do combustível ao Resumo
 - Separação entre faturamento bruto e resultado líquido
@@ -28,15 +31,7 @@
 
 ---
 
-## 🚧 Próximas etapas
-
-- Relatórios Inteligentes
-- Backup
-- Publicação
-
----
-
-## 🔥 Próxima grande etapa
+## 🔮 Próximas melhorias — fora do MVP
 
 ### Relatórios Inteligentes
 
