@@ -43,7 +43,7 @@ async function addGasto() {
 
   const tipo = document.getElementById("tipo-gasto").value;
 
-  if (!desc || isNaN(valor)) return alert("Preencha tudo");
+  if (isNaN(valor)) return alert("Preencha o valor");
 
   const gastoData = {
     descricao: desc,

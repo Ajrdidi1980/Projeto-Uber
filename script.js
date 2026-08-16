@@ -571,6 +571,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   atualizarConsumoPadrao(); // 👈 adicione esta linha
 
   setTimeout(() => {
+    if (document.body.classList.contains("dark")) {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    }
+
     atualizar();
   }, 1500);
 });
@@ -726,7 +733,11 @@ function trocarTema() {
 const temaSalvo = localStorage.getItem("tema");
 
 if (temaSalvo === "light") {
+  document.body.classList.remove("dark");
   document.body.classList.add("light");
+} else {
+  document.body.classList.remove("light");
+  document.body.classList.add("dark");
 }
 let unsubscribeReceitas = null;
 let unsubscribeGastos = null;

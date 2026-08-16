@@ -593,7 +593,7 @@
                 </select>
               </div>
               <div>
-                <label for="desc-gasto">Descrição</label>
+                <label for="desc-gasto">Observação</label>
                 <input id="desc-gasto" placeholder="Ex: Troca de óleo" />
               </div>
               <div>
@@ -621,7 +621,7 @@
               <thead>
                 <tr>
                   <th>TIPO</th>
-                  <th>Descrição</th>
+                  <th>Observação</th>
                   <th>Data</th>
                   <th>Valor</th>
                   <th>Ações</th>
@@ -670,11 +670,18 @@
           </div>
           <div class="card">
             <h3>💾 Backup dos Dados</h3>
+            <p class="texto-ajuda">
+              Salve uma cópia dos seus dados ou restaure um backup feito
+              anteriormente.
+            </p>
             <div class="acoes-grid">
               <button class="btn-acao" onclick="exportarBackup()">
                 💾 Backup JSON
               </button>
 
+              <p class="texto-ajuda">
+                Use as opções abaixo para salvar ou restaurar seus dados.
+              </p>
               <label class="btn-acao">
                 📥 Importar
                 <input
