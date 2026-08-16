@@ -71,6 +71,13 @@ function atualizarGrafico(dadosPorDia) {
       },
 
       plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return `Ganhos: ${formatarMoeda(context.raw)}`;
+            },
+          },
+        },
         legend: {
           labels: {
             color: "#f3f4f6",

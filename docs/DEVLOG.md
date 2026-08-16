@@ -178,3 +178,11 @@ Tela Meu Dia
 - Dashboard mais limpo.
 - Informações priorizadas conforme relevância.
 - Motorista recebe recomendações que a Uber não fornece.
+
+## [02/08/2026] - Backup e Importação
+
+### Implementado
+
+- ✅ Exportação de backup em arquivo JSON.
+- ✅ Importação de backup por arquivo JSON.
+- ✅ Restauração dos dados validada com sucesso.
