@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Motorista no Controle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#16a34a" />
+    <link rel="icon" href="img/logo.png" />
+    <script type="module" src="firebase.js"></script>
+    <script defer src="js/utils.js"></script>
+    <script defer src="js/receitas.js"></script>
+    <script defer src="js/gastos.js"></script>
+    <script defer src="js/filtros.js"></script>
+    <script defer src="js/dashboard.js"></script>
+    <script defer src="js/graficos.js"></script>
+    <script defer src="js/diario.js"></script>
+    <script defer src="js/ui.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="logo-area">
+          <img src="img/logo.png" alt="Logo" />
+          <h2>Controle Financeiro Motoristas</h2>
+          <button onclick="loginGoogle()">Entrar com Google</button>
+          <p id="nome-usuario"></p>
+          <button
+            id="btn-logout"
+            onclick="logoutGoogle()"
+            style="display: none"
+          >
+            Sair
+          </button>
+        </div>
+        <button onclick="trocarTela('resumo')" id="btn-resumo">
+          📊 Resumo
+        </button>
+        <button onclick="trocarTela('receitas')" id="btn-receitas">
+          🚗 Corridas
+        </button>
+        <button onclick="trocarTela('gastos')" id="btn-gastos">
+          💸 Gastos
+        </button>
+        <button
+          onclick="window.location.href = 'admin.html'"
+          id="btn-admin"
+          style="display: none"
+        >
+          ⚙ Administração
+        </button>
+        <button onclick="trocarTela('relatorios')" id="btn-relatorios">
+          📊 Relatórios
+        </button>
+      </aside>
+
+      <!-- SIDEBAR (desktop) -->
+
+      <!-- HEADER MOBILE -->
+      <header class="app-header">
+        <div class="header-left">
+          <img src="img/logo.png" class="header-logo" alt="Logo" />
+          <span class="header-titulo">Controle Motoristas</span>
+        </div>
+        <div class="header-right">
+          <span id="nome-usuario-mobile" class="header-user"></span>
+          <button
+            class="btn-login"
+            onclick="loginGoogle()"
+            id="btn-login-mobile"
+          >
+            Entrar
+          </button>
+          <button
+            class="btn-logout-mini"
+            onclick="logoutGoogle()"
+            id="btn-logout-mobile"
+            style="display: none"
+          >
+            Sair
+          </button>
+          <button class="btn-tema-mini" onclick="trocarTema()">🌙</button>
+        </div>
+      </header>
+
+      <!-- CONTEÚDO -->
+      <main class="conteudo">
+        <div id="diario" class="tela">
+          <h2>📅 Meu Dia</h2>
+
+          <div class="card">
+            <h3>Resumo do Dia</h3>
+
+            <div class="linha-resumo">
+              <span>📅 Data</span>
+              <span id="diario-data"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>⏱ Horas Trabalhadas</span>
+              <span id="diario-horas"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>💰 Faturamento</span>
+              <span id="diario-faturamento"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>⛽ Combustível</span>
+              <span id="diario-combustivel"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>💸 Outros gastos</span>
+              <span id="diario-outros-gastos"></span>
+            </div>
+
+            <div class="linha-resumo linha-destaque">
+              <span>📈 Saldo líquido</span>
+              <span id="diario-lucro"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>💵 Ganho por Hora</span>
+              <span id="diario-ganho-hora"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>🛣 Quilômetros</span>
+              <span id="diario-km"></span>
+            </div>
+
+            <div class="linha-resumo">
+              <span>🎯 Meta</span>
+              <span id="diario-meta"></span>
+            </div>
+          </div>
+        </div>
+        <!-- TELA: RESUMO -->
+        <div id="resumo" class="tela">
+          <h2>Resumo</h2>
+
+          <div class="meta-card">
+            <div class="meta-header">
+              <span class="meta-label">🎯 Meta diária</span>
+              <span class="meta-valor"> <span id="meta-diaria">300</span></span>
+            </div>
+            <div class="barra-meta">
+              <div id="progresso-meta"></div>
+            </div>
+            <p id="texto-progresso">0% da meta</p>
+          </div>
+
+          <div class="filtros-resumo">
+            <div class="filtros-rapidos">
+              <button onclick="filtrarHoje()">Hoje</button>
+              <button onclick="filtrarSemana()">Semana</button>
+              <button onclick="filtrarMes()">Mês</button>
+              <button onclick="limparFiltros()">Tudo</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <input type="date" id="data-inicio" style="flex: 1" />
+              <input type="date" id="data-fim" style="flex: 1" />
+              <button class="btn-verde" onclick="filtrarPorData()">
+                Filtrar
+              </button>
+            </div>
+          </div>
+
+          <div id="loading-resumo">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+
+          <div class="cards">
+            <div class="card-mini destaque">
+              <div class="card-mini-label">💰 Renda</div>
+              <div class="card-mini-valor">
+                <span id="total-receitas">0</span>
+              </div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">💸 Outros gastos</div>
+              <div class="card-mini-valor" style="color: var(--vermelho)">
+                <span id="total-gastos">0</span>
+              </div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">⛽ Combustível</div>
+              <div class="card-mini-valor" style="color: var(--vermelho)">
+                <span id="total-combustivel">0</span>
+              </div>
+            </div>
+            <div class="card-mini destaque">
+              <div class="card-mini-label">📈 Saldo líquido</div>
+              <div class="card-mini-valor"><span id="saldo">0</span></div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">🏦 Reserva</div>
+              <div class="card-mini-valor"><span id="reserva">0</span></div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">🏆 Melhor dia</div>
+              <div class="card-mini-valor">
+                <span id="melhor-dia">0</span>
+              </div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">📊 Média diária</div>
+              <div class="card-mini-valor">
+                <span id="media-dia">0</span>
+                <div
+                  style="
+                    margin-top: 8px;
+                    font-size: 11px;
+                    color: var(--cinza-6);
+                  "
+                >
+                  📅 Dias trabalhados
+                </div>
+              </div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">🕒 Ganho/hora</div>
+              <div class="card-mini-valor">
+                <span id="media-hora">0</span>
+                <span style="font-size: 13px; font-weight: 400">/h</span>
+              </div>
+              <div
+                id="horas-trabalhadas"
+                style="font-size: 11px; color: #666; margin-top: 4px"
+              >
+                ⏱️ 0h 00min
+              </div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">💲Custo/km</div>
+              <div class="card-mini-valor"><span id="custo-km">0</span></div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">🛣 Ganho/km</div>
+              <div class="card-mini-valor"><span id="ganho-km">0</span></div>
+            </div>
+            <div class="card-mini">
+              <div class="card-mini-label">🎯 META</div>
+              <div class="card-mini-valor"><span id="faltam-meta">0</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🧠 Relatórios Inteligentes</h3>
+            <div id="insights"></div>
+          </div>
+
+          <!-- <div class="card">-->
+          <!-- <h3>🏆 Ranking</h3> -->
+          <!-- <p id="ranking-dia"></p> -->
+          <!-- <p id="ranking-periodo"></p>-->
+          <!--   <p id="ranking-maior"></p>-->
+          <!--   </div>-->
+
+          <!--  <div
+            class="card"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span style="font-size: 13px; color: var(--cinza-6)"
+              >Melhor período</span
+            >
+            <strong
+              id="melhor-periodo"
+              style="font-size: 14px; color: var(--cinza-9)"
+              >—</strong
+            >
+          </div> -->
+
+          <div class="card-resumo" id="card-economia-eletrica">
+            <h3>⚡ Economia elétrica</h3>
+            <div>
+              <p
+                id="economia-eletrica-total"
+                style="font-size: 20px; font-weight: 700; color: var(--verde)"
+              >
+                R$ 0,00
+              </p>
+              <p
+                id="percentual-economia"
+                style="
+                  font-size: 11px;
+                  color: var(--verde);
+                  font-weight: 600;
+                  margin-top: 2px;
+                "
+              >
+                0% mais econômico
+              </p>
+            </div>
+          </div>
+
+          <div class="filtros-grafico">
+            <button
+              onclick="
+                modoGrafico = 'dia';
+                atualizar();
+              "
+            >
+              Diário
+            </button>
+            <button
+              onclick="
+                modoGrafico = 'mes';
+                atualizar();
+              "
+            >
+              Mensal
+            </button>
+          </div>
+          <div class="grafico-container">
+            <canvas id="grafico"></canvas>
+          </div>
+          <div class="grafico-pizza-container">
+            <canvas id="graficoPizza"></canvas>
+          </div>
+        </div>
+
+        <!-- TELA: RELATÓRIOS -->
+        <div id="relatorios" class="tela" style="display: none">
+          <h2>📊 Relatórios</h2>
+
+          <div class="card">
+            <h3>📄 Relatório Financeiro</h3>
+            <div class="card" style="margin-top: 15px">
+              <h4>📅 Escolha o período</h4>
+              <div class="acoes-grid">
+                <button
+                  id="rel-hoje"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'hoje')"
+                >
+                  Hoje
+                </button>
+
+                <button
+                  id="rel-semana"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'semana')"
+                >
+                  Semana
+                </button>
+
+                <button
+                  id="rel-mes"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'mes')"
+                >
+                  Mês
+                </button>
+
+                <button
+                  id="rel-tudo"
+                  class="selector-btn"
+                  onclick="selecionarPeriodo(this, 'tudo')"
+                >
+                  Tudo
+                </button>
+              </div>
+            </div>
+            <p><strong>O relatório incluirá:</strong></p>
+            <ul class="lista-relatorio">
+              <li>✅ Receitas</li>
+              <li>✅ Gastos</li>
+              <li>✅ Saldo</li>
+              <li>✅ Corridas</li>
+              <li>✅ Lucro líquido</li>
+            </ul>
+            <button class="btn-login" onclick="gerarRelatorioPDF()">
+              📄 Gerar Relatório em PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- TELA: CORRIDAS -->
+        <div id="receitas" class="tela">
+          <h2>Fechamento do dia</h2>
+
+          <div class="card">
+            <h3>➕ Dados do dia</h3>
+
+            <div class="form-section">
+              <span class="form-label">Onde você trabalhou hoje?</span>
+              <div class="selector-grid" id="selector-plataforma">
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, 'Uber')"
+                >
+                  🚗 Uber
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, '99')"
+                >
+                  🟡 99
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, 'InDrive')"
+                >
+                  🔵 InDrive
+                </button>
+                <button
+                  class="selector-btn"
+                  onclick="selecionarPlataforma(this, 'Outro')"
+                >
+                  📍 Outro
+                </button>
+              </div>
+              <input
+                id="desc-receita"
+                placeholder="Plataforma"
+                style="display: none; margin-top: 8px"
+              />
+            </div>
+
+            <div class="form-section">
+              <label for="valor-receita">Faturamento do dia (R$)</label>
+              <input
+                id="valor-receita"
+                type="number"
+                placeholder="0,00"
+                step="0.01"
+                inputmode="decimal"
+              />
+            </div>
+
+            <div class="form-section">
+              <label for="data-receita">Data</label>
+              <input id="data-receita" type="date" />
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="hora-inicio">Início da jornada</label>
+                <input id="hora-inicio" type="time" />
+              </div>
+              <div>
+                <label for="hora-fim">Fim da jornada</label>
+                <input id="hora-fim" type="time" />
+              </div>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="km-inicial">KM inicial</label>
+                <input
+                  id="km-inicial"
+                  type="number"
+                  placeholder="Ex: 45230"
+                  inputmode="numeric"
+                />
+              </div>
+              <div>
+                <label for="km-final">KM final</label>
+                <input
+                  id="km-final"
+                  type="number"
+                  placeholder="Ex: 45242"
+                  inputmode="numeric"
+                />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <label for="tipo-veiculo">Combustível</label>
+              <select id="tipo-veiculo" onchange="atualizarConsumoPadrao()">
+                <option value="gasolina">⛽ Gasolina / Etanol</option>
+                <option value="gnv">🚙 GNV</option>
+                <option value="eletrico">⚡ Elétrico</option>
+              </select>
+            </div>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              class="form-section"
+            >
+              <div>
+                <label for="consumo">Consumo do veículo</label>
+                <input
+                  id="consumo"
+                  type="number"
+                  placeholder="Km/L"
+                  step="0.1"
+                  inputmode="decimal"
+                />
+              </div>
+              <div>
+                <label for="combustivel">Preço do combustível</label>
+                <input
+                  id="combustivel"
+                  type="number"
+                  placeholder="R$/L"
+                  step="0.01"
+                  inputmode="decimal"
+                />
+              </div>
+            </div>
+
+            <button
+              class="btn-primario"
+              id="btn-receita"
+              onclick="addReceita()"
+            >
+              ✅ Salvar dia
+            </button>
+          </div>
+
+          <div class="filtros">
+            <input
+              id="filtro-receitas"
+              placeholder="🔍 Buscar corrida..."
+              oninput="aplicarFiltrosReceitas()"
+            />
+            <select id="filtro-veiculo" onchange="aplicarFiltrosReceitas()">
+              <option value="">Todos veículos</option>
+              <option value="gasolina">⛽ Gasolina / Etanol</option>
+              <option value="gnv">🚙 GNV</option>
+              <option value="eletrico">⚡ Elétrico</option>
+            </select>
+            <button class="btn-secundario" onclick="limparFiltros()">
+              Limpar
+            </button>
+          </div>
+
+          <div class="tabela-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Plataforma</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>KM</th>
+                  <th>Veículo</th>
+                  <th>Combustível</th>
+                  <th>Lucro</th>
+                  <th>Economia ⚡</th>
+                  <th>Ganho/h</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="lista-receitas"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TELA: GASTOS -->
+        <div id="gastos" class="tela">
+          <h2>Gastos</h2>
+          <div class="card">
+            <h3>➕ Novo gasto</h3>
+            <div class="form">
+              <div>
+                <label for="tipo-gasto">Tipo de gasto</label>
+                <select id="tipo-gasto">
+                  <option value="manutencao">🔧 Manutenção</option>
+                  <option value="alimentacao">🍽️ Alimentação</option>
+                  <option value="pedagio">🛣️ Pedágio</option>
+                  <option value="estacionamento">🅿️ Estacionamento</option>
+                  <option value="lavagem">🚿 Lavagem</option>
+                  <option value="internet">📱 Internet</option>
+                  <option value="outros">📦 Outros</option>
+                </select>
+              </div>
+              <div>
+                <label for="desc-gasto">Observação</label>
+                <input id="desc-gasto" placeholder="Ex: Troca de óleo" />
+              </div>
+              <div>
+                <label for="valor-gasto">Valor (R$)</label>
+                <input
+                  id="valor-gasto"
+                  type="number"
+                  placeholder="0,00"
+                  step="0.01"
+                  inputmode="decimal"
+                />
+              </div>
+              <div>
+                <label for="data-gasto">Data</label>
+                <input id="data-gasto" type="date" />
+              </div>
+              <button class="btn-primario" id="btn-gasto" onclick="addGasto()">
+                ✅ Salvar gasto
+              </button>
+            </div>
+          </div>
+
+          <div class="tabela-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>TIPO</th>
+                  <th>Observação</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="lista-gastos"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="mais" class="tela">
+          <h2>☰ Mais</h2>
+
+          <div class="card">
+            <h3>Acessos</h3>
+
+            <button class="btn-acao" onclick="trocarTela('gastos')">
+              💸 Gastos
+            </button>
+          </div>
+          <div class="card" style="margin-top: 16px">
+            <h3>💰 Configurações Financeiras</h3>
+            <p class="ajuda-percentual">
+              Defina a porcentagem dos ganhos que será reservada automaticamente
+              para manutenção do veículo ou para formar sua reserva financeira.
+            </p>
+            <div class="reserva-form">
+              <input
+                id="percentual"
+                type="number"
+                placeholder="Reserva (%)"
+                min="0"
+                max="100"
+              />
+              <button onclick="salvarPercentual()">Salvar</button>
+            </div>
+            <label for="meta-input">Meta diária (R$)</label>
+            <div class="reserva-form">
+              <input
+                id="meta-input"
+                type="number"
+                placeholder="Ex: 300"
+                min="0"
+              />
+              <button onclick="salvarMeta()">Salvar</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>💾 Backup dos Dados</h3>
+            <p class="texto-ajuda">
+              Salve uma cópia dos seus dados ou restaure um backup feito
+              anteriormente.
+            </p>
+            <div class="acoes-grid">
+              <button class="btn-acao" onclick="exportarBackup()">
+                💾 Backup JSON
+              </button>
+
+              <p class="texto-ajuda">
+                Use as opções abaixo para salvar ou restaurar seus dados.
+              </p>
+              <label class="btn-acao">
+                📥 Importar
+                <input
+                  type="file"
+                  id="importar-backup"
+                  accept=".json"
+                  onchange="importarBackup(event)"
+                  style="display: none"
+                />
+              </label>
+            </div>
+          </div>
+          <div class="card">
+            <h3>ℹ️ Sobre o Aplicativo</h3>
+
+            <div class="sobre-app">
+              <h4>🚗 Controle Motoristas</h4>
+
+              <p class="versao-app"><strong>Versão:</strong> 2.0.0</p>
+
+              <p><strong>Desenvolvido por:</strong><br />Antônio Linhares</p>
+
+              <p>
+                O Controle Motoristas foi desenvolvido para auxiliar motoristas
+                de aplicativo no gerenciamento de receitas, despesas, metas
+                financeiras e acompanhamento dos resultados do dia a dia, de
+                forma simples, rápida e organizada.
+              </p>
+
+              <p class="frase-app">
+                🚗 Dirija com segurança.<br />
+                💰 Controle seus resultados.<br />
+                📈 Cresça todos os dias.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- BOTTOM NAV (mobile) -->
+      <nav class="bottom-nav">
+        <button
+          class="nav-item"
+          id="nav-resumo"
+          onclick="
+            trocarTela('resumo');
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            });
+          "
+        >
+          <span class="nav-icon">📊</span>
+          <span>Resumo</span>
+        </button>
+        <button
+          class="nav-item"
+          id="nav-receitas"
+          onclick="trocarTela('receitas')"
+        >
+          <span class="nav-icon">🚗</span>
+          <span>Corridas</span>
+        </button>
+        <button
+          class="nav-item"
+          id="nav-relatorios"
+          onclick="trocarTela('relatorios')"
+        >
+          <span class="nav-icon">📈</span>
+          <span>Relatórios</span>
+        </button>
+        <button class="nav-item" id="nav-diario" onclick="trocarTela('diario')">
+          <span class="nav-icon">📅</span>
+          <span>Meu Dia</span>
+        </button>
+        <button class="nav-item" id="nav-mais" onclick="trocarTela('mais')">
+          <span class="nav-icon">☰</span>
+          <span>Mais</span>
+        </button>
+      </nav>
+    </div>
+
+    <div id="toast"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script defer src="js/pdf.js"></script>
+
+    <script>
+      let plataformaSelecionada = "Uber";
+
+      function selecionarPlataforma(botao, plataforma) {
+        document
+          .querySelectorAll("#selector-plataforma .selector-btn")
+          .forEach((btn) => btn.classList.remove("ativo"));
+
+        botao.classList.add("ativo");
+
+        plataformaSelecionada = plataforma;
+        document.getElementById("desc-receita").value = plataforma;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const _orig = window.trocarTela;
+        window.trocarTela = function (id, el) {
+          _orig && _orig(id, el);
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((b) => b.classList.remove("ativo"));
+          const idNav = id === "gastos" ? "mais" : id;
+          const nav = document.getElementById("nav-" + idNav);
+          if (nav) nav.classList.add("ativo");
+          document
+            .querySelectorAll(".tela")
+            .forEach((t) => t.classList.remove("ativa"));
+          const tela = document.getElementById(id);
+          if (tela) tela.classList.add("ativa");
+        };
+        trocarTela("resumo");
+      });
+    </script>
+  </body>
+</html>
