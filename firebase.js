@@ -359,6 +359,14 @@ onAuthStateChanged(auth, async (usuario) => {
 
       console.log("✅ Configurações carregadas");
     }
+    await window.atualizarStatusTeste();
+
+    const acessoLiberado = await window.verificarAcessoUsuario();
+
+    if (!acessoLiberado) {
+      trocarTela("assinatura");
+      console.log("🔒 Acesso direcionado para assinatura.");
+    }
 
     if (nomeUsuario) {
       nomeUsuario.innerText = `Olá, ${usuario.displayName} 👋`;
@@ -458,22 +466,106 @@ window.migrarReceitas = async function () {
 };
 window.salvarUsuarioFirebase = async function (usuario) {
   try {
-    await setDoc(
-      doc(db, "usuarios", usuario.uid),
-      {
-        nome: usuario.displayName,
-        email: usuario.email,
-        foto: usuario.photoURL,
-        plano: "gratis",
-        dataCadastro: serverTimestamp(),
-        ultimoAcesso: serverTimestamp(),
-      },
-      { merge: true },
-    );
+    const usuarioRef = doc(db, "usuarios", usuario.uid);
+    const usuarioExistente = await getDoc(usuarioRef);
+
+    const dadosAtuais = usuarioExistente.exists()
+      ? usuarioExistente.data()
+      : {};
+
+    const dadosUsuario = {
+      nome: usuario.displayName,
+      email: usuario.email,
+      foto: usuario.photoURL,
+      plano: dadosAtuais.plano || "gratis",
+      ultimoAcesso: serverTimestamp(),
+    };
+
+    if (!dadosAtuais.dataCadastro) {
+      dadosUsuario.dataCadastro = serverTimestamp();
+    }
+
+    if (!dadosAtuais.inicioTeste) {
+      dadosUsuario.inicioTeste = serverTimestamp();
+    }
+
+    await setDoc(usuarioRef, dadosUsuario, { merge: true });
 
     console.log("✅ Usuário registrado");
   } catch (erro) {
     console.error("❌ Erro ao salvar usuário:", erro);
+  }
+};
+window.verificarTesteGratis = async function () {
+  try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      return null;
+    }
+
+    const usuarioRef = doc(db, "usuarios", usuario.uid);
+    const snapshot = await getDoc(usuarioRef);
+
+    if (!snapshot.exists()) {
+      return null;
+    }
+
+    const dados = snapshot.data();
+
+    if (!dados.inicioTeste) {
+      return null;
+    }
+
+    const inicio = dados.inicioTeste.toDate
+      ? dados.inicioTeste.toDate()
+      : new Date(dados.inicioTeste);
+
+    const agora = new Date();
+
+    const diferencaMs = agora - inicio;
+    const diasPassados = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
+
+    const diasRestantes = Math.max(0, 15 - diasPassados);
+
+    return {
+      inicioTeste: inicio,
+      diasPassados,
+      diasRestantes,
+      testeAtivo: diasPassados < 15,
+    };
+  } catch (erro) {
+    console.error("❌ Erro ao verificar teste:", erro);
+    return null;
+  }
+};
+window.verificarAcessoUsuario = async function () {
+  try {
+    const usuario = usuarioAtual();
+
+    if (!usuario) {
+      return false;
+    }
+
+    const usuarioRef = doc(db, "usuarios", usuario.uid);
+    const snapshot = await getDoc(usuarioRef);
+
+    if (!snapshot.exists()) {
+      return false;
+    }
+
+    const dados = snapshot.data();
+
+    if (dados.plano === "premium") {
+      return true;
+    }
+
+    const teste = await window.verificarTesteGratis();
+
+    return teste ? teste.testeAtivo : false;
+  } catch (erro) {
+    console.error("❌ Erro ao verificar acesso:", erro);
+    return false;
   }
 };
 window.listarUsuariosFirebase = async function () {

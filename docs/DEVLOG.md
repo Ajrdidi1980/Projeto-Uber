@@ -186,3 +186,62 @@ Tela Meu Dia
 - ✅ Exportação de backup em arquivo JSON.
 - ✅ Importação de backup por arquivo JSON.
 - ✅ Restauração dos dados validada com sucesso.
+
+## [07/09/2026] - Sistema de teste grátis e assinatura
+
+### Modelo comercial definido
+
+- Período de teste grátis de 15 dias.
+- Após o período de teste, assinatura de R$ 9,90 por mês.
+- O período de teste oferece acesso completo ao aplicativo.
+- O Mercado Pago não possui um segundo período de teste.
+- A cobrança da assinatura é recorrente e mensal.
+
+### Controle do período de teste
+
+- Adicionado o registro `inicioTeste` no documento do usuário no Firebase.
+- Usuários existentes passaram a preservar seus dados já cadastrados.
+- Implementada a verificação do período de teste.
+- Implementado o cálculo dos dias restantes.
+- Implementada a identificação automática de teste ativo ou expirado.
+- Validado o funcionamento do período de 15 dias.
+
+### Controle de acesso
+
+- Criada a função `verificarAcessoUsuario()`.
+- Usuários com plano `premium` possuem acesso liberado.
+- Usuários em período de teste ativo possuem acesso liberado.
+- Usuários com período de teste encerrado são direcionados para a tela de assinatura.
+- Fluxo de acesso testado com período ativo e período expirado.
+
+### Tela de assinatura
+
+- Criada a tela "Seu plano".
+- Exibição do término do período de teste.
+- Exibição do valor da assinatura mensal.
+- Adicionado botão para continuar com a assinatura.
+
+### Mercado Pago
+
+- Criado plano recorrente no Mercado Pago.
+- Valor definido em R$ 9,90 por mês.
+- Cobrança configurada para o dia da adesão.
+- Duração da assinatura configurada como ilimitada.
+- Período de teste do Mercado Pago desativado.
+- Código de referência definido como `CM-MENSAL-990`.
+- Link de assinatura integrado ao botão da tela "Seu plano".
+
+### Testes realizados
+
+- Login com usuário existente validado.
+- Registro do `inicioTeste` validado.
+- Contagem dos dias restantes validada.
+- Simulação de período expirado validada.
+- Redirecionamento para a tela de assinatura validado.
+- Link do Mercado Pago testado com sucesso.
+- Página de assinatura exibida corretamente com o valor de R$ 9,90.
+
+### Próxima tarefa
+
+- Integrar a confirmação do pagamento do Mercado Pago ao Firebase.
+- Liberar automaticamente o acesso do usuário após a confirmação da assinatura.

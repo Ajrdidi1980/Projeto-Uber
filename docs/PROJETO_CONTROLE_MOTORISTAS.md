@@ -61,10 +61,26 @@ Configurações
 
 ---
 
+## Estado atual do projeto
+
+O Controle Motoristas possui o MVP funcional publicado, com:
+
+- Dashboard
+- Meu Dia
+- Corridas
+- Gastos
+- Relatórios
+- Configurações
+- Relatórios Inteligentes
+- Backup e Importação
+- Suporte a diferentes tipos de veículos
+- Sistema de teste grátis de 15 dias
+- Controle de acesso
+- Tela de assinatura
+- Plano mensal de R$ 9,90
+
 ## Próxima grande etapa
 
-Criar a tela
+Concluir a integração entre o Mercado Pago e o Firebase.
 
-Meu Dia
-
-Ela será um fechamento do dia.
+O objetivo é reconhecer automaticamente o pagamento da assinatura e liberar o acesso do usuário como `premium`.

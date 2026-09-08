@@ -28,6 +28,25 @@
 - Dashboard adaptado ao tipo de veículo
 - Revisão visual do Dashboard
 - Revisão visual da tela Meu Dia
+- Sistema de teste grátis de 15 dias
+- Controle do período de teste
+- Controle de acesso
+- Tela Seu Plano
+- Plano de assinatura mensal criado no Mercado Pago
+- Link de assinatura integrado ao aplicativo
+
+---
+
+## 🚧 Em desenvolvimento
+
+### Monetização e assinatura
+
+- Integração da confirmação de pagamento do Mercado Pago ao Firebase.
+- Alteração automática do plano do usuário para `premium` após pagamento confirmado.
+- Liberação automática do acesso após confirmação da assinatura.
+- Tratamento de assinatura cancelada.
+- Tratamento de assinatura inadimplente.
+- Controle do status da assinatura.
 
 ---
 

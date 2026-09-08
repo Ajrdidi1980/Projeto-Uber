@@ -92,3 +92,43 @@ A lógica financeira oficial do Controle Motoristas deve manter separados o fatu
 - **Melhor dia da semana:** resultado líquido acumulado por dia da semana.
 - **Melhor período:** resultado líquido acumulado por período do dia.
 - **Maior corrida:** maior valor bruto recebido em uma corrida.
+
+---
+
+## Regra de Acesso
+
+O acesso ao Controle Motoristas é controlado pelo Firebase.
+
+### Período de teste
+
+- Novo usuário recebe 15 dias de teste grátis.
+- O início do teste é registrado no campo `inicioTeste`.
+- Durante o período de teste, o usuário possui acesso completo.
+- Após o término do período, o acesso é direcionado para a tela de assinatura.
+
+### Assinatura
+
+- Plano mensal de R$ 9,90.
+- Assinatura recorrente.
+- Pagamento realizado através do Mercado Pago.
+- Usuário com plano `premium` possui acesso liberado.
+
+### Fluxo de acesso
+
+Usuário autenticado
+
+→ Verificação do plano
+
+→ Verificação do período de teste
+
+→ Acesso ao aplicativo
+
+ou
+
+→ Tela "Seu plano"
+
+### Estado atual
+
+O controle de acesso e o período de teste estão implementados.
+
+A confirmação automática do pagamento do Mercado Pago e a atualização do plano para `premium` ainda estão em desenvolvimento.

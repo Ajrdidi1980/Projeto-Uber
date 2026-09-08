@@ -42,4 +42,34 @@ function trocarTela(id, el) {
     atualizarMeuDia();
   }
 }
+window.atualizarStatusTeste = async function () {
+  const elemento = document.getElementById("status-teste");
+
+  if (!elemento) {
+    return;
+  }
+
+  const resultado = await window.verificarTesteGratis();
+
+  if (!resultado) {
+    elemento.style.display = "none";
+    return;
+  }
+
+  elemento.style.display = "block";
+
+  if (resultado.testeAtivo) {
+    const textoDias =
+      resultado.diasRestantes === 1
+        ? "1 dia restante"
+        : `${resultado.diasRestantes} dias restantes`;
+
+    elemento.textContent = `🎁 Período de teste grátis — ${textoDias}`;
+  } else {
+    elemento.textContent = "⏰ Seu período de teste grátis terminou.";
+  }
+};
+document.getElementById("btn-assinar")?.addEventListener("click", () => {
+  window.open("https://mpago.la/2pqQDbv", "_blank");
+});
 window.trocarTela = trocarTela;

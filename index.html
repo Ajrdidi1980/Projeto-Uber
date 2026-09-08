@@ -151,7 +151,11 @@
         <!-- TELA: RESUMO -->
         <div id="resumo" class="tela">
           <h2>Resumo</h2>
-
+          <div
+            id="status-teste"
+            class="status-teste"
+            style="display: none"
+          ></div>
           <div class="meta-card">
             <div class="meta-header">
               <span class="meta-label">🎯 Meta diária</span>
@@ -719,7 +723,45 @@
             </div>
           </div>
         </div>
+
+        <!-- TELA: ASSINATURA -->
+        <div id="assinatura" class="tela">
+          <h2>💎 Seu plano</h2>
+
+          <div class="card">
+            <h3>⏰ Seu período de teste terminou</h3>
+
+            <p>Seus 15 dias grátis chegaram ao fim.</p>
+
+            <p style="margin-top: 12px">
+              Continue usando todos os recursos do
+              <strong>Controle Motoristas</strong> por apenas:
+            </p>
+
+            <div style="text-align: center; margin: 20px 0">
+              <strong style="font-size: 28px; color: var(--verde)">
+                R$ 9,90
+              </strong>
+              <span>/mês</span>
+            </div>
+
+            <p style="text-align: center">
+              Controle seus ganhos, gastos, metas e resultados sem perder seu
+              histórico.
+            </p>
+
+            <button
+              class="btn-primario"
+              id="btn-assinar"
+              style="width: 100%; margin-top: 20px"
+            >
+              Continuar por R$ 9,90/mês
+            </button>
+          </div>
+        </div>
       </main>
+
+      <!-- BOTTOM NAV (mobile) -->
 
       <!-- BOTTOM NAV (mobile) -->
       <nav class="bottom-nav">

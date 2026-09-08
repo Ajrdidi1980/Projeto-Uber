@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motorista no Controle — Finanças que te levam mais longe</title>
+    <title>Controle Motoristas — Saiba quanto você ganha de verdade.</title>
     <meta
       name="description"
       content="Controle seus ganhos, gastos e bata sua meta diária. O app financeiro feito para motoristas de aplicativo."
@@ -66,6 +66,12 @@
         font-weight: 700;
         font-size: 15px;
         text-decoration: none;
+      }
+      .nav-logo img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        border-radius: 8px;
       }
 
       .nav-logo-icon {
@@ -504,6 +510,9 @@
 
       /* === RESPONSIVO === */
       @media (max-width: 600px) {
+        .hero .hero-preview {
+          grid-template-columns: 1fr;
+        }
         nav {
           padding: 12px 16px;
         }
@@ -533,7 +542,7 @@
       .hero-preview {
         margin-top: 60px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: 24px;
       }
 
@@ -551,7 +560,10 @@
 
       .preview-card img {
         width: 100%;
+        height: 430px;
+        object-fit: contain;
         display: block;
+        background: #ffffff;
       }
 
       .preview-card h3 {
@@ -569,8 +581,8 @@
     <!-- NAV -->
     <nav>
       <a class="nav-logo" href="#">
-        <div class="nav-logo-icon">🚗</div>
-        Motorista no Controle
+        <img src="./img/logo.png" alt="Controle Motoristas" />
+        Controle Motoristas
       </a>
       <a
         class="nav-cta"
@@ -583,19 +595,20 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-badge">🚀 Seu financeiro no controle</div>
-      <h1>Motorista<br /><span>no Controle</span></h1>
-      <p class="hero-sub">— Finanças que te levam mais longe —</p>
+      <h1>Controle<br /><span>Motoristas</span></h1>
+      <p class="hero-sub">— Seu trabalho. Seus números. Seu controle. —</p>
       <p class="hero-desc">
-        Você trabalha duro todo dia. Mas sabe exatamente quanto lucrou? Controle
-        seus ganhos, gastos e bata sua meta — tudo em um só lugar.
+        Trabalhe, registre e entenda seus resultados. O Controle Motoristas
+        reúne seus ganhos, gastos, combustível, horas trabalhadas, quilômetros e
+        lucro líquido em um só lugar.
       </p>
       <div class="hero-btns">
         <a
           class="btn-main"
           href="https://controle-corridas-90795.web.app"
           target="_blank"
-          >🚀 Começar agora — é grátis</a
-        >
+          >🚀 Começar agora
+        </a>
         <a class="btn-ghost" href="#funcionalidades">Ver funcionalidades</a>
       </div>
       <div class="hero-preview">
@@ -619,13 +632,15 @@
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Grátis para usar</div>
+          <div class="stat-num">4</div>
+          <div class="stat-label">Plataformas de trabalho</div>
         </div>
+
         <div class="stat">
-          <div class="stat-num">3 min</div>
-          <div class="stat-label">Para configurar</div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">Tipos de combustível</div>
         </div>
+
         <div class="stat">
           <div class="stat-num">R$ 0</div>
           <div class="stat-label">Para começar</div>
@@ -637,53 +652,58 @@
     <section class="problemas">
       <div class="container">
         <p class="section-label fade-up">Você se identifica?</p>
+
         <h2 class="section-title fade-up">
           Todo motorista já passou por isso...
         </h2>
+
         <div class="problemas-grid">
           <div class="problema-card fade-up">
-            <div class="problema-icon">😰</div>
+            <div class="problema-icon">💰</div>
             <div>
               <div class="problema-titulo">
-                Roda o dia todo e não sabe quanto lucrou
+                Você sabe quanto realmente ganhou?
               </div>
               <div class="problema-desc">
-                Faturou R$ 300 mas gastou R$ 120 em gasolina. Quanto sobrou de
-                verdade?
+                Faturou, abasteceu, pagou despesas... mas no fim do dia, quanto
+                realmente sobrou no seu bolso?
               </div>
             </div>
           </div>
+
           <div class="problema-card fade-up">
-            <div class="problema-icon">📱</div>
+            <div class="problema-icon">⛽</div>
             <div>
               <div class="problema-titulo">
-                Trabalha em várias plataformas ao mesmo tempo
+                Quanto seu carro está consumindo?
               </div>
               <div class="problema-desc">
-                Uber, 99, iFood... mistura tudo e no fim do mês não sabe qual
-                compensa mais.
+                Gasolina, Etanol, GNV ou Elétrico. O aplicativo ajuda você a
+                acompanhar o custo do seu trabalho.
               </div>
             </div>
           </div>
+
           <div class="problema-card fade-up">
-            <div class="problema-icon">📋</div>
+            <div class="problema-icon">🚗</div>
             <div>
               <div class="problema-titulo">
-                Imposto de renda vira um pesadelo
+                Trabalha em mais de uma plataforma?
               </div>
               <div class="problema-desc">
-                Sem registros organizados, fica difícil declarar as despesas e
-                pagar menos.
+                Registre suas corridas de Uber, 99, InDrive ou outra plataforma
+                e mantenha tudo organizado.
               </div>
             </div>
           </div>
+
           <div class="problema-card fade-up">
             <div class="problema-icon">🎯</div>
             <div>
-              <div class="problema-titulo">Meta diária? Só no feeling</div>
+              <div class="problema-titulo">Sua meta está sendo alcançada?</div>
               <div class="problema-desc">
-                Sem controle, você não sabe se já bateu a meta ou se precisa
-                rodar mais.
+                Defina uma meta diária e acompanhe seu desempenho para saber
+                quando está no caminho certo.
               </div>
             </div>
           </div>
@@ -704,56 +724,84 @@
         </p>
         <div class="features-grid">
           <div class="feature-card fade-up">
-            <span class="feature-icon">💰</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 20px"
+              >GANHOS</span
+            >
             <div class="feature-num">01 — GANHOS</div>
             <div class="feature-title">Controle de corridas por plataforma</div>
             <div class="feature-desc">
-              Registre cada corrida com valor, horário, KM e plataforma. Veja
-              quanto cada app te paga de verdade.
+              Registre cada corrida com valor, horário, KM e plataforma.
+              Acompanhe seus ganhos por aplicativo e compare o desempenho das
+              plataformas.
             </div>
           </div>
           <div class="feature-card fade-up">
-            <span class="feature-icon">⛽</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 20px"
+              >COMBUSTÍVEL</span
+            >
             <div class="feature-num">02 — COMBUSTÍVEL</div>
             <div class="feature-title">Custo por KM rodado</div>
             <div class="feature-desc">
-              Gasolina, GNV ou elétrico — o app calcula automaticamente quanto
-              você gasta por quilômetro.
+              Gasolina, GNV ou elétrico — acompanhe o custo por quilômetro e
+              entenda quanto o seu veículo representa no resultado do seu
+              trabalho.
             </div>
           </div>
           <div class="feature-card fade-up">
-            <span class="feature-icon">🎯</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 20px"
+              >META</span
+            >
             <div class="feature-num">03 — META</div>
             <div class="feature-title">Barra de meta diária</div>
             <div class="feature-desc">
-              Defina sua meta e acompanhe em tempo real. Sabe exatamente quanto
-              falta pra bater o objetivo do dia.
+              Defina sua meta diária e acompanhe seu progresso em tempo real.
+              Saiba quanto já alcançou e quanto ainda falta para atingir seu
+              objetivo.
             </div>
           </div>
           <div class="feature-card fade-up">
-            <span class="feature-icon">📊</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 20px"
+              >ANÁLISE</span
+            >
             <div class="feature-num">04 — ANÁLISE</div>
-            <div class="feature-title">Gráficos e ranking automático</div>
+            <div class="feature-title">Relatórios inteligentes e análise</div>
             <div class="feature-desc">
-              Veja seu melhor dia da semana, melhor período (manhã/tarde/noite)
-              e compare semana a semana.
+              Entenda seus resultados com gráficos, ranking e comparativos.
+              Identifique seus melhores dias, períodos e oportunidades de
+              melhoria.
             </div>
           </div>
           <div class="feature-card fade-up">
-            <span class="feature-icon">📄</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 24px"
+              >PDF</span
+            >
             <div class="feature-num">05 — RELATÓRIO</div>
             <div class="feature-title">Exportar PDF e backup</div>
             <div class="feature-desc">
-              Gere relatórios em PDF com um toque. Ideal para declarar IR e ter
-              tudo organizado.
+              Gere relatórios em PDF com um toque. Mantenha seu histórico
+              financeiro organizado e fácil de consultar.
             </div>
           </div>
           <div class="feature-card fade-up">
-            <span class="feature-icon">☁️</span>
+            <span
+              class="feature-icon"
+              style="color: var(--verde); font-weight: 800; font-size: 20px"
+              >NUVEM</span
+            >
             <div class="feature-num">06 — NUVEM</div>
             <div class="feature-title">Seus dados salvos na nuvem</div>
             <div class="feature-desc">
-              Login com Google. Seus dados ficam seguros e acessíveis em
+              Login com Google. Seus dados ficam salvos na nuvem e acessíveis em
               qualquer dispositivo.
             </div>
           </div>
@@ -771,83 +819,100 @@
             <div class="passo-num">1</div>
             <div class="passo-titulo">Entra com Google</div>
             <div class="passo-desc">
-              Cria sua conta em segundos com o Google. Sem formulário, sem
-              burocracia.
+              Crie sua conta em segundos. Seus dados ficam salvos com segurança
+              na nuvem.
             </div>
           </div>
+
           <div class="passo fade-up">
             <div class="passo-num">2</div>
-            <div class="passo-titulo">Registra suas corridas</div>
+            <div class="passo-titulo">Registre seu trabalho</div>
             <div class="passo-desc">
-              Adiciona o valor, horário e KM de cada corrida. Leva menos de 30
-              segundos.
+              Informe seus ganhos, horário, quilômetros, plataforma e
+              combustível.
             </div>
           </div>
+
           <div class="passo fade-up">
             <div class="passo-num">3</div>
-            <div class="passo-titulo">Acompanha seu lucro</div>
+            <div class="passo-titulo">Acompanhe seu resultado</div>
             <div class="passo-desc">
-              Veja o resumo do dia, sua meta e os gráficos atualizados em tempo
-              real.
+              Veja seu faturamento, gastos, lucro líquido, meta e desempenho.
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- DEPOIMENTOS -->
+    <!-- POR QUE USAR -->
     <section class="depoimentos">
       <div class="container">
-        <p class="section-label fade-up">Quem já usa</p>
+        <p class="section-label fade-up">Feito para a rotina do motorista</p>
+
         <h2 class="section-title fade-up">
-          Motoristas que estão<br />no controle
+          Mais controle para<br />trabalhar melhor
         </h2>
+
         <p class="section-desc fade-up">
-          Resultados reais de quem parou de adivinhar e começou a controlar.
+          Tenha uma visão clara do seu trabalho e tome decisões com base nos
+          seus próprios números.
         </p>
+
         <div class="dep-grid">
           <div class="dep-card fade-up">
-            <div class="dep-stars">★★★★★</div>
+            <div class="dep-stars">💰</div>
+
             <p class="dep-texto">
-              "Antes eu achava que estava ganhando bem. Depois do app descobri
-              que meu custo por KM estava muito alto. Mudei minha rota e
-              aumentei o lucro em R$ 400 no mês."
+              Saiba quanto você faturou, quanto gastou e quanto realmente sobrou
+              depois dos custos do dia.
             </p>
+
             <div class="dep-autor">
-              <div class="dep-avatar">C</div>
+              <div class="dep-avatar">1</div>
               <div>
-                <div class="dep-nome">Carlos Silva</div>
-                <div class="dep-cargo">Motorista Uber — São Paulo</div>
+                <div class="dep-nome">Saiba o que realmente sobrou</div>
+                <div class="dep-cargo">
+                  Faturamento, gastos e custos reunidos em um único resultado
+                </div>
               </div>
             </div>
           </div>
+
           <div class="dep-card fade-up">
-            <div class="dep-stars">★★★★★</div>
+            <div class="dep-stars">🎯</div>
+
             <p class="dep-texto">
-              "A barra de meta diária mudou minha vida. Agora eu sei exatamente
-              quando posso parar de rodar. Durmo mais cedo e ganho a mesma
-              coisa!"
+              Defina sua meta diária e acompanhe seu desempenho para saber
+              quando continuar trabalhando ou quando já atingiu seu objetivo.
             </p>
+
             <div class="dep-autor">
-              <div class="dep-avatar">M</div>
+              <div class="dep-avatar">2</div>
               <div>
-                <div class="dep-nome">Marcos Oliveira</div>
-                <div class="dep-cargo">Motorista 99 — Belo Horizonte</div>
+                <div class="dep-nome">Trabalhe com uma meta clara</div>
+                <div class="dep-cargo">
+                  Acompanhe seu progresso e saiba quando atingir seu objetivo
+                </div>
               </div>
             </div>
           </div>
+
           <div class="dep-card fade-up">
-            <div class="dep-stars">★★★★★</div>
+            <div class="dep-stars">📊</div>
+
             <p class="dep-texto">
-              "Na hora do IR foi um alívio. Tinha todos os gastos organizados,
-              consegui deduzir combustível e manutenção. Paguei bem menos
-              imposto esse ano."
+              Compare seus dias, acompanhe seus custos por quilômetro e veja
+              seus melhores resultados ao longo do tempo.
             </p>
+
             <div class="dep-autor">
-              <div class="dep-avatar">R</div>
+              <div class="dep-avatar">3</div>
               <div>
-                <div class="dep-nome">Roberto Santos</div>
-                <div class="dep-cargo">Motorista iFood — Rio de Janeiro</div>
+                <div class="dep-nome">Entenda seu desempenho</div>
+                <div class="dep-cargo">
+                  Compare seus dias, custos e resultados para tomar decisões
+                  melhores
+                </div>
               </div>
             </div>
           </div>
@@ -859,8 +924,8 @@
     <section class="cta-final">
       <h2 class="fade-up">Pronto pra estar<br /><span>no controle?</span></h2>
       <p class="fade-up">
-        Começa agora, é grátis. Em 3 minutos você já tem o controle das suas
-        finanças na palma da mão.
+        Comece agora, é grátis. Registre seu trabalho e descubra quanto você
+        realmente ganha depois dos seus custos.
       </p>
       <a
         class="btn-main fade-up"
@@ -876,7 +941,9 @@
 
     <!-- FOOTER -->
     <footer>
-      <p>© 2026 Motorista no Controle — Finanças que te levam mais longe 🚗</p>
+      <p>
+        © 2026 Controle Motoristas — Desenvolvido por Antônio de Jesus Linhares.
+      </p>
     </footer>
 
     <script>
